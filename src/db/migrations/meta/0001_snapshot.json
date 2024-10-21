@@ -1,6 +1,6 @@
 {
-  "id": "56a47c1f-8df6-412d-ab24-85248a6a416d",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "1016bdfa-8d9a-4d7d-9032-c6b062a5cf64",
+  "prevId": "56a47c1f-8df6-412d-ab24-85248a6a416d",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -230,9 +230,144 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
+    },
+    "public.user_fitness_profiles": {
+      "name": "user_fitness_profiles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "height": {
+          "name": "height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "weight": {
+          "name": "weight",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "age": {
+          "name": "age",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gender": {
+          "name": "gender",
+          "type": "gender",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "activity_level": {
+          "name": "activity_level",
+          "type": "activity_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fitness_goal": {
+          "name": "fitness_goal",
+          "type": "fitness_goal",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dietary_preference": {
+          "name": "dietary_preference",
+          "type": "dietary_preference",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_fitness_profiles_user_id_user_id_fk": {
+          "name": "user_fitness_profiles_user_id_user_id_fk",
+          "tableFrom": "user_fitness_profiles",
+          "tableTo": "user",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "public.activity_level": {
+      "name": "activity_level",
+      "schema": "public",
+      "values": [
+        "sedentary",
+        "lightly_active",
+        "moderately_active",
+        "very_active",
+        "extra_active"
+      ]
+    },
+    "public.dietary_preference": {
+      "name": "dietary_preference",
+      "schema": "public",
+      "values": [
+        "no_preference",
+        "vegetarian",
+        "vegan",
+        "pescatarian",
+        "keto",
+        "paleo",
+        "mediterranean"
+      ]
+    },
+    "public.fitness_goal": {
+      "name": "fitness_goal",
+      "schema": "public",
+      "values": [
+        "lose_weight",
+        "gain_muscle",
+        "maintain_weight",
+        "improve_endurance",
+        "increase_flexibility"
+      ]
+    },
+    "public.gender": {
+      "name": "gender",
+      "schema": "public",
+      "values": ["male", "female", "other", "prefer_not_to_say"]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "views": {},
