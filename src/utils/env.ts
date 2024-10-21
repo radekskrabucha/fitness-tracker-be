@@ -23,7 +23,10 @@ const EnvSchema = z.object({
     'fatal',
     'silent'
   ]),
-  DATABASE_URL: z.string()
+  DATABASE_URL: z.string(),
+  BETTER_AUTH_SECRET: z.string(),
+  BETTER_AUTH_URL: z.string(),
+  BETTER_AUTH_TRUSTED_ORIGINS: z.string()
 })
 
 export type Env = z.infer<typeof EnvSchema>
