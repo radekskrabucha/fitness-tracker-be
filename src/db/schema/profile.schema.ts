@@ -58,7 +58,7 @@ export const insertUserFitnessProfileSchema = createInsertSchema(
   userFitnessProfiles,
   {
     height: schema => schema.height.min(1).max(300),
-    weight: schema => schema.weight.min(1).max(300),
+    weight: schema => schema.weight.min(1).max(300_000),
     age: schema => schema.age.min(1).max(120)
   }
 ).omit({

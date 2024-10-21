@@ -10,7 +10,11 @@ import {
   UNAUTHORIZED,
   UNPROCESSABLE_ENTITY
 } from '~/utils/httpCodes'
-import { errorOpenApiSchema, jsonContentOpenAPISchema } from '~/utils/schemas'
+import {
+  errorOpenApiSchema,
+  jsonContentOpenAPISchema,
+  zodErrorOpenApiSchema
+} from '~/utils/schemas'
 
 const tags = ['Profile']
 
@@ -60,7 +64,7 @@ export const createUserProfile = createRoute({
       description: 'Unauthorized'
     }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
+      schema: zodErrorOpenApiSchema.openapi('ZodError'),
       description: 'Invalid request'
     })
   }
