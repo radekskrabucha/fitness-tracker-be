@@ -2,6 +2,7 @@ import type { AppRouteHandler } from '~/types/app'
 import { NOT_FOUND, OK } from '~/utils/httpCodes'
 import type {
   CreateUserProfile,
+  DeleteUserProfile,
   GetUserProfile,
   UpdateUserProfile
 } from './profile.routes'
@@ -40,6 +41,16 @@ export const updateUserProfile: AppRouteHandler<
   const profileReq = c.req.valid('json')
 
   const [profile] = await profileService.updateUserProfile(user.id, profileReq)
+
+  return c.json(profile, OK)
+}
+
+export const deleteUserProfile: AppRouteHandler<
+  DeleteUserProfile
+> = async c => {
+  const user = c.get('user')
+
+  const [profile] = await profileService.deleteUserProfile(user.id)
 
   return c.json(profile, OK)
 }

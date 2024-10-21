@@ -101,3 +101,18 @@ export const updateUserProfile = createRoute({
   }
 })
 export type UpdateUserProfile = typeof updateUserProfile
+
+export const deleteUserProfile = createRoute({
+  method: 'delete',
+  path: '/',
+  tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Deleted fitness profile',
+      schema: selectUserFitnessProfileSchema
+    })
+  }
+})
+export type DeleteUserProfile = typeof deleteUserProfile
