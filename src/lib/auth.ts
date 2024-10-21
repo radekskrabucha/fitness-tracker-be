@@ -4,9 +4,16 @@ import { db } from '~/db'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: 'pg'
+    provider: 'pg',
+    generateId: false
   }),
   emailAndPassword: {
     enabled: true
+  },
+  user: {
+    modelName: 'user',
+    fields: {
+      name: 'displayName'
+    }
   }
 })
