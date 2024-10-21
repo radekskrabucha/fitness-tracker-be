@@ -1,7 +1,15 @@
 import { createRoute } from '@hono/zod-openapi'
-import { selectUserFitnessProfileSchema } from '~/db/schema/profile.schema'
+import {
+  insertUserFitnessProfileSchema,
+  selectUserFitnessProfileSchema
+} from '~/db/schema/profile.schema'
 import { authMiddleware } from '~/middleware/auth'
-import { NOT_FOUND, OK, UNAUTHORIZED } from '~/utils/httpCodes'
+import {
+  NOT_FOUND,
+  OK,
+  UNAUTHORIZED,
+  UNPROCESSABLE_ENTITY
+} from '~/utils/httpCodes'
 import { errorOpenApiSchema, jsonContentOpenAPISchema } from '~/utils/schemas'
 
 const tags = ['Profile']
@@ -28,3 +36,33 @@ export const getUserProfile = createRoute({
   }
 })
 export type GetUserProfile = typeof getUserProfile
+
+export const createUserProfile = createRoute({
+  method: 'post',
+  path: '/',
+  tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
+  request: {
+    body: jsonContentOpenAPISchema({
+      description: 'Create a fitness profile',
+      schema: insertUserFitnessProfileSchema,
+      required: true
+    })
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Created fitness profile',
+      schema: selectUserFitnessProfileSchema
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Unauthorized'
+    }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Invalid request'
+    })
+  }
+})
+export type CreateUserProfile = typeof createUserProfile
