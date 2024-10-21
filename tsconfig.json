@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "types": ["node"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"],
+  "extends": "@total-typescript/tsconfig/tsc/no-dom/app",
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
+}
