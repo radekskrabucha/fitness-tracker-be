@@ -1,6 +1,10 @@
 import type { AppRouteHandler } from '~/types/app'
 import { NOT_FOUND, OK } from '~/utils/httpCodes'
-import type { CreateUserProfile, GetUserProfile } from './profile.routes'
+import type {
+  CreateUserProfile,
+  GetUserProfile,
+  UpdateUserProfile
+} from './profile.routes'
 import * as profileService from './profile.services'
 
 export const getUserProfile: AppRouteHandler<GetUserProfile> = async c => {
@@ -25,6 +29,17 @@ export const createUserProfile: AppRouteHandler<
     ...profileReq,
     userId: id
   })
+
+  return c.json(profile, OK)
+}
+
+export const updateUserProfile: AppRouteHandler<
+  UpdateUserProfile
+> = async c => {
+  const user = c.get('user')
+  const profileReq = c.req.valid('json')
+
+  const [profile] = await profileService.updateUserProfile(user.id, profileReq)
 
   return c.json(profile, OK)
 }
