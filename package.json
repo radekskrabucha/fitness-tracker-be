@@ -21,6 +21,7 @@
     "@hono/swagger-ui": "0.4.1",
     "@hono/zod-openapi": "0.16.4",
     "@neondatabase/serverless": "0.10.1",
+    "better-auth": "0.5.2-beta.19",
     "dotenv": "16.4.5",
     "drizzle-orm": "0.35.2",
     "drizzle-zod": "0.5.1",
