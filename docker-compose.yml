@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  hono-api:
-    container_name: hono_api_container
+  api:
+    container_name: api_container
     build:
       context: .
       args:

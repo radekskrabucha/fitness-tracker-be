@@ -1,6 +1,6 @@
-# Hono OpenAPI Template
+# Fitness Tracker Backend
 
-This project is a template for building APIs using Hono, OpenAPI, and TypeScript.
+This project is the backend for a Fitness Tracker application, built using Hono, OpenAPI, and TypeScript.
 
 ## Features
 
@@ -24,7 +24,7 @@ To get started with this template, follow these steps:
 1. **Clone the repository**: Use the following command to clone the repository:
 
 ```bash
-git clone git@github.com:radekskrabucha/hono-template.git
+git clone git@github.com:radekskrabucha/fitness-tracker-be.git
 ```
 
 2. **Install dependencies**: Navigate to the project directory and run the following command to install the dependencies:
@@ -117,7 +117,7 @@ If you prefer to run Docker commands manually, you can use the following instruc
 1. Build the Docker image:
 
    ```
-   docker build -t hono-openapi-app .
+   docker build -t fitness-tracker-be .
    ```
 
 2. Run the container:
@@ -128,7 +128,7 @@ If you prefer to run Docker commands manually, you can use the following instruc
      -e NODE_ENV=development \
      -e LOG_LEVEL=debug \
      -e PORT=4000 \
-     hono-openapi-app
+     fitness-tracker-be
    ```
 
    This command does the following:
@@ -139,6 +139,6 @@ If you prefer to run Docker commands manually, you can use the following instruc
      - `NODE_ENV`: Set to 'development' (can be changed to 'production' or 'test' as needed)
      - `LOG_LEVEL`: Set to 'debug' (can be adjusted to 'trace', 'info', 'warn', 'error', 'fatal', or 'silent' as needed)
      - `PORT`: Set to 4000 (can be changed if you want to use a different port)
-   - Uses the `hono-openapi-app` image we built earlier
+   - Uses the `fitness-tracker-be` image we built earlier
 
 Note: Make sure you have Docker and Docker Compose installed on your system before running these commands.
