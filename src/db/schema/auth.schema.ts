@@ -7,7 +7,10 @@ export const user = pgTable('user', {
   emailVerified: boolean('emailVerified').notNull().default(false),
   image: text('image'),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
-  updatedAt: timestamp('updatedAt').notNull().defaultNow()
+  updatedAt: timestamp('updatedAt')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date())
 })
 
 export type InsertUser = typeof user.$inferInsert
@@ -20,7 +23,9 @@ export const session = pgTable('session', {
   userAgent: text('userAgent'),
   userId: uuid('userId')
     .notNull()
-    .references(() => user.id)
+    .references(() => user.id, {
+      onDelete: 'cascade'
+    })
 })
 
 export type InsertSession = typeof session.$inferInsert
@@ -32,7 +37,9 @@ export const account = pgTable('account', {
   providerId: text('providerId').notNull(),
   userId: uuid('userId')
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, {
+      onDelete: 'cascade'
+    }),
   accessToken: text('accessToken'),
   refreshToken: text('refreshToken'),
   idToken: text('idToken'),
