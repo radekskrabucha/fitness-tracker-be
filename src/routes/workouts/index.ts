@@ -4,3 +4,4 @@ import * as routes from './workouts.routes'
 
 export const workoutsRouter = createRouter()
   .openapi(routes.listWorkouts, handlers.listWorkouts)
+  .openapi(routes.getWorkout, handlers.getWorkout)

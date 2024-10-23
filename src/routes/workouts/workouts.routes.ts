@@ -1,8 +1,15 @@
-import { createRoute } from '@hono/zod-openapi'
-import { z } from '@hono/zod-openapi'
+import { createRoute, z } from '@hono/zod-openapi'
 import { authMiddleware } from '~/middleware/auth'
-import { OK, UNAUTHORIZED } from '~/utils/httpCodes'
-import { errorOpenApiSchema, jsonContentOpenAPISchema } from '~/utils/schemas'
+import {
+  NOT_FOUND,
+  OK,
+  UNAUTHORIZED
+} from '~/utils/httpCodes'
+import {
+  errorOpenApiSchema,
+  jsonContentOpenAPISchema,
+  paramIdUUIDSchema
+} from '~/utils/schemas'
 import { selectWorkoutSchema } from '~/db/schema/workout.schema'
 
 const tags = ['Workouts']
@@ -25,3 +32,30 @@ export const listWorkouts = createRoute({
   }
 })
 export type ListWorkouts = typeof listWorkouts
+
+export const getWorkout = createRoute({
+  method: 'get',
+  path: '/{id}',
+  tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
+  request: {
+    params: paramIdUUIDSchema
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Retrieved workout',
+      schema: selectWorkoutSchema
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Workout not found'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Unauthorized'
+    })
+  }
+})
+
+export type GetWorkout = typeof getWorkout
