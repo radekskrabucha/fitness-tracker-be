@@ -1,6 +1,10 @@
 import { and, eq } from 'drizzle-orm'
 import { db } from '~/db'
-import { workouts, type InsertWorkout } from '~/db/schema/workout.schema'
+import {
+  workouts,
+  type InsertWorkout,
+  type PatchWorkout
+} from '~/db/schema/workout.schema'
 
 export const getUserWorkouts = (userId: string) =>
   db.query.workouts.findMany({
@@ -17,4 +21,15 @@ export const createWorkout = (userId: string, workout: InsertWorkout) =>
   db
     .insert(workouts)
     .values({ ...workout, userId })
+    .returning()
+
+export const updateWorkout = (
+  userId: string,
+  workoutId: string,
+  workout: PatchWorkout
+) =>
+  db
+    .update(workouts)
+    .set(workout)
+    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)))
     .returning()
