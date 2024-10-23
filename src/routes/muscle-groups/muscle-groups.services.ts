@@ -18,3 +18,6 @@ export const createMuscleGroup = (data: InsertMuscleGroup) =>
 
 export const updateMuscleGroup = (id: string, data: PatchMuscleGroup) =>
   db.update(muscleGroups).set(data).where(eq(muscleGroups.id, id)).returning()
+
+export const deleteMuscleGroup = (id: string) =>
+  db.delete(muscleGroups).where(eq(muscleGroups.id, id)).returning()

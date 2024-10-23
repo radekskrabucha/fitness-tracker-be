@@ -99,3 +99,23 @@ export const updateMuscleGroup = createRoute({
   }
 })
 export type UpdateMuscleGroup = typeof updateMuscleGroup
+
+export const deleteMuscleGroup = createRoute({
+  method: 'delete',
+  path: '/{id}',
+  tags,
+  request: {
+    params: paramIdUUIDSchema
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Deleted muscle group',
+      schema: selectMuscleGroupSchema
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Muscle group not found'
+    })
+  }
+})
+export type DeleteMuscleGroup = typeof deleteMuscleGroup

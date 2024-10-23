@@ -4,7 +4,8 @@ import type {
   GetMuscleGroups,
   GetMuscleGroup,
   CreateMuscleGroup,
-  UpdateMuscleGroup
+  UpdateMuscleGroup,
+  DeleteMuscleGroup
 } from './muscle-groups.routes'
 import * as muscleGroupService from './muscle-groups.services'
 
@@ -51,4 +52,18 @@ export const updateMuscleGroup: AppRouteHandler<
   }
 
   return c.json(updatedMuscleGroup, OK)
+}
+
+export const deleteMuscleGroup: AppRouteHandler<
+  DeleteMuscleGroup
+> = async c => {
+  const { id } = c.req.valid('param')
+
+  const [deletedMuscleGroup] = await muscleGroupService.deleteMuscleGroup(id)
+
+  if (!deletedMuscleGroup) {
+    return c.json({ message: 'Muscle group not found' }, NOT_FOUND)
+  }
+
+  return c.json(deletedMuscleGroup, OK)
 }
