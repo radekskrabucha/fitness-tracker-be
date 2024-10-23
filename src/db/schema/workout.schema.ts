@@ -57,7 +57,8 @@ export const insertWorkoutSchema = createInsertSchema(workouts, {
 }).omit({
   id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
+  userId: true
 })
 export const patchWorkoutSchema = insertWorkoutSchema.partial()
 export const selectWorkoutSchema = createSelectSchema(workouts)

@@ -1,6 +1,6 @@
 import type { AppRouteHandler } from '~/types/app'
-import { OK, NOT_FOUND } from '~/utils/httpCodes'
-import type { ListWorkouts, GetWorkout } from './workouts.routes'
+import { NOT_FOUND, OK } from '~/utils/httpCodes'
+import type { ListWorkouts, GetWorkout, CreateWorkout } from './workouts.routes'
 import * as workoutService from './workouts.services'
 
 export const listWorkouts: AppRouteHandler<ListWorkouts> = async c => {
@@ -20,6 +20,15 @@ export const getWorkout: AppRouteHandler<GetWorkout> = async c => {
   if (!workout) {
     return c.json({ message: 'Workout not found' }, NOT_FOUND)
   }
+
+  return c.json(workout, OK)
+}
+
+export const createWorkout: AppRouteHandler<CreateWorkout> = async c => {
+  const user = c.get('user')
+  const workoutData = c.req.valid('json')
+
+  const [workout] = await workoutService.createWorkout(user.id, workoutData)
 
   return c.json(workout, OK)
 }
