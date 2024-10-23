@@ -53,7 +53,8 @@ export const workoutExerciseDetails = pgTable('workout_exercise_details', {
 export const insertWorkoutSchema = createInsertSchema(workouts, {
   name: schema => schema.name.min(1).max(256),
   description: schema => schema.description.max(1024),
-  duration: schema => schema.duration.min(1)
+  duration: schema => schema.duration.min(1),
+  date: z.coerce.date()
 }).omit({
   id: true,
   createdAt: true,
@@ -61,7 +62,9 @@ export const insertWorkoutSchema = createInsertSchema(workouts, {
   userId: true
 })
 export const patchWorkoutSchema = insertWorkoutSchema.partial()
-export const selectWorkoutSchema = createSelectSchema(workouts)
+export const selectWorkoutSchema = createSelectSchema(workouts, {
+  date: z.coerce.date()
+})
 
 export const insertWorkoutExerciseSchema = createInsertSchema(
   workoutExercises,

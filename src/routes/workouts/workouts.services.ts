@@ -20,6 +20,7 @@ export const getUserWorkout = (userId: string, workoutId: string) =>
 export const createWorkout = (userId: string, workout: InsertWorkout) =>
   db
     .insert(workouts)
+    // @ts-expect-error date is coerced to string in the schema
     .values({ ...workout, userId })
     .returning()
 
@@ -30,6 +31,7 @@ export const updateWorkout = (
 ) =>
   db
     .update(workouts)
+    // @ts-expect-error date is coerced to string in the schema
     .set(workout)
     .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)))
     .returning()
