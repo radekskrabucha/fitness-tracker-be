@@ -53,7 +53,11 @@ export const workoutPlanWorkouts = pgTable(
   })
 )
 
-export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans).omit({
+export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans, {
+  name: schema => schema.name.min(1).max(256),
+  description: schema => schema.description.max(1000),
+  duration: schema => schema.duration.min(1)
+}).omit({
   id: true,
   createdAt: true,
   updatedAt: true
@@ -69,10 +73,12 @@ export const selectWorkoutPlanWorkoutSchema =
   createSelectSchema(workoutPlanWorkouts)
 
 export type InsertWorkoutPlan = z.infer<typeof insertWorkoutPlanSchema>
+export type PatchWorkoutPlan = Partial<InsertWorkoutPlan>
 export type SelectWorkoutPlan = z.infer<typeof selectWorkoutPlanSchema>
 export type InsertWorkoutPlanWorkout = z.infer<
   typeof insertWorkoutPlanWorkoutSchema
 >
+export type PatchWorkoutPlanWorkout = Partial<InsertWorkoutPlanWorkout>
 export type SelectWorkoutPlanWorkout = z.infer<
   typeof selectWorkoutPlanWorkoutSchema
 >
