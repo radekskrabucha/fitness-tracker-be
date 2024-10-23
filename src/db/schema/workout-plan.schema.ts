@@ -2,7 +2,7 @@ import { sql } from 'drizzle-orm'
 import {
   pgTable,
   uuid,
-  text,
+  varchar,
   integer,
   timestamp,
   pgEnum
@@ -26,8 +26,8 @@ export const workoutPlans = pgTable('workout_plans', {
   userId: uuid('user_id')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
-  name: text('name').notNull(),
-  description: text('description'),
+  name: varchar('name', { length: 256 }).notNull(),
+  description: varchar('description', { length: 1024 }),
   difficultyLevel: difficultyLevelEnum('difficulty_level').notNull(),
   duration: integer('duration'), // in seconds
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
@@ -55,7 +55,7 @@ export const workoutPlanWorkouts = pgTable(
 
 export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans, {
   name: schema => schema.name.min(1).max(256),
-  description: schema => schema.description.max(1000),
+  description: schema => schema.description.max(1024),
   duration: schema => schema.duration.min(1)
 }).omit({
   id: true,

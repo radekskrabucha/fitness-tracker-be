@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { pgTable, uuid, text, timestamp, integer } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, varchar, timestamp, integer } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { user } from './auth.schema'
@@ -11,8 +11,8 @@ export const workouts = pgTable('workouts', {
   userId: uuid('user_id')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
-  name: text('name').notNull(),
-  description: text('description'),
+  name: varchar('name', { length: 256 }).notNull(),
+  description: varchar('description', { length: 1024 }),
   date: timestamp('date', timestampConfig).notNull(),
   duration: integer('duration'), // in seconds
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
@@ -52,7 +52,7 @@ export const workoutExerciseDetails = pgTable('workout_exercise_details', {
 
 export const insertWorkoutSchema = createInsertSchema(workouts, {
   name: schema => schema.name.min(1).max(256),
-  description: schema => schema.description.max(1000),
+  description: schema => schema.description.max(1024),
   duration: schema => schema.duration.min(1)
 }).omit({
   id: true,

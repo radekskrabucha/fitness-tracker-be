@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { pgEnum, pgTable, text, uuid, timestamp } from 'drizzle-orm/pg-core'
+import { pgEnum, pgTable, varchar, uuid, timestamp } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { timestampConfig } from './config'
@@ -14,8 +14,8 @@ export const exerciseCategoryEnum = pgEnum('exercise_category', [
 
 export const exercises = pgTable('exercises', {
   id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name').notNull(),
-  description: text('description'),
+  name: varchar('name', { length: 256 }).notNull().unique(),
+  description: varchar('description', { length: 1024 }),
   category: exerciseCategoryEnum('category').notNull(),
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', timestampConfig)
@@ -26,7 +26,7 @@ export const exercises = pgTable('exercises', {
 
 export const muscleGroups = pgTable('muscle_groups', {
   id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name').notNull().unique(),
+  name: varchar('name', { length: 256 }).notNull().unique(),
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', timestampConfig)
     .defaultNow()
@@ -51,7 +51,7 @@ export const exerciseMuscleGroups = pgTable(
 
 export const insertExerciseSchema = createInsertSchema(exercises, {
   name: schema => schema.name.min(1).max(256),
-  description: schema => schema.description.max(1000)
+  description: schema => schema.description.max(1024)
 }).omit({
   id: true,
   createdAt: true,
