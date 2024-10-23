@@ -1,7 +1,8 @@
 import { createRoute, z } from '@hono/zod-openapi'
 import {
   selectMuscleGroupSchema,
-  insertMuscleGroupSchema
+  insertMuscleGroupSchema,
+  patchMuscleGroupSchema
 } from '~/db/schema/exercise.schema'
 import { OK, NOT_FOUND, CREATED, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
 import {
@@ -69,3 +70,32 @@ export const createMuscleGroup = createRoute({
   }
 })
 export type CreateMuscleGroup = typeof createMuscleGroup
+
+export const updateMuscleGroup = createRoute({
+  method: 'put',
+  path: '/{id}',
+  tags,
+  request: {
+    params: paramIdUUIDSchema,
+    body: jsonContentOpenAPISchema({
+      description: 'Update a muscle group',
+      schema: patchMuscleGroupSchema,
+      required: true
+    })
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Updated muscle group',
+      schema: selectMuscleGroupSchema
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Muscle group not found'
+    }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      schema: zodErrorOpenApiSchema,
+      description: 'Invalid request'
+    })
+  }
+})
+export type UpdateMuscleGroup = typeof updateMuscleGroup

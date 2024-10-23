@@ -3,7 +3,8 @@ import { CREATED, NOT_FOUND, OK } from '~/utils/httpCodes'
 import type {
   GetMuscleGroups,
   GetMuscleGroup,
-  CreateMuscleGroup
+  CreateMuscleGroup,
+  UpdateMuscleGroup
 } from './muscle-groups.routes'
 import * as muscleGroupService from './muscle-groups.services'
 
@@ -32,4 +33,22 @@ export const createMuscleGroup: AppRouteHandler<
     await muscleGroupService.createMuscleGroup(muscleGroupData)
 
   return c.json(muscleGroup, CREATED)
+}
+
+export const updateMuscleGroup: AppRouteHandler<
+  UpdateMuscleGroup
+> = async c => {
+  const { id } = c.req.valid('param')
+  const muscleGroupData = c.req.valid('json')
+
+  const [updatedMuscleGroup] = await muscleGroupService.updateMuscleGroup(
+    id,
+    muscleGroupData
+  )
+
+  if (!updatedMuscleGroup) {
+    return c.json({ message: 'Muscle group not found' }, NOT_FOUND)
+  }
+
+  return c.json(updatedMuscleGroup, OK)
 }
