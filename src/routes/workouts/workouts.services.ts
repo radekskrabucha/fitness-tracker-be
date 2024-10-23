@@ -33,3 +33,9 @@ export const updateWorkout = (
     .set(workout)
     .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)))
     .returning()
+
+export const deleteWorkout = (userId: string, workoutId: string) =>
+  db
+    .delete(workouts)
+    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)))
+    .returning()
