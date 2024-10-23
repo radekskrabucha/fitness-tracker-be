@@ -1,11 +1,15 @@
 import { createRoute } from '@hono/zod-openapi'
 import { z } from '@hono/zod-openapi'
-import { selectExerciseSchema } from '~/db/schema/exercise.schema'
-import { NOT_FOUND, OK, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
+import {
+  insertExerciseSchema,
+  selectExerciseSchema
+} from '~/db/schema/exercise.schema'
+import { CREATED, OK, NOT_FOUND, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
 import {
   errorOpenApiSchema,
   jsonContentOpenAPISchema,
-  paramIdUUIDSchema
+  paramIdUUIDSchema,
+  zodErrorOpenApiSchema
 } from '~/utils/schemas'
 
 const tags = ['Exercises']
@@ -46,3 +50,26 @@ export const getExerciseById = createRoute({
   }
 })
 export type GetExerciseById = typeof getExerciseById
+
+export const createExercise = createRoute({
+  method: 'post',
+  path: '/',
+  tags,
+  request: {
+    body: jsonContentOpenAPISchema({
+      description: 'Exercise to create',
+      schema: insertExerciseSchema
+    })
+  },
+  responses: {
+    [CREATED]: jsonContentOpenAPISchema({
+      description: 'Created exercise',
+      schema: selectExerciseSchema
+    }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      description: 'Invalid input',
+      schema: zodErrorOpenApiSchema
+    })
+  }
+})
+export type CreateExercise = typeof createExercise

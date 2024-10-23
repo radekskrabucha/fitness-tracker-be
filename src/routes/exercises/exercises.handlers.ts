@@ -1,6 +1,10 @@
 import type { AppRouteHandler } from '~/types/app'
-import { NOT_FOUND, OK } from '~/utils/httpCodes'
-import type { GetExercises, GetExerciseById } from './exercises.routes'
+import { CREATED, NOT_FOUND, OK } from '~/utils/httpCodes'
+import type {
+  GetExercises,
+  GetExerciseById,
+  CreateExercise
+} from './exercises.routes'
 import * as exerciseService from './exercises.services'
 
 export const getExercises: AppRouteHandler<GetExercises> = async c => {
@@ -17,4 +21,11 @@ export const getExerciseById: AppRouteHandler<GetExerciseById> = async c => {
   }
 
   return c.json(exercise, OK)
+}
+
+export const createExercise: AppRouteHandler<CreateExercise> = async c => {
+  const exerciseData = c.req.valid('json')
+  const [createdExercise] = await exerciseService.createExercise(exerciseData)
+
+  return c.json(createdExercise, CREATED)
 }
