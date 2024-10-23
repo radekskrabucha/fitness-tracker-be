@@ -1,6 +1,8 @@
+import { sql } from 'drizzle-orm'
 import { integer, pgTable, timestamp, uuid, pgEnum } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { user } from './auth.schema'
+import { timestampConfig } from './config'
 
 export const genderEnum = pgEnum('gender', [
   'male',
@@ -44,11 +46,11 @@ export const userFitnessProfiles = pgTable('user_fitness_profiles', {
   activityLevel: activityLevelEnum('activity_level').notNull(),
   fitnessGoal: fitnessGoalEnum('fitness_goal').notNull(),
   dietaryPreference: dietaryPreferenceEnum('dietary_preference'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at')
+  createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', timestampConfig)
     .defaultNow()
     .notNull()
-    .$onUpdate(() => new Date())
+    .$onUpdate(() => sql`now()`)
 })
 
 export type InsertUserFitnessProfile = typeof userFitnessProfiles.$inferInsert
