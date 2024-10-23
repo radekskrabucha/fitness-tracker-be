@@ -1,10 +1,25 @@
 import { sql } from 'drizzle-orm'
-import { pgTable, uuid, text, integer, timestamp } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  uuid,
+  text,
+  integer,
+  timestamp,
+  pgEnum
+} from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { user } from './auth.schema'
 import { timestampConfig } from './config'
 import { workouts } from './workout.schema'
+
+// Define the difficulty level enum
+export const difficultyLevelEnum = pgEnum('difficulty_level', [
+  'beginner',
+  'intermediate',
+  'advanced',
+  'expert'
+])
 
 export const workoutPlans = pgTable('workout_plans', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -13,7 +28,7 @@ export const workoutPlans = pgTable('workout_plans', {
     .references(() => user.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   description: text('description'),
-  difficultyLevel: text('difficulty_level').notNull(),
+  difficultyLevel: difficultyLevelEnum('difficulty_level').notNull(),
   duration: integer('duration'), // in seconds
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', timestampConfig)
