@@ -3,8 +3,8 @@ import { pgTable, uuid, text, timestamp, integer } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { user } from './auth.schema'
-import { exercises } from './exercise.schema'
 import { timestampConfig } from './config'
+import { exercises } from './exercise.schema'
 
 export const workouts = pgTable('workouts', {
   id: uuid('id').defaultRandom().primaryKey(),
