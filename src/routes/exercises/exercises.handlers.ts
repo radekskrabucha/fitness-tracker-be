@@ -4,7 +4,8 @@ import type {
   GetExercises,
   GetExerciseById,
   CreateExercise,
-  UpdateExercise
+  UpdateExercise,
+  DeleteExercise
 } from './exercises.routes'
 import * as exerciseService from './exercises.services'
 
@@ -45,4 +46,11 @@ export const updateExercise: AppRouteHandler<UpdateExercise> = async c => {
   }
 
   return c.json(updatedExercise, OK)
+}
+
+export const deleteExercise: AppRouteHandler<DeleteExercise> = async c => {
+  const { id } = c.req.valid('param')
+  const [deletedExercise] = await exerciseService.deleteExercise(id)
+
+  return c.json(deletedExercise, OK)
 }

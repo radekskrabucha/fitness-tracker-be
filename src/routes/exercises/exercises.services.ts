@@ -18,3 +18,6 @@ export const createExercise = (exercise: InsertExercise) =>
 
 export const updateExercise = (id: string, exercise: PatchExercise) =>
   db.update(exercises).set(exercise).where(eq(exercises.id, id)).returning()
+
+export const deleteExercise = (id: string) =>
+  db.delete(exercises).where(eq(exercises.id, id)).returning()

@@ -102,3 +102,23 @@ export const updateExercise = createRoute({
   }
 })
 export type UpdateExercise = typeof updateExercise
+
+export const deleteExercise = createRoute({
+  method: 'delete',
+  path: '/{id}',
+  tags,
+  request: {
+    params: paramIdUUIDSchema
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Deleted exercise',
+      schema: selectExerciseSchema
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      description: 'Exercise not found',
+      schema: errorOpenApiSchema
+    })
+  }
+})
+export type DeleteExercise = typeof deleteExercise
