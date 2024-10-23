@@ -29,7 +29,7 @@ export type GetExercises = typeof getExercises
 
 export const getExerciseById = createRoute({
   method: 'get',
-  path: '/:id',
+  path: '/{id}',
   tags,
   request: {
     params: paramIdUUIDSchema
