@@ -54,6 +54,7 @@ export const userFitnessProfiles = pgTable('user_fitness_profiles', {
 })
 
 export type InsertUserFitnessProfile = typeof userFitnessProfiles.$inferInsert
+export type PatchUserFitnessProfile = Partial<InsertUserFitnessProfile>
 export type SelectUserFitnessProfile = typeof userFitnessProfiles.$inferSelect
 
 export const insertUserFitnessProfileSchema = createInsertSchema(
