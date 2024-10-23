@@ -29,7 +29,7 @@ export const workoutPlans = pgTable('workout_plans', {
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 1024 }),
   difficultyLevel: difficultyLevelEnum('difficulty_level').notNull(),
-  duration: integer('duration'), // in seconds
+  duration: integer('duration'), // in days
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', timestampConfig)
     .defaultNow()
@@ -56,14 +56,22 @@ export const workoutPlanWorkouts = pgTable(
 export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans, {
   name: schema => schema.name.min(1).max(256),
   description: schema => schema.description.max(1024),
-  duration: schema => schema.duration.min(1)
+  duration: schema =>
+    schema.duration.min(1).openapi({
+      description: 'Workout plan duration in days'
+    })
 }).omit({
   id: true,
   createdAt: true,
   updatedAt: true
 })
 export const patchWorkoutPlanSchema = insertWorkoutPlanSchema.partial()
-export const selectWorkoutPlanSchema = createSelectSchema(workoutPlans)
+export const selectWorkoutPlanSchema = createSelectSchema(workoutPlans, {
+  duration: schema =>
+    schema.duration.min(1).openapi({
+      description: 'Workout plan duration in days'
+    })
+})
 
 export const insertWorkoutPlanWorkoutSchema =
   createInsertSchema(workoutPlanWorkouts)

@@ -14,7 +14,7 @@ export const workouts = pgTable('workouts', {
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 1024 }),
   date: timestamp('date', timestampConfig).notNull(),
-  duration: integer('duration'), // in seconds
+  duration: integer('duration'), // in minutes
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', timestampConfig)
     .defaultNow()
@@ -53,7 +53,10 @@ export const workoutExerciseDetails = pgTable('workout_exercise_details', {
 export const insertWorkoutSchema = createInsertSchema(workouts, {
   name: schema => schema.name.min(1).max(256),
   description: schema => schema.description.max(1024),
-  duration: schema => schema.duration.min(1),
+  duration: schema =>
+    schema.duration.min(1).openapi({
+      description: 'Workout duration in minutes'
+    }),
   date: z.coerce.date()
 }).omit({
   id: true,
@@ -63,7 +66,11 @@ export const insertWorkoutSchema = createInsertSchema(workouts, {
 })
 export const patchWorkoutSchema = insertWorkoutSchema.partial()
 export const selectWorkoutSchema = createSelectSchema(workouts, {
-  date: z.coerce.date()
+  date: z.coerce.date(),
+  duration: schema =>
+    schema.duration.min(1).openapi({
+      description: 'Workout duration in minutes'
+    })
 })
 
 export const insertWorkoutExerciseSchema = createInsertSchema(
@@ -90,7 +97,10 @@ export const insertWorkoutExerciseDetailSchema = createInsertSchema(
     sets: schema => schema.sets.min(0),
     reps: schema => schema.reps.min(0),
     weight: schema => schema.weight.min(0),
-    duration: schema => schema.duration.min(0),
+    duration: schema =>
+      schema.duration.min(0).openapi({
+        description: 'Exercise duration in seconds'
+      }),
     distance: schema => schema.distance.min(0)
   }
 ).omit({
@@ -99,7 +109,13 @@ export const insertWorkoutExerciseDetailSchema = createInsertSchema(
 export const patchWorkoutExerciseDetailSchema =
   insertWorkoutExerciseDetailSchema.partial()
 export const selectWorkoutExerciseDetailSchema = createSelectSchema(
-  workoutExerciseDetails
+  workoutExerciseDetails,
+  {
+    duration: schema =>
+      schema.duration.min(0).openapi({
+        description: 'Exercise duration in seconds'
+      })
+  }
 )
 
 export type InsertWorkout = z.infer<typeof insertWorkoutSchema>

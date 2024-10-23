@@ -35,7 +35,7 @@ export const getWorkoutExercises = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of exercises for the workout',
-      schema: z.array(selectWorkoutExerciseSchema)
+      schema: z.array(selectWorkoutExerciseSchema.openapi('Exercise'))
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
