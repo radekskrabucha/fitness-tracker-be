@@ -1,4 +1,4 @@
-import { createRoute, z } from '@hono/zod-openapi'
+import { createRoute } from '@hono/zod-openapi'
 import {
   selectMuscleGroupSchema,
   insertMuscleGroupSchema,
@@ -21,7 +21,7 @@ export const getMuscleGroups = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of muscle groups',
-      schema: z.array(selectMuscleGroupSchema.openapi('MuscleGroup'))
+      schema: selectMuscleGroupSchema.openapi('MuscleGroup').array()
     })
   }
 })

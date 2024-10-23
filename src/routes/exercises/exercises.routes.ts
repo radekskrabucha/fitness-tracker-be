@@ -1,4 +1,4 @@
-import { createRoute, z } from '@hono/zod-openapi'
+import { createRoute } from '@hono/zod-openapi'
 import {
   insertExerciseSchema,
   selectExerciseSchema,
@@ -21,7 +21,7 @@ export const getExercises = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of exercises',
-      schema: z.array(selectExerciseSchema.openapi('Exercise'))
+      schema: selectExerciseSchema.openapi('Exercise').array()
     })
   }
 })
