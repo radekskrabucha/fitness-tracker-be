@@ -24,30 +24,34 @@ export const jsonContentOpenAPISchema = <
   }
 }
 
-export const paramIdNumberSchema = z.object({
-  id: z.coerce
+export const IdNumberSchema = (name: string) =>
+  z.coerce
     .number()
     .positive()
     .openapi({
       param: {
-        name: 'id',
+        name,
         in: 'path'
       },
       example: 1
     })
+export const paramIdNumberSchema = z.object({
+  id: IdNumberSchema('id')
 })
 
-export const paramIdUUIDSchema = z.object({
-  id: z
+export const UUIDSchema = (name: string) =>
+  z
     .string()
     .uuid()
     .openapi({
       param: {
-        name: 'id',
+        name,
         in: 'path'
       },
       example: '123e4567-e89b-12d3-a456-426614174000'
     })
+export const paramIdUUIDSchema = z.object({
+  id: UUIDSchema('id')
 })
 
 export const errorOpenApiSchema = z
