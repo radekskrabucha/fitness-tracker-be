@@ -37,6 +37,19 @@ export const paramIdNumberSchema = z.object({
     })
 })
 
+export const paramIdUUIDSchema = z.object({
+  id: z
+    .string()
+    .uuid()
+    .openapi({
+      param: {
+        name: 'id',
+        in: 'path'
+      },
+      example: '123e4567-e89b-12d3-a456-426614174000'
+    })
+})
+
 export const errorOpenApiSchema = z
   .object({
     message: z.string().openapi({
