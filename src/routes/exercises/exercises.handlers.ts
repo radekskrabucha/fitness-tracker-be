@@ -3,7 +3,8 @@ import { CREATED, NOT_FOUND, OK } from '~/utils/httpCodes'
 import type {
   GetExercises,
   GetExerciseById,
-  CreateExercise
+  CreateExercise,
+  UpdateExercise
 } from './exercises.routes'
 import * as exerciseService from './exercises.services'
 
@@ -28,4 +29,20 @@ export const createExercise: AppRouteHandler<CreateExercise> = async c => {
   const [createdExercise] = await exerciseService.createExercise(exerciseData)
 
   return c.json(createdExercise, CREATED)
+}
+
+export const updateExercise: AppRouteHandler<UpdateExercise> = async c => {
+  const { id } = c.req.valid('param')
+  const exerciseData = c.req.valid('json')
+
+  const [updatedExercise] = await exerciseService.updateExercise(
+    id,
+    exerciseData
+  )
+
+  if (!updatedExercise) {
+    return c.json({ message: 'Exercise not found' }, NOT_FOUND)
+  }
+
+  return c.json(updatedExercise, OK)
 }
