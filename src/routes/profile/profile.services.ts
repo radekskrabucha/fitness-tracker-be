@@ -11,8 +11,14 @@ export const getUserProfile = (id: string) =>
     where: ({ userId }) => eq(userId, id)
   })
 
-export const createUserProfile = (userId: string,profile: InsertUserFitnessProfile) =>
-  db.insert(userFitnessProfiles).values({ ...profile, userId }).returning()
+export const createUserProfile = (
+  userId: string,
+  profile: InsertUserFitnessProfile
+) =>
+  db
+    .insert(userFitnessProfiles)
+    .values({ ...profile, userId })
+    .returning()
 
 export const updateUserProfile = (
   id: string,
