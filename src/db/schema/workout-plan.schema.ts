@@ -73,12 +73,14 @@ export const selectWorkoutPlanWorkoutSchema =
   createSelectSchema(workoutPlanWorkouts)
 
 export type InsertWorkoutPlan = z.infer<typeof insertWorkoutPlanSchema>
-export type PatchWorkoutPlan = Partial<InsertWorkoutPlan>
+export type PatchWorkoutPlan = z.infer<typeof patchWorkoutPlanSchema>
 export type SelectWorkoutPlan = z.infer<typeof selectWorkoutPlanSchema>
 export type InsertWorkoutPlanWorkout = z.infer<
   typeof insertWorkoutPlanWorkoutSchema
 >
-export type PatchWorkoutPlanWorkout = Partial<InsertWorkoutPlanWorkout>
+export type PatchWorkoutPlanWorkout = z.infer<
+  typeof patchWorkoutPlanWorkoutSchema
+>
 export type SelectWorkoutPlanWorkout = z.infer<
   typeof selectWorkoutPlanWorkoutSchema
 >

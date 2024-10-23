@@ -74,9 +74,14 @@ export const insertWorkoutExerciseSchema = createInsertSchema(
 ).omit({
   id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
+  workoutId: true
 })
-export const patchWorkoutExerciseSchema = insertWorkoutExerciseSchema.partial()
+export const patchWorkoutExerciseSchema = insertWorkoutExerciseSchema
+  .partial()
+  .omit({
+    exerciseId: true
+  })
 export const selectWorkoutExerciseSchema = createSelectSchema(workoutExercises)
 
 export const insertWorkoutExerciseDetailSchema = createInsertSchema(
@@ -98,15 +103,17 @@ export const selectWorkoutExerciseDetailSchema = createSelectSchema(
 )
 
 export type InsertWorkout = z.infer<typeof insertWorkoutSchema>
-export type PatchWorkout = Partial<InsertWorkout>
+export type PatchWorkout = z.infer<typeof patchWorkoutSchema>
 export type SelectWorkout = z.infer<typeof selectWorkoutSchema>
 export type InsertWorkoutExercise = z.infer<typeof insertWorkoutExerciseSchema>
-export type PatchWorkoutExercise = Partial<InsertWorkoutExercise>
+export type PatchWorkoutExercise = z.infer<typeof patchWorkoutExerciseSchema>
 export type SelectWorkoutExercise = z.infer<typeof selectWorkoutExerciseSchema>
 export type InsertWorkoutExerciseDetail = z.infer<
   typeof insertWorkoutExerciseDetailSchema
 >
-export type PatchWorkoutExerciseDetail = Partial<InsertWorkoutExerciseDetail>
+export type PatchWorkoutExerciseDetail = z.infer<
+  typeof patchWorkoutExerciseDetailSchema
+>
 export type SelectWorkoutExerciseDetail = z.infer<
   typeof selectWorkoutExerciseDetailSchema
 >

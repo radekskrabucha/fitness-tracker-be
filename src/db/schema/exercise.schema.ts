@@ -72,19 +72,23 @@ export const selectMuscleGroupSchema = createSelectSchema(muscleGroups)
 
 export const insertExerciseMuscleGroupSchema =
   createInsertSchema(exerciseMuscleGroups)
+export const patchExerciseMuscleGroupSchema =
+  insertExerciseMuscleGroupSchema.partial()
 export const selectExerciseMuscleGroupSchema =
   createSelectSchema(exerciseMuscleGroups)
 
 export type InsertExercise = z.infer<typeof insertExerciseSchema>
-export type PatchExercise = Partial<InsertExercise>
+export type PatchExercise = z.infer<typeof patchExerciseSchema>
 export type SelectExercise = z.infer<typeof selectExerciseSchema>
 export type InsertMuscleGroup = z.infer<typeof insertMuscleGroupSchema>
-export type PatchMuscleGroup = Partial<InsertMuscleGroup>
+export type PatchMuscleGroup = z.infer<typeof patchMuscleGroupSchema>
 export type SelectMuscleGroup = z.infer<typeof selectMuscleGroupSchema>
 export type InsertExerciseMuscleGroup = z.infer<
   typeof insertExerciseMuscleGroupSchema
 >
-export type PatchExerciseMuscleGroup = Partial<InsertExerciseMuscleGroup>
+export type PatchExerciseMuscleGroup = z.infer<
+  typeof patchExerciseMuscleGroupSchema
+>
 export type SelectExerciseMuscleGroup = z.infer<
   typeof selectExerciseMuscleGroupSchema
 >
