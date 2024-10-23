@@ -5,3 +5,4 @@ import * as routes from './muscle-groups.routes'
 export const muscleGroupsRouter = createRouter()
   .openapi(routes.getMuscleGroups, handlers.getMuscleGroups)
   .openapi(routes.getMuscleGroup, handlers.getMuscleGroup)
+  .openapi(routes.createMuscleGroup, handlers.createMuscleGroup)
