@@ -31,3 +31,6 @@ export const updateWorkoutPlan = (
     .set(workoutPlanData)
     .where(eq(workoutPlans.id, id))
     .returning()
+
+export const deleteWorkoutPlan = (id: string) =>
+  db.delete(workoutPlans).where(eq(workoutPlans.id, id)).returning()
