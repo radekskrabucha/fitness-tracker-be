@@ -4,7 +4,7 @@ import { workoutExercises } from '~/db/schema/workout.schema'
 import type {
   InsertWorkoutExercise,
   PatchWorkoutExercise
-} from '~/db/schema/workout.schema'
+} from '~/lib/dbSchema/workout'
 
 export const getWorkoutExercises = (workoutId: string) =>
   db.query.workoutExercises.findMany({

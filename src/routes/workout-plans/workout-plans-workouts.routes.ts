@@ -3,7 +3,7 @@ import {
   selectWorkoutPlanWorkoutSchema,
   insertWorkoutPlanWorkoutSchema,
   patchWorkoutPlanWorkoutSchema
-} from '~/db/schema/workout-plan.schema'
+} from '~/lib/dbSchema/workout-plan'
 import { authMiddleware } from '~/middleware/auth'
 import {
   OK,

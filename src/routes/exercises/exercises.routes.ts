@@ -3,7 +3,7 @@ import {
   insertExerciseSchema,
   selectExerciseSchema,
   patchExerciseSchema
-} from '~/db/schema/exercise.schema'
+} from '~/lib/dbSchema/exercise'
 import { CREATED, OK, NOT_FOUND, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
 import {
   errorOpenApiSchema,

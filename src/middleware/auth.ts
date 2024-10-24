@@ -1,5 +1,6 @@
 import { createMiddleware } from 'hono/factory'
 import { auth } from '~/lib/auth'
+import { UNAUTHORIZED } from '~/utils/httpCodes'
 
 export const authMiddleware = createMiddleware(async (c, next) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers })
@@ -8,7 +9,7 @@ export const authMiddleware = createMiddleware(async (c, next) => {
     c.set('user', null)
     c.set('session', null)
 
-    return c.json({ message: 'Unauthorized' }, 401)
+    return c.json({ message: 'Unauthorized' }, UNAUTHORIZED)
   }
 
   c.set('user', session.user)

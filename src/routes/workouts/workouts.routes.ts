@@ -3,7 +3,7 @@ import {
   selectWorkoutSchema,
   insertWorkoutSchema,
   patchWorkoutSchema
-} from '~/db/schema/workout.schema'
+} from '~/lib/dbSchema/workout'
 import { authMiddleware } from '~/middleware/auth'
 import {
   NOT_FOUND,

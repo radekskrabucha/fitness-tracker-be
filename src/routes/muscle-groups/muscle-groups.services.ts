@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
-import {
-  muscleGroups,
-  type InsertMuscleGroup,
-  type PatchMuscleGroup
-} from '~/db/schema/exercise.schema'
+import { muscleGroups } from '~/db/schema/exercise.schema'
+import type {
+  InsertMuscleGroup,
+  PatchMuscleGroup
+} from '~/lib/dbSchema/exercise'
 
 export const getMuscleGroups = () => db.query.muscleGroups.findMany()
 

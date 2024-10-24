@@ -1,4 +1,14 @@
-import { pgTable, text, timestamp, boolean, uuid } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  uuid,
+  integer,
+  pgEnum
+} from 'drizzle-orm/pg-core'
+
+export const userRoleEnum = pgEnum('user_role', ['user', 'admin'])
 
 export const user = pgTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -10,7 +20,11 @@ export const user = pgTable('user', {
   updatedAt: timestamp('updatedAt')
     .notNull()
     .defaultNow()
-    .$onUpdate(() => new Date())
+    .$onUpdate(() => new Date()),
+  role: userRoleEnum('role').notNull().default('user'),
+  banned: boolean('banned'),
+  banReason: text('banReason'),
+  banExpires: integer('banExpires')
 })
 
 export type InsertUser = typeof user.$inferInsert
@@ -25,7 +39,8 @@ export const session = pgTable('session', {
     .notNull()
     .references(() => user.id, {
       onDelete: 'cascade'
-    })
+    }),
+  impersonatedBy: text('impersonatedBy')
 })
 
 export type InsertSession = typeof session.$inferInsert
