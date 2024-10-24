@@ -18,3 +18,7 @@ export const workoutPlansRouter = createRouter()
     workoutsRoutes.postWorkoutPlanWorkout,
     workoutsHandlers.postWorkoutPlanWorkout
   )
+  .openapi(
+    workoutsRoutes.putWorkoutPlanWorkout,
+    workoutsHandlers.putWorkoutPlanWorkout
+  )
