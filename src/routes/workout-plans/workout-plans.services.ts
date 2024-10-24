@@ -2,7 +2,8 @@ import { eq } from 'drizzle-orm'
 import { db } from '~/db'
 import {
   workoutPlans,
-  type InsertWorkoutPlan
+  type InsertWorkoutPlan,
+  type PatchWorkoutPlan
 } from '~/db/schema/workout-plan.schema'
 
 export const getWorkoutPlans = () => db.query.workoutPlans.findMany()
@@ -19,4 +20,14 @@ export const createWorkoutPlan = (
   db
     .insert(workoutPlans)
     .values({ ...workoutPlanData, userId })
+    .returning()
+
+export const updateWorkoutPlan = (
+  id: string,
+  workoutPlanData: PatchWorkoutPlan
+) =>
+  db
+    .update(workoutPlans)
+    .set(workoutPlanData)
+    .where(eq(workoutPlans.id, id))
     .returning()
