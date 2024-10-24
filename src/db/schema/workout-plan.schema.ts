@@ -74,8 +74,11 @@ export const selectWorkoutPlanSchema = createSelectSchema(workoutPlans, {
     })
 })
 
-export const insertWorkoutPlanWorkoutSchema =
-  createInsertSchema(workoutPlanWorkouts)
+export const insertWorkoutPlanWorkoutSchema = createInsertSchema(
+  workoutPlanWorkouts
+).omit({
+  workoutPlanId: true
+})
 export const patchWorkoutPlanWorkoutSchema =
   insertWorkoutPlanWorkoutSchema.partial()
 export const selectWorkoutPlanWorkoutSchema =
