@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
-import {
-  userFitnessProfiles,
-  type InsertUserFitnessProfile,
-  type PatchUserFitnessProfile
-} from '~/db/schema/profile.schema'
+import { userFitnessProfiles } from '~/db/schema/profile.schema'
+import type {
+  InsertUserFitnessProfile,
+  PatchUserFitnessProfile
+} from '~/lib/dbSchema/profile'
 
 export const getUserProfile = (id: string) =>
   db.query.userFitnessProfiles.findFirst({

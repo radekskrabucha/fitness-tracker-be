@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
-import {
-  workoutPlans,
-  type InsertWorkoutPlan,
-  type PatchWorkoutPlan
-} from '~/db/schema/workout-plan.schema'
+import { workoutPlans } from '~/db/schema/workout-plan.schema'
+import type {
+  InsertWorkoutPlan,
+  PatchWorkoutPlan
+} from '~/lib/dbSchema/workout-plan'
 
 export const getWorkoutPlans = () => db.query.workoutPlans.findMany()
 

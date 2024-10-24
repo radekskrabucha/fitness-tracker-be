@@ -3,7 +3,7 @@ import {
   selectMuscleGroupSchema,
   insertMuscleGroupSchema,
   patchMuscleGroupSchema
-} from '~/db/schema/exercise.schema'
+} from '~/lib/dbSchema/exercise'
 import { OK, NOT_FOUND, CREATED, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
 import {
   jsonContentOpenAPISchema,
