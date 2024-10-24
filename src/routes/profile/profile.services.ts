@@ -2,7 +2,8 @@ import { eq } from 'drizzle-orm'
 import { db } from '~/db'
 import {
   userFitnessProfiles,
-  type InsertUserFitnessProfile
+  type InsertUserFitnessProfile,
+  type PatchUserFitnessProfile
 } from '~/db/schema/profile.schema'
 
 export const getUserProfile = (id: string) =>
@@ -10,12 +11,18 @@ export const getUserProfile = (id: string) =>
     where: ({ userId }) => eq(userId, id)
   })
 
-export const createUserProfile = (profile: InsertUserFitnessProfile) =>
-  db.insert(userFitnessProfiles).values(profile).returning()
+export const createUserProfile = (
+  userId: string,
+  profile: InsertUserFitnessProfile
+) =>
+  db
+    .insert(userFitnessProfiles)
+    .values({ ...profile, userId })
+    .returning()
 
 export const updateUserProfile = (
   id: string,
-  profile: Partial<InsertUserFitnessProfile>
+  profile: PatchUserFitnessProfile
 ) =>
   db
     .update(userFitnessProfiles)

@@ -26,10 +26,7 @@ export const createUserProfile: AppRouteHandler<
   const { id } = c.get('user')
   const profileReq = c.req.valid('json')
 
-  const [profile] = await profileService.createUserProfile({
-    ...profileReq,
-    userId: id
-  })
+  const [profile] = await profileService.createUserProfile(id, profileReq)
 
   return c.json(profile, OK)
 }
