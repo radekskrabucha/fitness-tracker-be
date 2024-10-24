@@ -22,3 +22,7 @@ export const workoutPlansRouter = createRouter()
     workoutsRoutes.putWorkoutPlanWorkout,
     workoutsHandlers.putWorkoutPlanWorkout
   )
+  .openapi(
+    workoutsRoutes.deleteWorkoutPlanWorkout,
+    workoutsHandlers.deleteWorkoutPlanWorkout
+  )

@@ -35,3 +35,17 @@ export const updateWorkoutPlanWorkout = (
       )
     )
     .returning()
+
+export const deleteWorkoutPlanWorkout = (
+  workoutPlanId: string,
+  workoutPlanWorkoutId: string
+) =>
+  db
+    .delete(workoutPlanWorkouts)
+    .where(
+      and(
+        eq(workoutPlanWorkouts.workoutPlanId, workoutPlanId),
+        eq(workoutPlanWorkouts.workoutId, workoutPlanWorkoutId)
+      )
+    )
+    .returning()

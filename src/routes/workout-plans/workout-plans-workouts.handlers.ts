@@ -3,7 +3,8 @@ import { OK, NOT_FOUND } from '~/utils/httpCodes'
 import type {
   GetWorkoutPlanWorkouts,
   PostWorkoutPlanWorkout,
-  PutWorkoutPlanWorkout
+  PutWorkoutPlanWorkout,
+  DeleteWorkoutPlanWorkout
 } from './workout-plans-workouts.routes'
 import * as workoutService from './workout-plans-workouts.services'
 
@@ -48,4 +49,19 @@ export const putWorkoutPlanWorkout: AppRouteHandler<
   }
 
   return c.json(updatedWorkoutPlanWorkout, OK)
+}
+
+export const deleteWorkoutPlanWorkout: AppRouteHandler<
+  DeleteWorkoutPlanWorkout
+> = async c => {
+  const { id, workoutId } = c.req.valid('param')
+
+  const [deletedWorkoutPlanWorkout] =
+    await workoutService.deleteWorkoutPlanWorkout(id, workoutId)
+
+  if (!deletedWorkoutPlanWorkout) {
+    return c.json({ message: 'Workout plan not found' }, NOT_FOUND)
+  }
+
+  return c.json(deletedWorkoutPlanWorkout, OK)
 }

@@ -107,3 +107,31 @@ export const putWorkoutPlanWorkout = createRoute({
   }
 })
 export type PutWorkoutPlanWorkout = typeof putWorkoutPlanWorkout
+
+export const deleteWorkoutPlanWorkout = createRoute({
+  method: 'delete',
+  path: '/{id}/workouts/{workoutId}',
+  tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
+  request: {
+    params: paramIdUUIDSchema.extend({
+      workoutId: UUIDSchema('workoutId')
+    })
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Deleted workout plan',
+      schema: selectWorkoutPlanWorkoutSchema
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Workout plan not found'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Unauthorized'
+    })
+  }
+})
+export type DeleteWorkoutPlanWorkout = typeof deleteWorkoutPlanWorkout
