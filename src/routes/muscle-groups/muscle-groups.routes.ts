@@ -4,6 +4,9 @@ import {
   insertMuscleGroupSchema,
   patchMuscleGroupSchema
 } from '~/lib/dbSchema/exercise'
+import { withAdminTag } from '~/lib/openApi'
+import { adminMiddleware } from '~/middleware/admin'
+import { authMiddleware } from '~/middleware/auth'
 import { OK, NOT_FOUND, CREATED, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
 import {
   jsonContentOpenAPISchema,
@@ -13,11 +16,14 @@ import {
 } from '~/utils/schemas'
 
 const tags = ['Muscle Groups']
+const adminTags = withAdminTag(tags)
 
 export const getMuscleGroups = createRoute({
   method: 'get',
   path: '/',
   tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of muscle groups',
@@ -31,6 +37,8 @@ export const getMuscleGroup = createRoute({
   method: 'get',
   path: '/{id}',
   tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
   request: {
     params: paramIdUUIDSchema
   },
@@ -50,7 +58,9 @@ export type GetMuscleGroup = typeof getMuscleGroup
 export const createMuscleGroup = createRoute({
   method: 'post',
   path: '/',
-  tags,
+  tags: adminTags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware, adminMiddleware],
   request: {
     body: jsonContentOpenAPISchema({
       description: 'Create a new muscle group',
@@ -74,7 +84,9 @@ export type CreateMuscleGroup = typeof createMuscleGroup
 export const updateMuscleGroup = createRoute({
   method: 'put',
   path: '/{id}',
-  tags,
+  tags: adminTags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware, adminMiddleware],
   request: {
     params: paramIdUUIDSchema,
     body: jsonContentOpenAPISchema({
@@ -103,7 +115,9 @@ export type UpdateMuscleGroup = typeof updateMuscleGroup
 export const deleteMuscleGroup = createRoute({
   method: 'delete',
   path: '/{id}',
-  tags,
+  tags: adminTags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware, adminMiddleware],
   request: {
     params: paramIdUUIDSchema
   },

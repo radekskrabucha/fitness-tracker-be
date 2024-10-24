@@ -17,7 +17,13 @@ export const configureOpenApi = (app: AppOpenApi) => {
     info: {
       version: packageJson.version,
       title: packageJson.name
-    }
+    },
+    tags: [
+      {
+        name: ADMIN_TAG,
+        description: 'Admin-only endpoints'
+      }
+    ]
   })
   app.get('/swagger', swaggerUI({ url: '/api/doc' }))
 
@@ -34,3 +40,7 @@ export const configureOpenApi = (app: AppOpenApi) => {
   app.openAPIRegistry.registerPath(updateUser)
   app.openAPIRegistry.registerPath(deleteUser)
 }
+
+export const ADMIN_TAG = 'Admin'
+export const withAdminTag = (tags: Array<string>) =>
+  tags.concat(ADMIN_TAG)

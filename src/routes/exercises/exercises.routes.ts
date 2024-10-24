@@ -4,6 +4,9 @@ import {
   selectExerciseSchema,
   patchExerciseSchema
 } from '~/lib/dbSchema/exercise'
+import { withAdminTag } from '~/lib/openApi'
+import { adminMiddleware } from '~/middleware/admin'
+import { authMiddleware } from '~/middleware/auth'
 import { CREATED, OK, NOT_FOUND, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
 import {
   errorOpenApiSchema,
@@ -13,11 +16,14 @@ import {
 } from '~/utils/schemas'
 
 const tags = ['Exercises']
+const adminTags = withAdminTag(tags)
 
 export const getExercises = createRoute({
   method: 'get',
   path: '/',
   tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of exercises',
@@ -31,6 +37,8 @@ export const getExerciseById = createRoute({
   method: 'get',
   path: '/{id}',
   tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
   request: {
     params: paramIdUUIDSchema
   },
@@ -54,7 +62,9 @@ export type GetExerciseById = typeof getExerciseById
 export const createExercise = createRoute({
   method: 'post',
   path: '/',
-  tags,
+  tags: adminTags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware, adminMiddleware],
   request: {
     body: jsonContentOpenAPISchema({
       description: 'Exercise to create',
@@ -77,7 +87,9 @@ export type CreateExercise = typeof createExercise
 export const updateExercise = createRoute({
   method: 'put',
   path: '/{id}',
-  tags,
+  tags: adminTags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware, adminMiddleware],
   request: {
     params: paramIdUUIDSchema,
     body: jsonContentOpenAPISchema({
@@ -105,7 +117,9 @@ export type UpdateExercise = typeof updateExercise
 export const deleteExercise = createRoute({
   method: 'delete',
   path: '/{id}',
-  tags,
+  tags: adminTags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware, adminMiddleware],
   request: {
     params: paramIdUUIDSchema
   },

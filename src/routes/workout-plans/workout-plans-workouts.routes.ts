@@ -4,6 +4,8 @@ import {
   insertWorkoutPlanWorkoutSchema,
   patchWorkoutPlanWorkoutSchema
 } from '~/lib/dbSchema/workout-plan'
+import { withAdminTag } from '~/lib/openApi'
+import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'
 import {
   OK,
@@ -15,6 +17,7 @@ import { errorOpenApiSchema, jsonContentOpenAPISchema } from '~/utils/schemas'
 import { paramIdUUIDSchema, UUIDSchema } from '~/utils/schemas'
 
 const tags = ['Workout Plan Exercises']
+const adminTags = withAdminTag(tags)
 
 export const getWorkoutPlanWorkouts = createRoute({
   method: 'get',
@@ -43,9 +46,9 @@ export type GetWorkoutPlanWorkouts = typeof getWorkoutPlanWorkouts
 export const postWorkoutPlanWorkout = createRoute({
   method: 'post',
   path: '/{id}/workouts',
-  tags,
+  tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware, adminMiddleware],
   request: {
     params: paramIdUUIDSchema,
     body: jsonContentOpenAPISchema({
@@ -74,9 +77,9 @@ export type PostWorkoutPlanWorkout = typeof postWorkoutPlanWorkout
 export const putWorkoutPlanWorkout = createRoute({
   method: 'put',
   path: '/{id}/workouts/{workoutId}',
-  tags,
+  tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware, adminMiddleware],
   request: {
     params: paramIdUUIDSchema.extend({
       workoutId: UUIDSchema('workoutId')
@@ -111,9 +114,9 @@ export type PutWorkoutPlanWorkout = typeof putWorkoutPlanWorkout
 export const deleteWorkoutPlanWorkout = createRoute({
   method: 'delete',
   path: '/{id}/workouts/{workoutId}',
-  tags,
+  tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware, adminMiddleware],
   request: {
     params: paramIdUUIDSchema.extend({
       workoutId: UUIDSchema('workoutId')
