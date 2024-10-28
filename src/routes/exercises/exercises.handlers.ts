@@ -36,10 +36,7 @@ export const updateExercise: AppRouteHandler<UpdateExercise> = async c => {
   const { id } = c.req.valid('param')
   const exerciseData = c.req.valid('json')
 
-  const [updatedExercise] = await exerciseService.updateExercise(
-    id,
-    exerciseData
-  )
+  const updatedExercise = await exerciseService.updateExercise(id, exerciseData)
 
   if (!updatedExercise) {
     return c.json({ message: 'Exercise not found' }, NOT_FOUND)
