@@ -5,14 +5,53 @@ import {
   workoutExercises,
   workoutExerciseDetails
 } from '~/db/schema/workout.schema'
-import type { InsertWorkout, PatchWorkout } from '~/lib/dbSchema/workout'
+import type {
+  InsertWorkout,
+  PatchWorkout,
+  SelectWorkoutWithExercisesDetails
+} from '~/lib/dbSchema/workout'
 
 export const getWorkouts = () => db.query.workouts.findMany()
 
-export const getWorkout = (workoutId: string) =>
-  db.query.workouts.findFirst({
-    where: ({ id }) => eq(id, workoutId)
+export const getWorkout = async (
+  workoutId: string
+): Promise<SelectWorkoutWithExercisesDetails | undefined> => {
+  const result = await db
+    .select({
+      workout: workouts,
+      exercise: workoutExercises,
+      details: workoutExerciseDetails
+    })
+    .from(workouts)
+    .leftJoin(workoutExercises, eq(workouts.id, workoutExercises.workoutId))
+    .leftJoin(
+      workoutExerciseDetails,
+      eq(workoutExercises.id, workoutExerciseDetails.workoutExerciseId)
+    )
+    .where(eq(workouts.id, workoutId))
+
+  const workout = result[0]?.workout
+
+  if (!workout) {
+    return undefined
+  }
+
+  const exercises = result.flatMap(({ exercise, details }) => {
+    if (!exercise || !details) {
+      return []
+    }
+
+    return {
+      ...exercise,
+      details
+    }
   })
+
+  return {
+    workout,
+    exercises
+  }
+}
 
 export const createWorkout = async ({
   exercises,

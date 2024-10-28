@@ -76,12 +76,23 @@ export const patchWorkoutExerciseSchema = insertWorkoutExerciseSchema
 export const selectWorkoutExerciseSchema =
   createSelectSchema(workoutExercises).openapi('WorkoutExercise')
 
+export const selectWorkoutExerciseWithDetailsSchema =
+  selectWorkoutExerciseSchema.extend({
+    details: selectWorkoutExerciseDetailSchema
+  })
+export const selectWorkoutWithExercisesDetailsSchema = z.object({
+  workout: selectWorkoutSchema,
+  exercises: z.array(selectWorkoutExerciseWithDetailsSchema)
+})
+
 export type InsertWorkout = z.infer<typeof insertWorkoutSchema>
 export type PatchWorkout = z.infer<typeof patchWorkoutSchema>
 export type SelectWorkout = z.infer<typeof selectWorkoutSchema>
+
 export type InsertWorkoutExercise = z.infer<typeof insertWorkoutExerciseSchema>
 export type PatchWorkoutExercise = z.infer<typeof patchWorkoutExerciseSchema>
 export type SelectWorkoutExercise = z.infer<typeof selectWorkoutExerciseSchema>
+
 export type InsertWorkoutExerciseDetail = z.infer<
   typeof insertWorkoutExerciseDetailSchema
 >
@@ -90,4 +101,8 @@ export type PatchWorkoutExerciseDetail = z.infer<
 >
 export type SelectWorkoutExerciseDetail = z.infer<
   typeof selectWorkoutExerciseDetailSchema
+>
+
+export type SelectWorkoutWithExercisesDetails = z.infer<
+  typeof selectWorkoutWithExercisesDetailsSchema
 >
