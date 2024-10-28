@@ -32,29 +32,27 @@ export const selectWorkoutExerciseDetailSchema = createSelectSchema(
       })
   }
 )
-
-export const insertWorkoutSchema = createInsertSchema(workouts, {
+const insertWorkoutBaseSchema = createInsertSchema(workouts, {
   name: schema => schema.name.min(1).max(256),
   description: schema => schema.description.max(1024)
+}).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
 })
-  .omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true
-  })
-  .extend({
-    exercises: z
-      .array(
-        z.object({
-          id: z.string().uuid(),
-          details: insertWorkoutExerciseDetailSchema.omit({
-            workoutExerciseId: true
-          })
+export const insertWorkoutSchema = insertWorkoutBaseSchema.extend({
+  exercises: z
+    .array(
+      z.object({
+        id: z.string().uuid(),
+        details: insertWorkoutExerciseDetailSchema.omit({
+          workoutExerciseId: true
         })
-      )
-      .min(1)
-  })
-export const patchWorkoutSchema = insertWorkoutSchema.partial()
+      })
+    )
+    .min(1)
+})
+export const patchWorkoutSchema = insertWorkoutBaseSchema.partial()
 export const selectWorkoutSchema =
   createSelectSchema(workouts).openapi('Workout')
 
