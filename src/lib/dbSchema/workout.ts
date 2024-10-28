@@ -6,48 +6,6 @@ import {
   workoutExerciseDetails
 } from '~/db/schema/workout.schema'
 
-export const insertWorkoutSchema = createInsertSchema(workouts, {
-  name: schema => schema.name.min(1).max(256),
-  description: schema => schema.description.max(1024),
-  duration: schema =>
-    schema.duration.min(1).openapi({
-      description: 'Workout duration in minutes'
-    }),
-  date: z.coerce.date()
-}).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  userId: true
-})
-export const patchWorkoutSchema = insertWorkoutSchema.partial()
-export const selectWorkoutSchema = createSelectSchema(workouts, {
-  date: z.coerce.date(),
-  duration: schema =>
-    schema.duration.min(1).openapi({
-      description: 'Workout duration in minutes'
-    })
-}).openapi('Workout')
-
-export const insertWorkoutExerciseSchema = createInsertSchema(
-  workoutExercises,
-  {
-    orderIndex: schema => schema.orderIndex.min(0)
-  }
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  workoutId: true
-})
-export const patchWorkoutExerciseSchema = insertWorkoutExerciseSchema
-  .partial()
-  .omit({
-    exerciseId: true
-  })
-export const selectWorkoutExerciseSchema =
-  createSelectSchema(workoutExercises).openapi('WorkoutExercise')
-
 export const insertWorkoutExerciseDetailSchema = createInsertSchema(
   workoutExerciseDetails,
   {
@@ -74,6 +32,49 @@ export const selectWorkoutExerciseDetailSchema = createSelectSchema(
       })
   }
 )
+
+export const insertWorkoutSchema = createInsertSchema(workouts, {
+  name: schema => schema.name.min(1).max(256),
+  description: schema => schema.description.max(1024)
+})
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true
+  })
+  .extend({
+    exercises: z
+      .array(
+        z.object({
+          id: z.string().uuid(),
+          details: insertWorkoutExerciseDetailSchema.omit({
+            workoutExerciseId: true
+          })
+        })
+      )
+      .min(1)
+  })
+export const patchWorkoutSchema = insertWorkoutSchema.partial()
+export const selectWorkoutSchema =
+  createSelectSchema(workouts).openapi('Workout')
+
+export const insertWorkoutExerciseSchema = createInsertSchema(
+  workoutExercises,
+  {
+    orderIndex: schema => schema.orderIndex.min(0)
+  }
+).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+})
+export const patchWorkoutExerciseSchema = insertWorkoutExerciseSchema
+  .partial()
+  .omit({
+    exerciseId: true
+  })
+export const selectWorkoutExerciseSchema =
+  createSelectSchema(workoutExercises).openapi('WorkoutExercise')
 
 export type InsertWorkout = z.infer<typeof insertWorkoutSchema>
 export type PatchWorkout = z.infer<typeof patchWorkoutSchema>

@@ -30,7 +30,7 @@ export const getWorkout: AppRouteHandler<GetWorkout> = async c => {
 export const createWorkout: AppRouteHandler<CreateWorkout> = async c => {
   const workoutData = c.req.valid('json')
 
-  const [workout] = await workoutService.createWorkout(workoutData)
+  const workout = await workoutService.createWorkout(workoutData)
 
   return c.json(workout, OK)
 }
