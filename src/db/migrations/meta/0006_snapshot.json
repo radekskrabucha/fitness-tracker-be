@@ -1,6 +1,6 @@
 {
-  "id": "af231b66-a792-4ba7-be15-3c896b976c30",
-  "prevId": "80c038a0-9c89-49a2-a152-974c1cadc26b",
+  "id": "73868af9-80fc-4797-9750-e9c88b2f49cb",
+  "prevId": "af231b66-a792-4ba7-be15-3c896b976c30",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -765,12 +765,6 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
         "name": {
           "name": "name",
           "type": "varchar(256)",
@@ -799,17 +793,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "workouts_user_id_user_id_fk": {
-          "name": "workouts_user_id_user_id_fk",
-          "tableFrom": "workouts",
-          "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

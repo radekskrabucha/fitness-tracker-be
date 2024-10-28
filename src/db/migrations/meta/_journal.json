@@ -43,6 +43,13 @@
       "when": 1730116739842,
       "tag": "0005_magical_exiles",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1730116910395,
+      "tag": "0006_sloppy_black_crow",
+      "breakpoints": true
     }
   ]
 }
