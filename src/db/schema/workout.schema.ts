@@ -11,8 +11,6 @@ export const workouts = pgTable('workouts', {
     .references(() => user.id, { onDelete: 'cascade' }),
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 1024 }),
-  date: timestamp('date', timestampConfig).notNull(),
-  duration: integer('duration'), // in minutes
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', timestampConfig)
     .defaultNow()
