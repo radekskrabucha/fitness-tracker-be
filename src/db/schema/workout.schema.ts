@@ -1,14 +1,10 @@
 import { sql } from 'drizzle-orm'
 import { pgTable, uuid, varchar, timestamp, integer } from 'drizzle-orm/pg-core'
-import { user } from './auth.schema'
 import { timestampConfig } from './config'
 import { exercises } from './exercise.schema'
 
 export const workouts = pgTable('workouts', {
   id: uuid('id').defaultRandom().primaryKey(),
-  userId: uuid('user_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 1024 }),
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
