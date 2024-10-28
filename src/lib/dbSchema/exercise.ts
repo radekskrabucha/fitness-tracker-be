@@ -48,9 +48,11 @@ export const selectExerciseWithMusclesSchema = z.object({
 export type InsertExercise = z.infer<typeof insertExerciseSchema>
 export type PatchExercise = z.infer<typeof patchExerciseSchema>
 export type SelectExercise = z.infer<typeof selectExerciseSchema>
+
 export type InsertMuscleGroup = z.infer<typeof insertMuscleGroupSchema>
 export type PatchMuscleGroup = z.infer<typeof patchMuscleGroupSchema>
 export type SelectMuscleGroup = z.infer<typeof selectMuscleGroupSchema>
+
 export type InsertExerciseMuscleGroup = z.infer<
   typeof insertExerciseMuscleGroupSchema
 >
@@ -59,4 +61,8 @@ export type PatchExerciseMuscleGroup = z.infer<
 >
 export type SelectExerciseMuscleGroup = z.infer<
   typeof selectExerciseMuscleGroupSchema
+>
+
+export type SelectExerciseWithMuscles = z.infer<
+  typeof selectExerciseWithMusclesSchema
 >
