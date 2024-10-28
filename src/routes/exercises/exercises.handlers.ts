@@ -16,18 +16,21 @@ export const getExercises: AppRouteHandler<GetExercises> = async c => {
 
 export const getExerciseById: AppRouteHandler<GetExerciseById> = async c => {
   const { id } = c.req.valid('param')
-  const exercise = await exerciseService.getExerciseById(id)
+  const result = await exerciseService.getExerciseById(id)
 
-  if (!exercise) {
+  if (!result || !result.exercise) {
     return c.json({ message: 'Exercise not found' }, NOT_FOUND)
   }
 
-  return c.json(exercise, OK)
+  return c.json(
+    { exercise: result.exercise, muscleGroups: result.muscleGroups },
+    OK
+  )
 }
 
 export const createExercise: AppRouteHandler<CreateExercise> = async c => {
   const exerciseData = c.req.valid('json')
-  const [createdExercise] = await exerciseService.createExercise(exerciseData)
+  const createdExercise = await exerciseService.createExercise(exerciseData)
 
   return c.json(createdExercise, CREATED)
 }
@@ -36,10 +39,7 @@ export const updateExercise: AppRouteHandler<UpdateExercise> = async c => {
   const { id } = c.req.valid('param')
   const exerciseData = c.req.valid('json')
 
-  const [updatedExercise] = await exerciseService.updateExercise(
-    id,
-    exerciseData
-  )
+  const updatedExercise = await exerciseService.updateExercise(id, exerciseData)
 
   if (!updatedExercise) {
     return c.json({ message: 'Exercise not found' }, NOT_FOUND)

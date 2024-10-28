@@ -32,7 +32,7 @@ export const listWorkouts = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of user workouts',
-      schema: selectWorkoutSchema.openapi('Workout').array()
+      schema: selectWorkoutSchema.array()
     }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,

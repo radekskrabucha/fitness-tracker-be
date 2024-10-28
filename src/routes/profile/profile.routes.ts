@@ -28,7 +28,7 @@ export const getUserProfile = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'Retrieved profile',
-      schema: selectUserFitnessProfileSchema.openapi('UserFitnessProfile')
+      schema: selectUserFitnessProfileSchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
@@ -65,7 +65,7 @@ export const createUserProfile = createRoute({
       description: 'Unauthorized'
     }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
-      schema: zodErrorOpenApiSchema.openapi('ZodError'),
+      schema: zodErrorOpenApiSchema,
       description: 'Invalid request'
     })
   }

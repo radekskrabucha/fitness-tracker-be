@@ -24,7 +24,7 @@ export const selectWorkoutPlanSchema = createSelectSchema(workoutPlans, {
     schema.duration.min(1).openapi({
       description: 'Workout plan duration in days'
     })
-})
+}).openapi('WorkoutPlan')
 
 export const insertWorkoutPlanWorkoutSchema = createInsertSchema(
   workoutPlanWorkouts
@@ -33,8 +33,9 @@ export const insertWorkoutPlanWorkoutSchema = createInsertSchema(
 })
 export const patchWorkoutPlanWorkoutSchema =
   insertWorkoutPlanWorkoutSchema.partial()
-export const selectWorkoutPlanWorkoutSchema =
-  createSelectSchema(workoutPlanWorkouts)
+export const selectWorkoutPlanWorkoutSchema = createSelectSchema(
+  workoutPlanWorkouts
+).openapi('WorkoutPlan Excercise')
 
 export type InsertWorkoutPlan = z.infer<typeof insertWorkoutPlanSchema>
 export type PatchWorkoutPlan = z.infer<typeof patchWorkoutPlanSchema>

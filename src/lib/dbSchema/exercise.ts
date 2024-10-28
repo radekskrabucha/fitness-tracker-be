@@ -9,13 +9,18 @@ import {
 export const insertExerciseSchema = createInsertSchema(exercises, {
   name: schema => schema.name.min(1).max(256),
   description: schema => schema.description.max(1024)
-}).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true
 })
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true
+  })
+  .extend({
+    muscleGroupIds: z.array(z.string().uuid()).min(1)
+  })
 export const patchExerciseSchema = insertExerciseSchema.partial()
-export const selectExerciseSchema = createSelectSchema(exercises)
+export const selectExerciseSchema =
+  createSelectSchema(exercises).openapi('Exercise')
 
 export const insertMuscleGroupSchema = createInsertSchema(muscleGroups, {
   name: schema => schema.name.min(1).max(256)
@@ -25,7 +30,8 @@ export const insertMuscleGroupSchema = createInsertSchema(muscleGroups, {
   updatedAt: true
 })
 export const patchMuscleGroupSchema = insertMuscleGroupSchema.partial()
-export const selectMuscleGroupSchema = createSelectSchema(muscleGroups)
+export const selectMuscleGroupSchema =
+  createSelectSchema(muscleGroups).openapi('MuscleGroup')
 
 export const insertExerciseMuscleGroupSchema =
   createInsertSchema(exerciseMuscleGroups)
@@ -33,6 +39,11 @@ export const patchExerciseMuscleGroupSchema =
   insertExerciseMuscleGroupSchema.partial()
 export const selectExerciseMuscleGroupSchema =
   createSelectSchema(exerciseMuscleGroups)
+
+export const selectExerciseWithMusclesSchema = z.object({
+  exercise: selectExerciseSchema,
+  muscleGroups: z.array(selectMuscleGroupSchema)
+})
 
 export type InsertExercise = z.infer<typeof insertExerciseSchema>
 export type PatchExercise = z.infer<typeof patchExerciseSchema>
