@@ -9,11 +9,15 @@ import {
 export const insertExerciseSchema = createInsertSchema(exercises, {
   name: schema => schema.name.min(1).max(256),
   description: schema => schema.description.max(1024)
-}).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true
 })
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true
+  })
+  .extend({
+    muscleGroupIds: z.array(z.string().uuid()).min(1)
+  })
 export const patchExerciseSchema = insertExerciseSchema.partial()
 export const selectExerciseSchema = createSelectSchema(exercises)
 

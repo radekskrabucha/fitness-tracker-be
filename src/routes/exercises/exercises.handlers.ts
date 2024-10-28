@@ -27,7 +27,7 @@ export const getExerciseById: AppRouteHandler<GetExerciseById> = async c => {
 
 export const createExercise: AppRouteHandler<CreateExercise> = async c => {
   const exerciseData = c.req.valid('json')
-  const [createdExercise] = await exerciseService.createExercise(exerciseData)
+  const createdExercise = await exerciseService.createExercise(exerciseData)
 
   return c.json(createdExercise, CREATED)
 }
