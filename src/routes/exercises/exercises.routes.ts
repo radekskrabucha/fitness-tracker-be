@@ -1,9 +1,9 @@
-import { createRoute, z } from '@hono/zod-openapi'
+import { createRoute } from '@hono/zod-openapi'
 import {
   insertExerciseSchema,
   selectExerciseSchema,
   patchExerciseSchema,
-  selectMuscleGroupSchema
+  selectExerciseWithMusclesSchema
 } from '~/lib/dbSchema/exercise'
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
@@ -28,7 +28,7 @@ export const getExercises = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of exercises',
-      schema: selectExerciseSchema.openapi('Exercise').array()
+      schema: selectExerciseSchema.array()
     })
   }
 })
@@ -46,10 +46,7 @@ export const getExerciseById = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'Exercise details',
-      schema: z.object({
-        exercise: selectExerciseSchema.openapi('Exercise'),
-        muscleGroups: z.array(selectMuscleGroupSchema)
-      })
+      schema: selectExerciseWithMusclesSchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       description: 'Exercise not found',

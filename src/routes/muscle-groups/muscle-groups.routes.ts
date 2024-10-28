@@ -27,7 +27,7 @@ export const getMuscleGroups = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of muscle groups',
-      schema: selectMuscleGroupSchema.openapi('MuscleGroup').array()
+      schema: selectMuscleGroupSchema.array()
     })
   }
 })

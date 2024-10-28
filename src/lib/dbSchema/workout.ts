@@ -27,7 +27,7 @@ export const selectWorkoutSchema = createSelectSchema(workouts, {
     schema.duration.min(1).openapi({
       description: 'Workout duration in minutes'
     })
-})
+}).openapi('Workout')
 
 export const insertWorkoutExerciseSchema = createInsertSchema(
   workoutExercises,
@@ -45,7 +45,8 @@ export const patchWorkoutExerciseSchema = insertWorkoutExerciseSchema
   .omit({
     exerciseId: true
   })
-export const selectWorkoutExerciseSchema = createSelectSchema(workoutExercises)
+export const selectWorkoutExerciseSchema =
+  createSelectSchema(workoutExercises).openapi('WorkoutExercise')
 
 export const insertWorkoutExerciseDetailSchema = createInsertSchema(
   workoutExerciseDetails,
