@@ -1,40 +1,20 @@
-import { and, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { db } from '~/db'
 import { workouts } from '~/db/schema/workout.schema'
 import type { InsertWorkout, PatchWorkout } from '~/lib/dbSchema/workout'
 
-export const getUserWorkouts = (userId: string) =>
-  db.query.workouts.findMany({
-    where: ({ userId: id }) => eq(id, userId)
-  })
+export const getWorkouts = () => db.query.workouts.findMany()
 
-export const getUserWorkout = (userId: string, workoutId: string) =>
+export const getWorkout = (workoutId: string) =>
   db.query.workouts.findFirst({
-    where: ({ userId: workoutUserId, id }) =>
-      and(eq(workoutUserId, userId), eq(id, workoutId))
+    where: ({ id }) => eq(id, workoutId)
   })
 
-export const createWorkout = (userId: string, workout: InsertWorkout) =>
-  db
-    .insert(workouts)
-    // @ts-expect-error date is coerced to string in the schema
-    .values({ ...workout, userId })
-    .returning()
+export const createWorkout = (workout: InsertWorkout) =>
+  db.insert(workouts).values(workout).returning()
 
-export const updateWorkout = (
-  userId: string,
-  workoutId: string,
-  workout: PatchWorkout
-) =>
-  db
-    .update(workouts)
-    // @ts-expect-error date is coerced to string in the schema
-    .set(workout)
-    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)))
-    .returning()
+export const updateWorkout = (workoutId: string, workout: PatchWorkout) =>
+  db.update(workouts).set(workout).where(eq(workouts.id, workoutId)).returning()
 
-export const deleteWorkout = (userId: string, workoutId: string) =>
-  db
-    .delete(workouts)
-    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)))
-    .returning()
+export const deleteWorkout = (workoutId: string) =>
+  db.delete(workouts).where(eq(workouts.id, workoutId)).returning()
