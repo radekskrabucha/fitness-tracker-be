@@ -104,27 +104,25 @@ export const updateExercise = async (
   id: string,
   { muscleGroupIds, ...exerciseData }: PatchExercise
 ) => {
-  return await db.transaction(async tx => {
-    const [updatedExercise] = await tx
-      .update(exercises)
-      .set(exerciseData)
-      .where(eq(exercises.id, id))
-      .returning()
+  const [updatedExercise] = await db
+    .update(exercises)
+    .set(exerciseData)
+    .where(eq(exercises.id, id))
+    .returning()
 
-    if (muscleGroupIds) {
-      await tx
-        .delete(exerciseMuscleGroups)
-        .where(eq(exerciseMuscleGroups.exerciseId, id))
-      const muscleGroupAssociations = muscleGroupIds.map(muscleGroupId => ({
-        exerciseId: id,
-        muscleGroupId
-      }))
+  if (muscleGroupIds) {
+    await db
+      .delete(exerciseMuscleGroups)
+      .where(eq(exerciseMuscleGroups.exerciseId, id))
+    const muscleGroupAssociations = muscleGroupIds.map(muscleGroupId => ({
+      exerciseId: id,
+      muscleGroupId
+    }))
 
-      await tx.insert(exerciseMuscleGroups).values(muscleGroupAssociations)
-    }
+    await db.insert(exerciseMuscleGroups).values(muscleGroupAssociations)
+  }
 
-    return updatedExercise
-  })
+  return updatedExercise
 }
 
 export const deleteExercise = (id: string) =>
