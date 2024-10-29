@@ -2,6 +2,7 @@ import { serve } from '@hono/node-server'
 import { createApp } from '~/lib/createApp'
 import { configureOpenApi } from '~/lib/openApi'
 import { exercisesRouter } from '~/routes/exercises'
+import { exerciseCategoriesRouter } from '~/routes/exercises/categories'
 import { muscleGroupsRouter } from '~/routes/muscle-groups'
 import { profileRouter } from '~/routes/profile'
 import { userWorkoutsRouter } from '~/routes/user/workout-plans'
@@ -15,6 +16,7 @@ configureOpenApi(app)
 
 app.route('/profile', profileRouter)
 app.route('/exercises', exercisesRouter)
+app.route('/exercise/categories', exerciseCategoriesRouter)
 app.route('/muscle-groups', muscleGroupsRouter)
 app.route('/workouts', workoutsRouter)
 app.route('/workout-plans', workoutPlansRouter)
