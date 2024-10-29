@@ -49,14 +49,29 @@ export const getWorkoutPlanById = async (
   }
 }
 
-export const createWorkoutPlan = (
+export const createWorkoutPlan = async (
   userId: string,
-  workoutPlanData: InsertWorkoutPlan
-) =>
-  db
+  { workouts, ...workoutPlanData }: InsertWorkoutPlan
+) => {
+  const [workoutPlanInserted] = await db
     .insert(workoutPlans)
     .values({ ...workoutPlanData, userId })
     .returning()
+
+  if (!workoutPlanInserted) {
+    throw new Error('Workout plan not found')
+  }
+
+  const planWorkouts = workouts.map(({ id }, index) => ({
+    workoutPlanId: workoutPlanInserted.id,
+    orderIndex: index,
+    workoutId: id
+  }))
+
+  await db.insert(workoutPlanWorkouts).values(planWorkouts).returning()
+
+  return workoutPlanInserted
+}
 
 export const updateWorkoutPlan = (
   id: string,

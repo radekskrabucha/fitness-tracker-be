@@ -31,7 +31,7 @@ export const getWorkoutPlanById: AppRouteHandler<
 export const postWorkoutPlan: AppRouteHandler<PostWorkoutPlan> = async c => {
   const user = c.get('user')
   const workoutPlanData = c.req.valid('json')
-  const [newWorkoutPlan] = await workoutService.createWorkoutPlan(
+  const newWorkoutPlan = await workoutService.createWorkoutPlan(
     user.id,
     workoutPlanData
   )
