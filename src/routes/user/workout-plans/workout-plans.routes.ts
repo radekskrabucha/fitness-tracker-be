@@ -1,5 +1,8 @@
 import { createRoute } from '@hono/zod-openapi'
-import { selectUserWorkoutPlanSchema } from '~/lib/dbSchema/user-workout'
+import {
+  selectUserWorkoutPlanSchema,
+  insertUserWorkoutPlanSchema
+} from '~/lib/dbSchema/user-workout'
 import { authMiddleware } from '~/middleware/auth'
 import { OK, UNAUTHORIZED } from '~/utils/httpCodes'
 import { errorOpenApiSchema, jsonContentOpenAPISchema } from '~/utils/schemas'
@@ -24,3 +27,29 @@ export const getUserWorkoutPlans = createRoute({
   }
 })
 export type GetUserWorkoutPlans = typeof getUserWorkoutPlans
+
+export const createUserWorkoutPlan = createRoute({
+  method: 'post',
+  path: '/',
+  tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
+  request: {
+    body: jsonContentOpenAPISchema({
+      description: 'Create a new workout plan',
+      schema: insertUserWorkoutPlanSchema,
+      required: true
+    })
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Created workout plan',
+      schema: selectUserWorkoutPlanSchema
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Unauthorized'
+    })
+  }
+})
+export type CreateUserWorkoutPlan = typeof createUserWorkoutPlan

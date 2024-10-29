@@ -13,7 +13,8 @@ export const insertUserWorkoutExerciseAttributeSchema = createInsertSchema(
 ).omit({
   id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
+  userId: true
 })
 export const patchUserWorkoutExerciseAttributeSchema =
   insertUserWorkoutExerciseAttributeSchema.partial()
@@ -21,16 +22,23 @@ export const selectUserWorkoutExerciseAttributeSchema = createSelectSchema(
   userWorkoutExerciseAttributes
 ).openapi('UserWorkoutExerciseAttribute')
 
-export const insertUserWorkoutPlanSchema = createInsertSchema(
+export const insertUserWorkoutPlanBaseSchema = createInsertSchema(
   userWorkoutPlans
 ).omit({
   id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
+  userId: true
 })
-export const patchUserWorkoutPlanSchema = insertUserWorkoutPlanSchema.partial()
+export const patchUserWorkoutPlanSchema =
+  insertUserWorkoutPlanBaseSchema.partial()
 export const selectUserWorkoutPlanSchema =
   createSelectSchema(userWorkoutPlans).openapi('UserWorkoutPlan')
+
+export const insertUserWorkoutPlanSchema =
+  insertUserWorkoutPlanBaseSchema.extend({
+    exerciseAttributes: insertUserWorkoutExerciseAttributeSchema.array().min(1)
+  })
 
 export type InsertUserWorkoutExerciseAttribute = z.infer<
   typeof insertUserWorkoutExerciseAttributeSchema
@@ -42,6 +50,9 @@ export type SelectUserWorkoutExerciseAttribute = z.infer<
   typeof selectUserWorkoutExerciseAttributeSchema
 >
 
-export type InsertUserWorkoutPlan = z.infer<typeof insertUserWorkoutPlanSchema>
+export type InsertUserWorkoutBasePlan = z.infer<
+  typeof insertUserWorkoutPlanBaseSchema
+>
 export type PatchUserWorkoutPlan = z.infer<typeof patchUserWorkoutPlanSchema>
 export type SelectUserWorkoutPlan = z.infer<typeof selectUserWorkoutPlanSchema>
+export type InsertUserWorkoutPlan = z.infer<typeof insertUserWorkoutPlanSchema>
