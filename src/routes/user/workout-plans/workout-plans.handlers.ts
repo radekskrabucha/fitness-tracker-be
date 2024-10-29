@@ -1,7 +1,8 @@
 import type { AppRouteHandler } from '~/types/app'
-import { OK } from '~/utils/httpCodes'
+import { NOT_FOUND, OK } from '~/utils/httpCodes'
 import type {
   CreateUserWorkoutPlan,
+  GetUserWorkoutPlanById,
   GetUserWorkoutPlans
 } from './workout-plans.routes'
 import * as userWorkoutPlanService from './workout-plans.services'
@@ -15,6 +16,24 @@ export const getUserWorkoutPlans: AppRouteHandler<
   )
 
   return c.json(userWorkoutPlans, OK)
+}
+
+export const getUserWorkoutPlanById: AppRouteHandler<
+  GetUserWorkoutPlanById
+> = async c => {
+  const { id } = c.req.valid('param')
+  const user = c.get('user')
+
+  const userWorkoutPlan = await userWorkoutPlanService.getUserWorkoutPlanById(
+    user.id,
+    id
+  )
+
+  if (!userWorkoutPlan) {
+    return c.json({ message: 'User workout plan not found' }, NOT_FOUND)
+  }
+
+  return c.json(userWorkoutPlan, OK)
 }
 
 export const createUserWorkoutPlan: AppRouteHandler<
