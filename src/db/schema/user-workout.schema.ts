@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm'
 import { pgTable, uuid, timestamp, integer, pgEnum } from 'drizzle-orm/pg-core'
 import { user } from './auth.schema'
 import { timestampConfig } from './config'
+import { workoutPlans } from './workout-plan.schema'
 import { workoutExercises } from './workout.schema'
 
 export const exerciseAttributeNameEnum = pgEnum('exercise_attribute_name', [
@@ -31,3 +32,18 @@ export const userWorkoutExerciseAttributes = pgTable(
       .$onUpdate(() => sql`now()`)
   }
 )
+
+export const userWorkoutPlans = pgTable('user_workout_plans', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  workoutPlanId: uuid('workout_plan_id')
+    .notNull()
+    .references(() => workoutPlans.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', timestampConfig)
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => sql`now()`)
+})
