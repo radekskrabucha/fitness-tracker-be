@@ -9,6 +9,7 @@ import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'
 import {
+  FORBIDDEN,
   NOT_FOUND,
   OK,
   UNAUTHORIZED,
@@ -88,13 +89,17 @@ export const createWorkout = createRoute({
       description: 'Created workout',
       schema: selectWorkoutSchema
     }),
-    [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
-    }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: zodErrorOpenApiSchema,
       description: 'Invalid request'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -123,13 +128,17 @@ export const updateWorkout = createRoute({
       schema: errorOpenApiSchema,
       description: 'Workout not found'
     }),
-    [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
-    }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: zodErrorOpenApiSchema,
       description: 'Invalid request'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -153,9 +162,17 @@ export const deleteWorkout = createRoute({
       schema: errorOpenApiSchema,
       description: 'Workout not found'
     }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      description: 'Invalid UUID',
+      schema: errorOpenApiSchema
+    }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })

@@ -8,7 +8,14 @@ import {
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'
-import { CREATED, OK, NOT_FOUND, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
+import {
+  CREATED,
+  OK,
+  NOT_FOUND,
+  UNPROCESSABLE_ENTITY,
+  FORBIDDEN,
+  UNAUTHORIZED
+} from '~/utils/httpCodes'
 import {
   errorOpenApiSchema,
   jsonContentOpenAPISchema,
@@ -29,6 +36,10 @@ export const getExercises = createRoute({
     [OK]: jsonContentOpenAPISchema({
       description: 'List of exercises',
       schema: selectExerciseSchema.array()
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -55,6 +66,10 @@ export const getExerciseById = createRoute({
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       description: 'Invalid UUID',
       schema: errorOpenApiSchema
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -80,6 +95,14 @@ export const createExercise = createRoute({
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       description: 'Invalid input',
       schema: zodErrorOpenApiSchema
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -110,6 +133,14 @@ export const updateExercise = createRoute({
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       description: 'Invalid input',
       schema: zodErrorOpenApiSchema
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -131,6 +162,18 @@ export const deleteExercise = createRoute({
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       description: 'Exercise not found',
+      schema: errorOpenApiSchema
+    }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      description: 'Invalid UUID',
+      schema: errorOpenApiSchema
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
       schema: errorOpenApiSchema
     })
   }

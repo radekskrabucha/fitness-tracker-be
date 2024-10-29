@@ -12,7 +12,8 @@ import {
   OK,
   NOT_FOUND,
   UNAUTHORIZED,
-  UNPROCESSABLE_ENTITY
+  UNPROCESSABLE_ENTITY,
+  FORBIDDEN
 } from '~/utils/httpCodes'
 import {
   errorOpenApiSchema,
@@ -86,13 +87,17 @@ export const postWorkoutPlan = createRoute({
       description: 'Created workout plan',
       schema: selectWorkoutPlanSchema
     }),
-    [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
-    }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
       description: 'Invalid request'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -121,13 +126,17 @@ export const putWorkoutPlan = createRoute({
       schema: errorOpenApiSchema,
       description: 'Workout plan not found'
     }),
-    [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
-    }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
       description: 'Invalid request'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -151,9 +160,17 @@ export const deleteWorkoutPlan = createRoute({
       schema: errorOpenApiSchema,
       description: 'Workout plan not found'
     }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      description: 'Invalid UUID',
+      schema: errorOpenApiSchema
+    }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
