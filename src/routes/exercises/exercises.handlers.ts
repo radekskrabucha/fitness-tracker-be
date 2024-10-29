@@ -18,14 +18,11 @@ export const getExerciseById: AppRouteHandler<GetExerciseById> = async c => {
   const { id } = c.req.valid('param')
   const result = await exerciseService.getExerciseById(id)
 
-  if (!result || !result.exercise) {
+  if (!result) {
     return c.json({ message: 'Exercise not found' }, NOT_FOUND)
   }
 
-  return c.json(
-    { exercise: result.exercise, muscleGroups: result.muscleGroups },
-    OK
-  )
+  return c.json(result, OK)
 }
 
 export const createExercise: AppRouteHandler<CreateExercise> = async c => {

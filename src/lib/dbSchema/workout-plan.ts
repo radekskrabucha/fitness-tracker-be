@@ -4,27 +4,29 @@ import {
   workoutPlans,
   workoutPlanWorkouts
 } from '~/db/schema/workout-plan.schema'
+import { selectWorkoutSchema } from './workout'
 
-export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans, {
+export const insertWorkoutPlanBaseSchema = createInsertSchema(workoutPlans, {
   name: schema => schema.name.min(1).max(256),
-  description: schema => schema.description.max(1024),
-  duration: schema =>
-    schema.duration.min(1).openapi({
-      description: 'Workout plan duration in days'
-    })
+  description: schema => schema.description.max(1024)
 }).omit({
   id: true,
   createdAt: true,
-  updatedAt: true,
-  userId: true
+  updatedAt: true
 })
-export const patchWorkoutPlanSchema = insertWorkoutPlanSchema.partial()
-export const selectWorkoutPlanSchema = createSelectSchema(workoutPlans, {
-  duration: schema =>
-    schema.duration.min(1).openapi({
-      description: 'Workout plan duration in days'
-    })
-}).openapi('WorkoutPlan')
+export const insertWorkoutPlanSchema = insertWorkoutPlanBaseSchema.extend({
+  workouts: z
+    .array(
+      z.object({
+        id: z.string().uuid(),
+        orderIndex: z.number().min(0)
+      })
+    )
+    .min(1)
+})
+export const patchWorkoutPlanSchema = insertWorkoutPlanBaseSchema.partial()
+export const selectWorkoutPlanSchema =
+  createSelectSchema(workoutPlans).openapi('WorkoutPlan')
 
 export const insertWorkoutPlanWorkoutSchema = createInsertSchema(
   workoutPlanWorkouts
@@ -37,6 +39,11 @@ export const selectWorkoutPlanWorkoutSchema = createSelectSchema(
   workoutPlanWorkouts
 ).openapi('WorkoutPlan Excercise')
 
+export const selectWorkoutPlanWithWorkoutsSchema =
+  selectWorkoutPlanSchema.extend({
+    workouts: z.array(selectWorkoutSchema)
+  })
+
 export type InsertWorkoutPlan = z.infer<typeof insertWorkoutPlanSchema>
 export type PatchWorkoutPlan = z.infer<typeof patchWorkoutPlanSchema>
 export type SelectWorkoutPlan = z.infer<typeof selectWorkoutPlanSchema>
@@ -48,4 +55,7 @@ export type PatchWorkoutPlanWorkout = z.infer<
 >
 export type SelectWorkoutPlanWorkout = z.infer<
   typeof selectWorkoutPlanWorkoutSchema
+>
+export type SelectWorkoutPlanWithWorkouts = z.infer<
+  typeof selectWorkoutPlanWithWorkoutsSchema
 >

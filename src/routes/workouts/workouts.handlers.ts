@@ -10,18 +10,15 @@ import type {
 import * as workoutService from './workouts.services'
 
 export const listWorkouts: AppRouteHandler<ListWorkouts> = async c => {
-  const { id } = c.get('user')
-
-  const userWorkouts = await workoutService.getUserWorkouts(id)
+  const userWorkouts = await workoutService.getWorkouts()
 
   return c.json(userWorkouts, OK)
 }
 
 export const getWorkout: AppRouteHandler<GetWorkout> = async c => {
-  const user = c.get('user')
   const { id } = c.req.valid('param')
 
-  const workout = await workoutService.getUserWorkout(user.id, id)
+  const workout = await workoutService.getWorkout(id)
 
   if (!workout) {
     return c.json({ message: 'Workout not found' }, NOT_FOUND)
@@ -31,24 +28,18 @@ export const getWorkout: AppRouteHandler<GetWorkout> = async c => {
 }
 
 export const createWorkout: AppRouteHandler<CreateWorkout> = async c => {
-  const user = c.get('user')
   const workoutData = c.req.valid('json')
 
-  const [workout] = await workoutService.createWorkout(user.id, workoutData)
+  const workout = await workoutService.createWorkout(workoutData)
 
   return c.json(workout, OK)
 }
 
 export const updateWorkout: AppRouteHandler<UpdateWorkout> = async c => {
-  const user = c.get('user')
   const { id } = c.req.valid('param')
   const workoutData = c.req.valid('json')
 
-  const [updatedWorkout] = await workoutService.updateWorkout(
-    user.id,
-    id,
-    workoutData
-  )
+  const [updatedWorkout] = await workoutService.updateWorkout(id, workoutData)
 
   if (!updatedWorkout) {
     return c.json({ message: 'Workout not found' }, NOT_FOUND)
@@ -58,10 +49,9 @@ export const updateWorkout: AppRouteHandler<UpdateWorkout> = async c => {
 }
 
 export const deleteWorkout: AppRouteHandler<DeleteWorkout> = async c => {
-  const user = c.get('user')
   const { id } = c.req.valid('param')
 
-  const [deletedWorkout] = await workoutService.deleteWorkout(user.id, id)
+  const [deletedWorkout] = await workoutService.deleteWorkout(id)
 
   if (!deletedWorkout) {
     return c.json({ message: 'Workout not found' }, NOT_FOUND)

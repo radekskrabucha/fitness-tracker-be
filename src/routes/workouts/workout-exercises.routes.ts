@@ -12,7 +12,8 @@ import {
   CREATED,
   NOT_FOUND,
   UNAUTHORIZED,
-  UNPROCESSABLE_ENTITY
+  UNPROCESSABLE_ENTITY,
+  FORBIDDEN
 } from '~/utils/httpCodes'
 import {
   errorOpenApiSchema,
@@ -74,13 +75,17 @@ export const addWorkoutExercise = createRoute({
       schema: errorOpenApiSchema,
       description: 'Workout not found'
     }),
-    [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
-    }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: zodErrorOpenApiSchema,
       description: 'Invalid request'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -118,6 +123,10 @@ export const updateWorkoutExercise = createRoute({
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: zodErrorOpenApiSchema,
       description: 'Invalid request'
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -143,9 +152,17 @@ export const removeWorkoutExercise = createRoute({
       schema: errorOpenApiSchema,
       description: 'Workout or exercise not found'
     }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      description: 'Invalid UUID',
+      schema: errorOpenApiSchema
+    }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })

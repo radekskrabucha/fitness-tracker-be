@@ -7,7 +7,6 @@ import {
   timestamp,
   pgEnum
 } from 'drizzle-orm/pg-core'
-import { user } from './auth.schema'
 import { timestampConfig } from './config'
 import { workouts } from './workout.schema'
 
@@ -21,13 +20,9 @@ export const difficultyLevelEnum = pgEnum('difficulty_level', [
 
 export const workoutPlans = pgTable('workout_plans', {
   id: uuid('id').defaultRandom().primaryKey(),
-  userId: uuid('user_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 1024 }),
   difficultyLevel: difficultyLevelEnum('difficulty_level').notNull(),
-  duration: integer('duration'), // in days
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', timestampConfig)
     .defaultNow()

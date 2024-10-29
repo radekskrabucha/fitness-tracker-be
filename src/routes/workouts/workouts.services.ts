@@ -1,40 +1,80 @@
-import { and, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { db } from '~/db'
-import { workouts } from '~/db/schema/workout.schema'
-import type { InsertWorkout, PatchWorkout } from '~/lib/dbSchema/workout'
+import { exercises } from '~/db/schema/exercise.schema'
+import { workouts, workoutExercises } from '~/db/schema/workout.schema'
+import type {
+  InsertWorkout,
+  PatchWorkout,
+  SelectWorkoutWithExercises
+} from '~/lib/dbSchema/workout'
 
-export const getUserWorkouts = (userId: string) =>
-  db.query.workouts.findMany({
-    where: ({ userId: id }) => eq(id, userId)
-  })
+export const getWorkouts = () => db.query.workouts.findMany()
 
-export const getUserWorkout = (userId: string, workoutId: string) =>
-  db.query.workouts.findFirst({
-    where: ({ userId: workoutUserId, id }) =>
-      and(eq(workoutUserId, userId), eq(id, workoutId))
-  })
+export const getWorkout = async (
+  workoutId: string
+): Promise<SelectWorkoutWithExercises | undefined> => {
+  const result = await db
+    .select({
+      workout: workouts,
+      workoutExercise: workoutExercises,
+      exerciseDetails: exercises
+    })
+    .from(workouts)
+    .leftJoin(workoutExercises, eq(workouts.id, workoutExercises.workoutId))
+    .leftJoin(exercises, eq(workoutExercises.exerciseId, exercises.id))
+    .where(eq(workouts.id, workoutId))
 
-export const createWorkout = (userId: string, workout: InsertWorkout) =>
-  db
+  const workout = result[0]?.workout
+
+  if (!workout) {
+    return undefined
+  }
+
+  const exercisesFiltered = result.flatMap(
+    ({ workoutExercise, exerciseDetails }) => {
+      if (!workoutExercise || !exerciseDetails) {
+        return []
+      }
+
+      return {
+        ...workoutExercise,
+        details: exerciseDetails
+      }
+    }
+  )
+
+  return {
+    workout,
+    exercises: exercisesFiltered
+  }
+}
+
+export const createWorkout = async ({
+  exercises,
+  ...workout
+}: InsertWorkout) => {
+  const [workoutInserted] = await db
     .insert(workouts)
-    // @ts-expect-error date is coerced to string in the schema
-    .values({ ...workout, userId })
+    .values(workout)
     .returning()
 
-export const updateWorkout = (
-  userId: string,
-  workoutId: string,
-  workout: PatchWorkout
-) =>
-  db
-    .update(workouts)
-    // @ts-expect-error date is coerced to string in the schema
-    .set(workout)
-    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)))
-    .returning()
+  if (!workoutInserted) {
+    throw new Error('Workout not found')
+  }
 
-export const deleteWorkout = (userId: string, workoutId: string) =>
-  db
-    .delete(workouts)
-    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)))
-    .returning()
+  const exerciseIds = exercises.map(({ id }, index) => ({
+    exerciseId: id,
+    orderIndex: index,
+    workoutId: workoutInserted.id
+  }))
+
+  await db.insert(workoutExercises).values(exerciseIds).returning()
+
+  return workoutInserted
+}
+
+export const updateWorkout = (workoutId: string, workout: PatchWorkout) =>
+  db.update(workouts).set(workout).where(eq(workouts.id, workoutId)).returning()
+
+export const deleteWorkout = (workoutId: string) =>
+  db.delete(workouts).where(eq(workouts.id, workoutId)).returning()

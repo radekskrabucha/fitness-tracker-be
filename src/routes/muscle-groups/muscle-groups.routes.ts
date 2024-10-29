@@ -7,7 +7,14 @@ import {
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'
-import { OK, NOT_FOUND, CREATED, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
+import {
+  OK,
+  NOT_FOUND,
+  CREATED,
+  UNPROCESSABLE_ENTITY,
+  FORBIDDEN,
+  UNAUTHORIZED
+} from '~/utils/httpCodes'
 import {
   jsonContentOpenAPISchema,
   paramIdUUIDSchema,
@@ -28,6 +35,10 @@ export const getMuscleGroups = createRoute({
     [OK]: jsonContentOpenAPISchema({
       description: 'List of muscle groups',
       schema: selectMuscleGroupSchema.array()
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -50,6 +61,10 @@ export const getMuscleGroup = createRoute({
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
       description: 'Muscle group not found'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -76,6 +91,14 @@ export const createMuscleGroup = createRoute({
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: zodErrorOpenApiSchema,
       description: 'Invalid request'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -107,6 +130,14 @@ export const updateMuscleGroup = createRoute({
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: zodErrorOpenApiSchema,
       description: 'Invalid request'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })
@@ -129,6 +160,18 @@ export const deleteMuscleGroup = createRoute({
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
       description: 'Muscle group not found'
+    }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      description: 'Invalid UUID',
+      schema: errorOpenApiSchema
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      description: 'Unauthorized',
+      schema: errorOpenApiSchema
+    }),
+    [FORBIDDEN]: jsonContentOpenAPISchema({
+      description: 'Forbidden',
+      schema: errorOpenApiSchema
     })
   }
 })

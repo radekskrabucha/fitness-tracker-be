@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { db } from '~/db'
 import {
   exercises,
@@ -8,18 +8,18 @@ import {
 import type {
   InsertExercise,
   PatchExercise,
-  SelectMuscleGroup
+  SelectExerciseWithMuscles
 } from '~/lib/dbSchema/exercise'
 
 export const getExercises = () => db.query.exercises.findMany()
 
-export const getExerciseById = async (exerciseId: string) => {
-  const [result] = await db
+export const getExerciseById = async (
+  exerciseId: string
+): Promise<SelectExerciseWithMuscles | undefined> => {
+  const result = await db
     .select({
       exercise: exercises,
-      muscleGroups: sql<
-        Array<SelectMuscleGroup>
-      >`json_agg(row_to_json(${muscleGroups}))`
+      muscleGroups
     })
     .from(exerciseMuscleGroups)
     .leftJoin(exercises, eq(exerciseMuscleGroups.exerciseId, exercises.id))
@@ -28,9 +28,25 @@ export const getExerciseById = async (exerciseId: string) => {
       eq(exerciseMuscleGroups.muscleGroupId, muscleGroups.id)
     )
     .where(eq(exercises.id, exerciseId))
-    .groupBy(exercises.id)
 
-  return result
+  const exercise = result[0]?.exercise
+
+  if (!exercise) {
+    return undefined
+  }
+
+  const muscles = result.flatMap(({ muscleGroups }) => {
+    if (!muscleGroups) {
+      return []
+    }
+
+    return muscleGroups
+  })
+
+  return {
+    exercise,
+    muscleGroups: muscles
+  }
 }
 
 export const createExercise = async ({
