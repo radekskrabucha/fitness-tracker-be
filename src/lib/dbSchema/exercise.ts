@@ -42,12 +42,19 @@ export const patchExerciseMuscleGroupSchema =
 export const selectExerciseMuscleGroupSchema =
   createSelectSchema(exerciseMuscleGroups)
 
-export const insertExerciseCategorySchema =
-  createInsertSchema(exerciseCategories)
+export const insertExerciseCategorySchema = createInsertSchema(
+  exerciseCategories,
+  {
+    name: schema => schema.name.min(1).max(50),
+    description: schema => schema.description.max(256)
+  }
+).omit({
+  id: true
+})
 export const patchExerciseCategorySchema =
   insertExerciseCategorySchema.partial()
 export const selectExerciseCategorySchema =
-  createSelectSchema(exerciseCategories)
+  createSelectSchema(exerciseCategories).openapi('ExerciseCategory')
 
 export const selectExerciseWithCategorySchema = selectExerciseSchema.extend({
   category: selectExerciseCategorySchema

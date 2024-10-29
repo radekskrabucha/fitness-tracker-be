@@ -25,7 +25,7 @@ const adminTags = withAdminTag(tags)
 
 export const getExerciseCategories = createRoute({
   method: 'get',
-  path: '/',
+  path: '/categories',
   tags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware],
@@ -44,7 +44,7 @@ export type GetExerciseCategories = typeof getExerciseCategories
 
 export const getExerciseCategory = createRoute({
   method: 'get',
-  path: '/{id}',
+  path: '/categories/{id}',
   tags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware],
@@ -74,7 +74,7 @@ export type GetExerciseCategory = typeof getExerciseCategory
 
 export const createExerciseCategory = createRoute({
   method: 'post',
-  path: '/',
+  path: '/categories',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware, adminMiddleware],
@@ -107,7 +107,7 @@ export type CreateExerciseCategory = typeof createExerciseCategory
 
 export const updateExerciseCategory = createRoute({
   method: 'put',
-  path: '/{id}',
+  path: '/categories/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware, adminMiddleware],
@@ -145,7 +145,7 @@ export type UpdateExerciseCategory = typeof updateExerciseCategory
 
 export const deleteExerciseCategory = createRoute({
   method: 'delete',
-  path: '/{id}',
+  path: '/categories/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware, adminMiddleware],
