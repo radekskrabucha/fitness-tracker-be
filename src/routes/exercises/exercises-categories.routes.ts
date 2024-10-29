@@ -1,10 +1,8 @@
 import { createRoute } from '@hono/zod-openapi'
 import {
-  insertExerciseSchema,
-  selectExerciseSchema,
-  patchExerciseSchema,
-  selectExerciseWithDetailsSchema,
-  selectExerciseWithCategorySchema
+  insertExerciseCategorySchema,
+  patchExerciseCategorySchema,
+  selectExerciseCategorySchema
 } from '~/lib/dbSchema/exercise'
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
@@ -17,25 +15,24 @@ import {
   UNAUTHORIZED
 } from '~/utils/httpCodes'
 import {
-  errorOpenApiSchema,
   jsonContentOpenAPISchema,
   paramIdUUIDSchema,
-  zodErrorOpenApiSchema
+  errorOpenApiSchema
 } from '~/utils/schemas'
 
-const tags = ['Exercises']
+const tags = ['Exercise Categories']
 const adminTags = withAdminTag(tags)
 
-export const getExercises = createRoute({
+export const getExerciseCategories = createRoute({
   method: 'get',
-  path: '/',
+  path: '/categories',
   tags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware],
   responses: {
     [OK]: jsonContentOpenAPISchema({
-      description: 'List of exercises',
-      schema: selectExerciseWithCategorySchema.array()
+      description: 'List of exercise categories',
+      schema: selectExerciseCategorySchema.array()
     }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
       description: 'Unauthorized',
@@ -43,11 +40,11 @@ export const getExercises = createRoute({
     })
   }
 })
-export type GetExercises = typeof getExercises
+export type GetExerciseCategories = typeof getExerciseCategories
 
-export const getExerciseById = createRoute({
+export const getExerciseCategory = createRoute({
   method: 'get',
-  path: '/{id}',
+  path: '/categories/{id}',
   tags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware],
@@ -56,11 +53,11 @@ export const getExerciseById = createRoute({
   },
   responses: {
     [OK]: jsonContentOpenAPISchema({
-      description: 'Exercise details',
-      schema: selectExerciseWithDetailsSchema
+      description: 'Exercise category details',
+      schema: selectExerciseCategorySchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
-      description: 'Exercise not found',
+      description: 'Exercise category not found',
       schema: errorOpenApiSchema
     }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
@@ -73,28 +70,28 @@ export const getExerciseById = createRoute({
     })
   }
 })
-export type GetExerciseById = typeof getExerciseById
+export type GetExerciseCategory = typeof getExerciseCategory
 
-export const createExercise = createRoute({
+export const createExerciseCategory = createRoute({
   method: 'post',
-  path: '/',
+  path: '/categories',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware, adminMiddleware],
   request: {
     body: jsonContentOpenAPISchema({
-      description: 'Exercise to create',
-      schema: insertExerciseSchema
+      description: 'Exercise category to create',
+      schema: insertExerciseCategorySchema
     })
   },
   responses: {
     [OK]: jsonContentOpenAPISchema({
-      description: 'Created exercise',
-      schema: selectExerciseSchema
+      description: 'Created exercise category',
+      schema: selectExerciseCategorySchema
     }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       description: 'Invalid input',
-      schema: zodErrorOpenApiSchema
+      schema: errorOpenApiSchema
     }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
       description: 'Unauthorized',
@@ -106,33 +103,33 @@ export const createExercise = createRoute({
     })
   }
 })
-export type CreateExercise = typeof createExercise
+export type CreateExerciseCategory = typeof createExerciseCategory
 
-export const updateExercise = createRoute({
+export const updateExerciseCategory = createRoute({
   method: 'put',
-  path: '/{id}',
+  path: '/categories/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware, adminMiddleware],
   request: {
     params: paramIdUUIDSchema,
     body: jsonContentOpenAPISchema({
-      description: 'Updated exercise data',
-      schema: patchExerciseSchema
+      description: 'Updated exercise category data',
+      schema: patchExerciseCategorySchema
     })
   },
   responses: {
     [OK]: jsonContentOpenAPISchema({
-      description: 'Updated exercise',
-      schema: selectExerciseSchema
+      description: 'Updated exercise category',
+      schema: selectExerciseCategorySchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
-      description: 'Exercise not found',
+      description: 'Exercise category not found',
       schema: errorOpenApiSchema
     }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       description: 'Invalid input',
-      schema: zodErrorOpenApiSchema
+      schema: errorOpenApiSchema
     }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
       description: 'Unauthorized',
@@ -144,11 +141,11 @@ export const updateExercise = createRoute({
     })
   }
 })
-export type UpdateExercise = typeof updateExercise
+export type UpdateExerciseCategory = typeof updateExerciseCategory
 
-export const deleteExercise = createRoute({
+export const deleteExerciseCategory = createRoute({
   method: 'delete',
-  path: '/{id}',
+  path: '/categories/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware, adminMiddleware],
@@ -157,11 +154,11 @@ export const deleteExercise = createRoute({
   },
   responses: {
     [OK]: jsonContentOpenAPISchema({
-      description: 'Deleted exercise',
-      schema: selectExerciseSchema
+      description: 'Deleted exercise category',
+      schema: selectExerciseCategorySchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
-      description: 'Exercise not found',
+      description: 'Exercise category not found',
       schema: errorOpenApiSchema
     }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
@@ -178,4 +175,4 @@ export const deleteExercise = createRoute({
     })
   }
 })
-export type DeleteExercise = typeof deleteExercise
+export type DeleteExerciseCategory = typeof deleteExerciseCategory

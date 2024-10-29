@@ -3,23 +3,48 @@ import { db } from '~/db'
 import {
   exercises,
   exerciseMuscleGroups,
-  muscleGroups
+  muscleGroups,
+  exerciseCategories
 } from '~/db/schema/exercise.schema'
 import type {
   InsertExercise,
   PatchExercise,
-  SelectExerciseWithMuscles
+  SelectExerciseWithDetails
 } from '~/lib/dbSchema/exercise'
 
-export const getExercises = () => db.query.exercises.findMany()
-
-export const getExerciseById = async (
-  exerciseId: string
-): Promise<SelectExerciseWithMuscles | undefined> => {
+export const getExercises = async () => {
   const result = await db
     .select({
       exercise: exercises,
-      muscleGroups
+      category: exerciseCategories
+    })
+    .from(exercises)
+    .leftJoin(
+      exerciseCategories,
+      eq(exercises.categoryId, exerciseCategories.id)
+    )
+  const filteredExercises = result.flatMap(({ exercise, category }) => {
+    if (!category) {
+      return []
+    }
+
+    return {
+      ...exercise,
+      category
+    }
+  })
+
+  return filteredExercises
+}
+
+export const getExerciseById = async (
+  exerciseId: string
+): Promise<SelectExerciseWithDetails | undefined> => {
+  const result = await db
+    .select({
+      exercise: exercises,
+      muscleGroups,
+      category: exerciseCategories
     })
     .from(exerciseMuscleGroups)
     .leftJoin(exercises, eq(exerciseMuscleGroups.exerciseId, exercises.id))
@@ -27,11 +52,16 @@ export const getExerciseById = async (
       muscleGroups,
       eq(exerciseMuscleGroups.muscleGroupId, muscleGroups.id)
     )
+    .leftJoin(
+      exerciseCategories,
+      eq(exercises.categoryId, exerciseCategories.id)
+    )
     .where(eq(exercises.id, exerciseId))
 
   const exercise = result[0]?.exercise
+  const category = result[0]?.category
 
-  if (!exercise) {
+  if (!exercise || !category) {
     return undefined
   }
 
@@ -44,8 +74,9 @@ export const getExerciseById = async (
   })
 
   return {
-    exercise,
-    muscleGroups: muscles
+    ...exercise,
+    muscleGroups: muscles,
+    category
   }
 }
 

@@ -3,7 +3,8 @@ import { z } from 'zod'
 import {
   exercises,
   muscleGroups,
-  exerciseMuscleGroups
+  exerciseMuscleGroups,
+  exerciseCategories
 } from '~/db/schema/exercise.schema'
 
 export const insertExerciseSchema = createInsertSchema(exercises, {
@@ -16,7 +17,8 @@ export const insertExerciseSchema = createInsertSchema(exercises, {
     updatedAt: true
   })
   .extend({
-    muscleGroupIds: z.array(z.string().uuid()).min(1)
+    muscleGroupIds: z.array(z.string().uuid()).min(1),
+    categoryId: z.string().uuid()
   })
 export const patchExerciseSchema = insertExerciseSchema.partial()
 export const selectExerciseSchema =
@@ -40,10 +42,27 @@ export const patchExerciseMuscleGroupSchema =
 export const selectExerciseMuscleGroupSchema =
   createSelectSchema(exerciseMuscleGroups)
 
-export const selectExerciseWithMusclesSchema = z.object({
-  exercise: selectExerciseSchema,
-  muscleGroups: z.array(selectMuscleGroupSchema)
+export const insertExerciseCategorySchema = createInsertSchema(
+  exerciseCategories,
+  {
+    name: schema => schema.name.min(1).max(50),
+    description: schema => schema.description.max(256)
+  }
+).omit({
+  id: true
 })
+export const patchExerciseCategorySchema =
+  insertExerciseCategorySchema.partial()
+export const selectExerciseCategorySchema =
+  createSelectSchema(exerciseCategories).openapi('ExerciseCategory')
+
+export const selectExerciseWithCategorySchema = selectExerciseSchema.extend({
+  category: selectExerciseCategorySchema
+})
+export const selectExerciseWithDetailsSchema =
+  selectExerciseWithCategorySchema.extend({
+    muscleGroups: z.array(selectMuscleGroupSchema)
+  })
 
 export type InsertExercise = z.infer<typeof insertExerciseSchema>
 export type PatchExercise = z.infer<typeof patchExerciseSchema>
@@ -52,6 +71,14 @@ export type SelectExercise = z.infer<typeof selectExerciseSchema>
 export type InsertMuscleGroup = z.infer<typeof insertMuscleGroupSchema>
 export type PatchMuscleGroup = z.infer<typeof patchMuscleGroupSchema>
 export type SelectMuscleGroup = z.infer<typeof selectMuscleGroupSchema>
+
+export type InsertExerciseCategory = z.infer<
+  typeof insertExerciseCategorySchema
+>
+export type PatchExerciseCategory = z.infer<typeof patchExerciseCategorySchema>
+export type SelectExerciseCategory = z.infer<
+  typeof selectExerciseCategorySchema
+>
 
 export type InsertExerciseMuscleGroup = z.infer<
   typeof insertExerciseMuscleGroupSchema
@@ -63,6 +90,6 @@ export type SelectExerciseMuscleGroup = z.infer<
   typeof selectExerciseMuscleGroupSchema
 >
 
-export type SelectExerciseWithMuscles = z.infer<
-  typeof selectExerciseWithMusclesSchema
+export type SelectExerciseWithDetails = z.infer<
+  typeof selectExerciseWithDetailsSchema
 >
