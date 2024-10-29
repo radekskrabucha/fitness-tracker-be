@@ -49,13 +49,13 @@ export const getWorkoutPlanById = async (
   }
 }
 
-export const createWorkoutPlan = async (
-  userId: string,
-  { workouts, ...workoutPlanData }: InsertWorkoutPlan
-) => {
+export const createWorkoutPlan = async ({
+  workouts,
+  ...workoutPlanData
+}: InsertWorkoutPlan) => {
   const [workoutPlanInserted] = await db
     .insert(workoutPlans)
-    .values({ ...workoutPlanData, userId })
+    .values(workoutPlanData)
     .returning()
 
   if (!workoutPlanInserted) {

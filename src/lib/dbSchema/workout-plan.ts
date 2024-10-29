@@ -8,16 +8,11 @@ import { selectWorkoutSchema } from './workout'
 
 export const insertWorkoutPlanBaseSchema = createInsertSchema(workoutPlans, {
   name: schema => schema.name.min(1).max(256),
-  description: schema => schema.description.max(1024),
-  duration: schema =>
-    schema.duration.min(1).openapi({
-      description: 'Workout plan duration in days'
-    })
+  description: schema => schema.description.max(1024)
 }).omit({
   id: true,
   createdAt: true,
-  updatedAt: true,
-  userId: true
+  updatedAt: true
 })
 export const insertWorkoutPlanSchema = insertWorkoutPlanBaseSchema.extend({
   workouts: z
@@ -30,12 +25,8 @@ export const insertWorkoutPlanSchema = insertWorkoutPlanBaseSchema.extend({
     .min(1)
 })
 export const patchWorkoutPlanSchema = insertWorkoutPlanBaseSchema.partial()
-export const selectWorkoutPlanSchema = createSelectSchema(workoutPlans, {
-  duration: schema =>
-    schema.duration.min(1).openapi({
-      description: 'Workout plan duration in days'
-    })
-}).openapi('WorkoutPlan')
+export const selectWorkoutPlanSchema =
+  createSelectSchema(workoutPlans).openapi('WorkoutPlan')
 
 export const insertWorkoutPlanWorkoutSchema = createInsertSchema(
   workoutPlanWorkouts
