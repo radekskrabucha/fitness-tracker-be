@@ -62,10 +62,10 @@ export const createWorkoutPlan = async ({
     throw new Error('Workout plan not found')
   }
 
-  const planWorkouts = workouts.map(({ id }, index) => ({
+  const planWorkouts = workouts.map((workoutId, index) => ({
     workoutPlanId: workoutPlanInserted.id,
     orderIndex: index,
-    workoutId: id
+    workoutId
   }))
 
   await db.insert(workoutPlanWorkouts).values(planWorkouts).returning()
