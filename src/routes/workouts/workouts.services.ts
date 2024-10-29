@@ -1,5 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
+import { exercises } from '~/db/schema/exercise.schema'
 import { workouts, workoutExercises } from '~/db/schema/workout.schema'
 import type {
   InsertWorkout,
@@ -15,10 +16,12 @@ export const getWorkout = async (
   const result = await db
     .select({
       workout: workouts,
-      exercise: workoutExercises
+      workoutExercise: workoutExercises,
+      exerciseDetails: exercises
     })
     .from(workouts)
     .leftJoin(workoutExercises, eq(workouts.id, workoutExercises.workoutId))
+    .leftJoin(exercises, eq(workoutExercises.exerciseId, exercises.id))
     .where(eq(workouts.id, workoutId))
 
   const workout = result[0]?.workout
@@ -27,17 +30,22 @@ export const getWorkout = async (
     return undefined
   }
 
-  const exercises = result.flatMap(({ exercise }) => {
-    if (!exercise) {
-      return []
-    }
+  const exercisesFiltered = result.flatMap(
+    ({ workoutExercise, exerciseDetails }) => {
+      if (!workoutExercise || !exerciseDetails) {
+        return []
+      }
 
-    return exercise
-  })
+      return {
+        ...workoutExercise,
+        details: exerciseDetails
+      }
+    }
+  )
 
   return {
     workout,
-    exercises
+    exercises: exercisesFiltered
   }
 }
 

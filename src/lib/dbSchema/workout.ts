@@ -1,6 +1,7 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { workouts, workoutExercises } from '~/db/schema/workout.schema'
+import { selectExerciseSchema } from './exercise'
 
 const insertWorkoutBaseSchema = createInsertSchema(workouts, {
   name: schema => schema.name.min(1).max(256),
@@ -43,7 +44,11 @@ export const selectWorkoutExerciseSchema =
 
 export const selectWorkoutWithExercisesSchema = z.object({
   workout: selectWorkoutSchema,
-  exercises: z.array(selectWorkoutExerciseSchema)
+  exercises: z.array(
+    selectWorkoutExerciseSchema.extend({
+      details: selectExerciseSchema
+    })
+  )
 })
 
 export type InsertWorkout = z.infer<typeof insertWorkoutSchema>
