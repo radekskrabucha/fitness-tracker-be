@@ -4,6 +4,7 @@ import { configureOpenApi } from '~/lib/openApi'
 import { exercisesRouter } from '~/routes/exercises'
 import { muscleGroupsRouter } from '~/routes/muscle-groups'
 import { profileRouter } from '~/routes/profile'
+import { userWorkoutsRouter } from '~/routes/user/workout-plans'
 import { workoutPlansRouter } from '~/routes/workout-plans'
 import { workoutsRouter } from '~/routes/workouts'
 import { env } from '~/utils/env'
@@ -17,6 +18,7 @@ app.route('/exercises', exercisesRouter)
 app.route('/muscle-groups', muscleGroupsRouter)
 app.route('/workouts', workoutsRouter)
 app.route('/workout-plans', workoutPlansRouter)
+app.route('/user/workout-plans', userWorkoutsRouter)
 
 serve({
   fetch: app.fetch,

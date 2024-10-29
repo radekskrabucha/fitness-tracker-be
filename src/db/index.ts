@@ -4,6 +4,7 @@ import { env } from '~/utils/env'
 import * as authSchema from './schema/auth.schema'
 import * as exerciseSchema from './schema/exercise.schema'
 import * as profileSchema from './schema/profile.schema'
+import * as userWorkoutSchema from './schema/user-workout.schema'
 import * as workoutPlanSchema from './schema/workout-plan.schema'
 import * as workoutSchema from './schema/workout.schema'
 
@@ -14,6 +15,7 @@ export const db = drizzle(sql, {
     ...profileSchema,
     ...exerciseSchema,
     ...workoutSchema,
-    ...workoutPlanSchema
+    ...workoutPlanSchema,
+    ...userWorkoutSchema
   }
 })
