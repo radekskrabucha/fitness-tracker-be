@@ -70,12 +70,8 @@
           "name": "account_userId_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -132,12 +128,8 @@
           "name": "session_userId_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -230,9 +222,7 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "checkConstraints": {}
@@ -304,9 +294,7 @@
         "exercise_categories_name_unique": {
           "name": "exercise_categories_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "checkConstraints": {}
@@ -334,12 +322,8 @@
           "name": "exercise_muscle_groups_exercise_id_exercises_id_fk",
           "tableFrom": "exercise_muscle_groups",
           "tableTo": "exercises",
-          "columnsFrom": [
-            "exercise_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["exercise_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -347,12 +331,8 @@
           "name": "exercise_muscle_groups_muscle_group_id_muscle_groups_id_fk",
           "tableFrom": "exercise_muscle_groups",
           "tableTo": "muscle_groups",
-          "columnsFrom": [
-            "muscle_group_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["muscle_group_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -411,12 +391,8 @@
           "name": "exercises_category_id_exercise_categories_id_fk",
           "tableFrom": "exercises",
           "tableTo": "exercise_categories",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["category_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -426,9 +402,7 @@
         "exercises_name_unique": {
           "name": "exercises_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "checkConstraints": {}
@@ -472,9 +446,7 @@
         "muscle_groups_name_unique": {
           "name": "muscle_groups_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "checkConstraints": {}
@@ -563,12 +535,8 @@
           "name": "user_fitness_profiles_user_id_user_id_fk",
           "tableFrom": "user_fitness_profiles",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -606,12 +574,8 @@
           "name": "workout_plan_workouts_workout_plan_id_workout_plans_id_fk",
           "tableFrom": "workout_plan_workouts",
           "tableTo": "workout_plans",
-          "columnsFrom": [
-            "workout_plan_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["workout_plan_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -619,12 +583,8 @@
           "name": "workout_plan_workouts_workout_id_workouts_id_fk",
           "tableFrom": "workout_plan_workouts",
           "tableTo": "workouts",
-          "columnsFrom": [
-            "workout_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["workout_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -734,12 +694,8 @@
           "name": "workout_exercises_workout_id_workouts_id_fk",
           "tableFrom": "workout_exercises",
           "tableTo": "workouts",
-          "columnsFrom": [
-            "workout_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["workout_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -747,12 +703,8 @@
           "name": "workout_exercises_exercise_id_exercises_id_fk",
           "tableFrom": "workout_exercises",
           "tableTo": "exercises",
-          "columnsFrom": [
-            "exercise_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["exercise_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -810,10 +762,7 @@
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": [
-        "user",
-        "admin"
-      ]
+      "values": ["user", "admin"]
     },
     "public.activity_level": {
       "name": "activity_level",
@@ -853,22 +802,12 @@
     "public.gender": {
       "name": "gender",
       "schema": "public",
-      "values": [
-        "male",
-        "female",
-        "other",
-        "prefer_not_to_say"
-      ]
+      "values": ["male", "female", "other", "prefer_not_to_say"]
     },
     "public.difficulty_level": {
       "name": "difficulty_level",
       "schema": "public",
-      "values": [
-        "beginner",
-        "intermediate",
-        "advanced",
-        "expert"
-      ]
+      "values": ["beginner", "intermediate", "advanced", "expert"]
     }
   },
   "schemas": {},
