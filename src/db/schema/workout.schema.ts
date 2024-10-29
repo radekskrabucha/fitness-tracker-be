@@ -29,15 +29,3 @@ export const workoutExercises = pgTable('workout_exercises', {
     .notNull()
     .$onUpdate(() => sql`now()`)
 })
-
-export const workoutExerciseDetails = pgTable('workout_exercise_details', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  workoutExerciseId: uuid('workout_exercise_id')
-    .notNull()
-    .references(() => workoutExercises.id, { onDelete: 'cascade' }),
-  sets: integer('sets'),
-  reps: integer('reps'),
-  weight: integer('weight'), // in grams
-  duration: integer('duration'), // in seconds
-  distance: integer('distance') // in meters
-})
