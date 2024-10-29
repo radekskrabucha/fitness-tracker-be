@@ -4,6 +4,7 @@ import {
   workoutPlans,
   workoutPlanWorkouts
 } from '~/db/schema/workout-plan.schema'
+import { selectWorkoutSchema } from './workout'
 
 export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans, {
   name: schema => schema.name.min(1).max(256),
@@ -37,6 +38,11 @@ export const selectWorkoutPlanWorkoutSchema = createSelectSchema(
   workoutPlanWorkouts
 ).openapi('WorkoutPlan Excercise')
 
+export const selectWorkoutPlanWithWorkoutsSchema =
+  selectWorkoutPlanSchema.extend({
+    workouts: z.array(selectWorkoutSchema)
+  })
+
 export type InsertWorkoutPlan = z.infer<typeof insertWorkoutPlanSchema>
 export type PatchWorkoutPlan = z.infer<typeof patchWorkoutPlanSchema>
 export type SelectWorkoutPlan = z.infer<typeof selectWorkoutPlanSchema>
@@ -48,4 +54,7 @@ export type PatchWorkoutPlanWorkout = z.infer<
 >
 export type SelectWorkoutPlanWorkout = z.infer<
   typeof selectWorkoutPlanWorkoutSchema
+>
+export type SelectWorkoutPlanWithWorkouts = z.infer<
+  typeof selectWorkoutPlanWithWorkoutsSchema
 >
