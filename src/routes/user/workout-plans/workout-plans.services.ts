@@ -88,3 +88,9 @@ export const createUserWorkoutPlan = async (
 
   return insertedUSerWorkoutPlan
 }
+
+export const deleteWorkoutPlan = async (workoutPlanId: string) =>
+  db
+    .delete(userWorkoutPlans)
+    .where(eq(userWorkoutPlans.id, workoutPlanId))
+    .returning()

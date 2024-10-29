@@ -93,3 +93,33 @@ export const createUserWorkoutPlan = createRoute({
   }
 })
 export type CreateUserWorkoutPlan = typeof createUserWorkoutPlan
+
+export const deleteUserWorkoutPlan = createRoute({
+  method: 'delete',
+  path: '/{id}',
+  tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
+  request: {
+    params: paramIdUUIDSchema
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Deleted workout plan',
+      schema: selectUserWorkoutPlanSchema
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Workout plan not found'
+    }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Invalid UUID'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Unauthorized'
+    })
+  }
+})
+export type DeleteUserWorkoutPlan = typeof deleteUserWorkoutPlan
