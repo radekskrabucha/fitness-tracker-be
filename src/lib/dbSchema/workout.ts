@@ -32,7 +32,8 @@ export const insertWorkoutExerciseSchema = createInsertSchema(
 ).omit({
   id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
+  workoutId: true
 })
 export const patchWorkoutExerciseSchema = insertWorkoutExerciseSchema
   .partial()
