@@ -65,6 +65,14 @@ export type InsertMuscleGroup = z.infer<typeof insertMuscleGroupSchema>
 export type PatchMuscleGroup = z.infer<typeof patchMuscleGroupSchema>
 export type SelectMuscleGroup = z.infer<typeof selectMuscleGroupSchema>
 
+export type InsertExerciseCategory = z.infer<
+  typeof insertExerciseCategorySchema
+>
+export type PatchExerciseCategory = z.infer<typeof patchExerciseCategorySchema>
+export type SelectExerciseCategory = z.infer<
+  typeof selectExerciseCategorySchema
+>
+
 export type InsertExerciseMuscleGroup = z.infer<
   typeof insertExerciseMuscleGroupSchema
 >
