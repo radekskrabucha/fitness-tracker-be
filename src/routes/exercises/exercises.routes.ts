@@ -3,7 +3,8 @@ import {
   insertExerciseSchema,
   selectExerciseSchema,
   patchExerciseSchema,
-  selectExerciseWithMusclesSchema
+  selectExerciseWithDetailsSchema,
+  selectExerciseWithCategorySchema
 } from '~/lib/dbSchema/exercise'
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
@@ -35,7 +36,7 @@ export const getExercises = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of exercises',
-      schema: selectExerciseSchema.array()
+      schema: selectExerciseWithCategorySchema.array()
     }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
       description: 'Unauthorized',
@@ -57,7 +58,7 @@ export const getExerciseById = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'Exercise details',
-      schema: selectExerciseWithMusclesSchema
+      schema: selectExerciseWithDetailsSchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       description: 'Exercise not found',
