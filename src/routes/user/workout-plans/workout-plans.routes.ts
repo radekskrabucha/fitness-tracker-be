@@ -136,12 +136,12 @@ export const getUserWorkoutPlanWorkoutById = createRoute({
   },
   responses: {
     [OK]: jsonContentOpenAPISchema({
-      description: 'Retrieved workout plan',
+      description: 'Retrieved user workout',
       schema: selectWorkoutWithDetailedExercisesWithAttributesSchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
-      description: 'Workout plan not found'
+      description: 'User workout not found'
     }),
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
