@@ -34,7 +34,11 @@ export const selectWorkoutPlanWorkoutSchema = createSelectSchema(
 
 export const selectWorkoutPlanWithWorkoutsSchema =
   selectWorkoutPlanSchema.extend({
-    workouts: z.array(selectWorkoutSchema)
+    workouts: z.array(
+      selectWorkoutSchema.extend({
+        orderIndex: z.number()
+      })
+    )
   })
 
 export type InsertWorkoutPlan = z.infer<typeof insertWorkoutPlanSchema>

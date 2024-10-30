@@ -4,49 +4,46 @@ import {
   workoutPlans,
   workoutPlanWorkouts
 } from '~/db/schema/workout-plan.schema'
-import { workouts } from '~/db/schema/workout.schema'
 import type {
   InsertWorkoutPlan,
   PatchWorkoutPlan,
   SelectWorkoutPlanWithWorkouts
 } from '~/lib/dbSchema/workout-plan'
+import { transformWorkoutPlanWithPlanWorkouts } from '~/utils/workoutPlan'
 
-export const getWorkoutPlans = () => db.query.workoutPlans.findMany()
+export const getWorkoutPlans = async () => {
+  const workouts = await db.query.workoutPlans.findMany({
+    with: {
+      workoutPlanWorkouts: {
+        with: {
+          workout: true
+        }
+      }
+    }
+  })
+
+  return workouts.map(transformWorkoutPlanWithPlanWorkouts)
+}
 
 export const getWorkoutPlanById = async (
   workoutPlanId: string
 ): Promise<SelectWorkoutPlanWithWorkouts | undefined> => {
-  const result = await db
-    .select({
-      workoutPlan: workoutPlans,
-      workouts: workouts
-    })
-    .from(workoutPlanWorkouts)
-    .leftJoin(
-      workoutPlans,
-      eq(workoutPlanWorkouts.workoutPlanId, workoutPlans.id)
-    )
-    .leftJoin(workouts, eq(workoutPlanWorkouts.workoutId, workouts.id))
-    .where(eq(workoutPlans.id, workoutPlanId))
+  const workout = await db.query.workoutPlans.findFirst({
+    where: eq(workoutPlans.id, workoutPlanId),
+    with: {
+      workoutPlanWorkouts: {
+        with: {
+          workout: true
+        }
+      }
+    }
+  })
 
-  const workoutPlan = result[0]?.workoutPlan
-
-  if (!workoutPlan) {
+  if (!workout) {
     return undefined
   }
 
-  const filteredWorkouts = result.flatMap(({ workouts }) => {
-    if (!workouts) {
-      return []
-    }
-
-    return workouts
-  })
-
-  return {
-    ...workoutPlan,
-    workouts: filteredWorkouts
-  }
+  return transformWorkoutPlanWithPlanWorkouts(workout)
 }
 
 export const createWorkoutPlan = async ({

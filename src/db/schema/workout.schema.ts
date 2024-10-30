@@ -2,6 +2,7 @@ import { relations, sql } from 'drizzle-orm'
 import { pgTable, uuid, varchar, timestamp, integer } from 'drizzle-orm/pg-core'
 import { timestampConfig } from './config'
 import { exercises } from './exercise.schema'
+import { workoutPlanWorkouts } from './workout-plan.schema'
 
 export const workouts = pgTable('workouts', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -45,5 +46,6 @@ export const workoutExercisesRelations = relations(
 )
 
 export const workoutRelations = relations(workouts, ({ many }) => ({
-  workoutExercises: many(workoutExercises)
+  workoutExercises: many(workoutExercises),
+  workoutPlanWorkouts: many(workoutPlanWorkouts)
 }))

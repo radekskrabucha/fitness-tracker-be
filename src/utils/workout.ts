@@ -14,14 +14,6 @@ type WorkoutExerciseWithDetailsRaw = SelectWorkoutExercise & {
 type WorkoutWithExerciseDetailsRaw = SelectWorkout & {
   workoutExercises: Array<WorkoutExerciseWithDetailsRaw>
 }
-
-type WorkoutExerciseRaw = SelectWorkoutExercise & {
-  exercise: SelectExercise
-}
-type WorkoutWithDetailsRaw = SelectWorkout & {
-  workoutExercises: Array<WorkoutExerciseRaw>
-}
-
 export const transformWorkoutWithExerciseDetails = (
   workout: WorkoutWithExerciseDetailsRaw
 ) => {
@@ -36,6 +28,12 @@ export const transformWorkoutWithExerciseDetails = (
   }
 }
 
+type WorkoutExerciseRaw = SelectWorkoutExercise & {
+  exercise: SelectExercise
+}
+type WorkoutWithDetailsRaw = SelectWorkout & {
+  workoutExercises: Array<WorkoutExerciseRaw>
+}
 export const transformWorkout = (workout: WorkoutWithDetailsRaw) => {
   const { workoutExercises, ...rest } = workout
 

@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import {
   pgTable,
   uuid,
@@ -43,5 +43,23 @@ export const workoutPlanWorkouts = pgTable(
   },
   t => ({
     pk: { columns: [t.workoutPlanId, t.workoutId] }
+  })
+)
+
+export const workoutPlansRelations = relations(workoutPlans, ({ many }) => ({
+  workoutPlanWorkouts: many(workoutPlanWorkouts)
+}))
+
+export const workoutPlanWorkoutsRelations = relations(
+  workoutPlanWorkouts,
+  ({ one }) => ({
+    workoutPlan: one(workoutPlans, {
+      fields: [workoutPlanWorkouts.workoutPlanId],
+      references: [workoutPlans.id]
+    }),
+    workout: one(workouts, {
+      fields: [workoutPlanWorkouts.workoutId],
+      references: [workouts.id]
+    })
   })
 )
