@@ -1,5 +1,6 @@
 import { and, eq } from 'drizzle-orm'
 import { db } from '~/db'
+import { user } from '~/db/schema/auth.schema'
 import {
   userWorkoutPlans,
   userWorkoutExerciseAttributes
@@ -89,8 +90,11 @@ export const createUserWorkoutPlan = async (
   return insertedUSerWorkoutPlan
 }
 
-export const deleteWorkoutPlan = async (workoutPlanId: string) =>
+export const deleteWorkoutPlan = async (
+  userId: string,
+  workoutPlanId: string
+) =>
   db
     .delete(userWorkoutPlans)
-    .where(eq(userWorkoutPlans.id, workoutPlanId))
+    .where(and(eq(user.id, userId), eq(userWorkoutPlans.id, workoutPlanId)))
     .returning()

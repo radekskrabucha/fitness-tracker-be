@@ -54,10 +54,11 @@ export const createUserWorkoutPlan: AppRouteHandler<
 export const deleteUserWorkoutPlan: AppRouteHandler<
   DeleteUserWorkoutPlan
 > = async c => {
+  const user = c.get('user')
   const { id } = c.req.valid('param')
 
   const [deletedUserWorkoutPlan] =
-    await userWorkoutPlanService.deleteWorkoutPlan(id)
+    await userWorkoutPlanService.deleteWorkoutPlan(user.id, id)
 
   if (!deletedUserWorkoutPlan) {
     return c.json({ message: 'User workout plan not found' }, NOT_FOUND)
