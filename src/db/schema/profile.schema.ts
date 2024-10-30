@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { integer, pgTable, timestamp, uuid, pgEnum } from 'drizzle-orm/pg-core'
 import { user } from './auth.schema'
 import { timestampConfig } from './config'
@@ -51,3 +51,13 @@ export const userFitnessProfiles = pgTable('user_fitness_profiles', {
     .notNull()
     .$onUpdate(() => sql`now()`)
 })
+
+export const userFitnessProfilesRelations = relations(
+  userFitnessProfiles,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [userFitnessProfiles.userId],
+      references: [user.id]
+    })
+  })
+)

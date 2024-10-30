@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm'
 import {
   pgTable,
   text,
@@ -7,6 +8,7 @@ import {
   integer,
   pgEnum
 } from 'drizzle-orm/pg-core'
+import { userFitnessProfiles } from './profile.schema'
 
 export const userRoleEnum = pgEnum('user_role', ['user', 'admin'])
 
@@ -68,3 +70,10 @@ export const verification = pgTable('verification', {
   value: text('value').notNull(),
   expiresAt: timestamp('expiresAt').notNull()
 })
+
+export const userRelations = relations(user, ({ one }) => ({
+  userFitnessProfiles: one(userFitnessProfiles, {
+    fields: [user.id],
+    references: [userFitnessProfiles.userId]
+  })
+}))
