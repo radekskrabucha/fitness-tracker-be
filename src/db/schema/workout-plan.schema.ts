@@ -8,6 +8,7 @@ import {
   pgEnum
 } from 'drizzle-orm/pg-core'
 import { timestampConfig } from './config'
+import { userWorkoutPlans } from './user-workout.schema'
 import { workouts } from './workout.schema'
 
 // Define the difficulty level enum
@@ -47,7 +48,8 @@ export const workoutPlanWorkouts = pgTable(
 )
 
 export const workoutPlansRelations = relations(workoutPlans, ({ many }) => ({
-  workoutPlanWorkouts: many(workoutPlanWorkouts)
+  workoutPlanWorkouts: many(workoutPlanWorkouts),
+  userWorkoutPlans: many(userWorkoutPlans)
 }))
 
 export const workoutPlanWorkoutsRelations = relations(

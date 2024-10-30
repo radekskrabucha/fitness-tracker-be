@@ -9,6 +9,10 @@ import {
   pgEnum
 } from 'drizzle-orm/pg-core'
 import { userFitnessProfiles } from './profile.schema'
+import {
+  userWorkoutExerciseAttributes,
+  userWorkoutPlans
+} from './user-workout.schema'
 
 export const userRoleEnum = pgEnum('user_role', ['user', 'admin'])
 
@@ -71,9 +75,11 @@ export const verification = pgTable('verification', {
   expiresAt: timestamp('expiresAt').notNull()
 })
 
-export const userRelations = relations(user, ({ one }) => ({
-  userFitnessProfiles: one(userFitnessProfiles, {
+export const userRelations = relations(user, ({ one, many }) => ({
+  fitnessProfile: one(userFitnessProfiles, {
     fields: [user.id],
     references: [userFitnessProfiles.userId]
-  })
+  }),
+  workoutPlans: many(userWorkoutPlans),
+  workoutExerciseAttributes: many(userWorkoutExerciseAttributes)
 }))

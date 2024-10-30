@@ -2,6 +2,7 @@ import { relations, sql } from 'drizzle-orm'
 import { pgTable, uuid, varchar, timestamp, integer } from 'drizzle-orm/pg-core'
 import { timestampConfig } from './config'
 import { exercises } from './exercise.schema'
+import { userWorkoutExerciseAttributes } from './user-workout.schema'
 import { workoutPlanWorkouts } from './workout-plan.schema'
 
 export const workouts = pgTable('workouts', {
@@ -41,6 +42,10 @@ export const workoutExercisesRelations = relations(
     workout: one(workouts, {
       fields: [workoutExercises.workoutId],
       references: [workouts.id]
+    }),
+    attributes: one(userWorkoutExerciseAttributes, {
+      fields: [workoutExercises.id],
+      references: [userWorkoutExerciseAttributes.workoutExerciseId]
     })
   })
 )

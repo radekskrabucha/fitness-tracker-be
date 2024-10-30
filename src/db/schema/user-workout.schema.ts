@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { pgTable, uuid, timestamp, integer, pgEnum } from 'drizzle-orm/pg-core'
 import { user } from './auth.schema'
 import { timestampConfig } from './config'
@@ -47,3 +47,31 @@ export const userWorkoutPlans = pgTable('user_workout_plans', {
     .notNull()
     .$onUpdate(() => sql`now()`)
 })
+
+export const userWorkoutPlansRelations = relations(
+  userWorkoutPlans,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [userWorkoutPlans.userId],
+      references: [user.id]
+    }),
+    workoutPlan: one(workoutPlans, {
+      fields: [userWorkoutPlans.workoutPlanId],
+      references: [workoutPlans.id]
+    })
+  })
+)
+
+export const userWorkoutExerciseAttributesRelations = relations(
+  userWorkoutExerciseAttributes,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [userWorkoutExerciseAttributes.userId],
+      references: [user.id]
+    }),
+    workoutExercise: one(workoutExercises, {
+      fields: [userWorkoutExerciseAttributes.workoutExerciseId],
+      references: [workoutExercises.id]
+    })
+  })
+)
