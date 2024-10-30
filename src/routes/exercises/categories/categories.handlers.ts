@@ -6,8 +6,8 @@ import type {
   CreateExerciseCategory,
   UpdateExerciseCategory,
   DeleteExerciseCategory
-} from './exercises-categories.routes'
-import * as exerciseCategoryService from './exercises-categories.services'
+} from './categories.routes'
+import * as exerciseCategoryService from './categories.services'
 
 export const getExerciseCategories: AppRouteHandler<
   GetExerciseCategories

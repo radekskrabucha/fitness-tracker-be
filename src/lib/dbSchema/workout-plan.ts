@@ -15,14 +15,7 @@ export const insertWorkoutPlanBaseSchema = createInsertSchema(workoutPlans, {
   updatedAt: true
 })
 export const insertWorkoutPlanSchema = insertWorkoutPlanBaseSchema.extend({
-  workouts: z
-    .array(
-      z.object({
-        id: z.string().uuid(),
-        orderIndex: z.number().min(0)
-      })
-    )
-    .min(1)
+  workouts: z.array(z.string().uuid()).min(1)
 })
 export const patchWorkoutPlanSchema = insertWorkoutPlanBaseSchema.partial()
 export const selectWorkoutPlanSchema =
