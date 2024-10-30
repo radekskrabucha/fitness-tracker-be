@@ -55,7 +55,7 @@ export const userWorkoutPlansRelations = relations(
       fields: [userWorkoutPlans.userId],
       references: [user.id]
     }),
-    workoutPlan: one(workoutPlans, {
+    plan: one(workoutPlans, {
       fields: [userWorkoutPlans.workoutPlanId],
       references: [workoutPlans.id]
     })
@@ -69,7 +69,7 @@ export const userWorkoutExerciseAttributesRelations = relations(
       fields: [userWorkoutExerciseAttributes.userId],
       references: [user.id]
     }),
-    workoutExercise: one(workoutExercises, {
+    exercise: one(workoutExercises, {
       fields: [userWorkoutExerciseAttributes.workoutExerciseId],
       references: [workoutExercises.id]
     })
