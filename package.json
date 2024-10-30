@@ -22,7 +22,7 @@
     "@hono/zod-openapi": "0.16.4",
     "@neondatabase/serverless": "0.10.1",
     "dotenv": "16.4.5",
-    "drizzle-orm": "0.35.2",
+    "drizzle-orm": "0.35.3",
     "drizzle-zod": "0.5.1",
     "hono": "4.6.5",
     "hono-pino": "0.4.0",
