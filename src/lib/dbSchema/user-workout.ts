@@ -4,8 +4,6 @@ import {
   userWorkoutExerciseAttributes,
   userWorkoutPlans
 } from '~/db/schema/user-workout.schema'
-import { selectWorkoutSchema } from './workout'
-import { selectWorkoutPlanSchema } from './workout-plan'
 
 export const insertUserWorkoutExerciseAttributeSchema = createInsertSchema(
   userWorkoutExerciseAttributes,
@@ -41,11 +39,6 @@ export const insertUserWorkoutPlanSchema =
   insertUserWorkoutPlanBaseSchema.extend({
     exerciseAttributes: insertUserWorkoutExerciseAttributeSchema.array().min(1)
   })
-export const selectUserWorkoutPlanWithDetailsSchema =
-  selectUserWorkoutPlanSchema.extend({
-    details: selectWorkoutPlanSchema,
-    workouts: z.array(selectWorkoutSchema)
-  })
 
 export type InsertUserWorkoutExerciseAttribute = z.infer<
   typeof insertUserWorkoutExerciseAttributeSchema
@@ -63,6 +56,3 @@ export type InsertUserWorkoutBasePlan = z.infer<
 export type PatchUserWorkoutPlan = z.infer<typeof patchUserWorkoutPlanSchema>
 export type SelectUserWorkoutPlan = z.infer<typeof selectUserWorkoutPlanSchema>
 export type InsertUserWorkoutPlan = z.infer<typeof insertUserWorkoutPlanSchema>
-export type SelectUserWorkoutPlanWithDetails = z.infer<
-  typeof selectUserWorkoutPlanWithDetailsSchema
->

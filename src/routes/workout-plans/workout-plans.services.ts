@@ -6,8 +6,7 @@ import {
 } from '~/db/schema/workout-plan.schema'
 import type {
   InsertWorkoutPlan,
-  PatchWorkoutPlan,
-  SelectWorkoutPlanWithWorkouts
+  PatchWorkoutPlan
 } from '~/lib/dbSchema/workout-plan'
 import { transformWorkoutPlanWithPlanWorkouts } from '~/utils/workoutPlan'
 
@@ -25,9 +24,7 @@ export const getWorkoutPlans = async () => {
   return workouts.map(transformWorkoutPlanWithPlanWorkouts)
 }
 
-export const getWorkoutPlanById = async (
-  workoutPlanId: string
-): Promise<SelectWorkoutPlanWithWorkouts | undefined> => {
+export const getWorkoutPlanById = async (workoutPlanId: string) => {
   const workout = await db.query.workoutPlans.findFirst({
     where: eq(workoutPlans.id, workoutPlanId),
     with: {

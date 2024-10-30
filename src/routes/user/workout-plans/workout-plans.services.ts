@@ -5,66 +5,59 @@ import {
   userWorkoutPlans,
   userWorkoutExerciseAttributes
 } from '~/db/schema/user-workout.schema'
-import {
-  workoutPlans,
-  workoutPlanWorkouts
-} from '~/db/schema/workout-plan.schema'
-import { workouts } from '~/db/schema/workout.schema'
-import type {
-  InsertUserWorkoutPlan,
-  SelectUserWorkoutPlanWithDetails
-} from '~/lib/dbSchema/user-workout'
+import type { InsertUserWorkoutPlan } from '~/lib/dbSchema/user-workout'
+import { transformWorkoutPlanWithPlanWorkouts } from '~/utils/workoutPlan'
 
-export const getUserWorkoutPlans = (userId: string) =>
-  db.query.userWorkoutPlans.findMany({
-    where: ({ userId: id }) => eq(id, userId)
+export const getUserWorkoutPlans = async (userId: string) => {
+  const retrievedWorkoutPlans = await db.query.userWorkoutPlans.findMany({
+    where: ({ userId: id }) => eq(id, userId),
+    columns: {},
+    with: {
+      plan: {
+        with: {
+          workouts: {
+            with: {
+              workout: true
+            }
+          }
+        }
+      }
+    }
   })
+
+  return retrievedWorkoutPlans.map(({ plan }) =>
+    transformWorkoutPlanWithPlanWorkouts(plan)
+  )
+}
 
 export const getUserWorkoutPlanById = async (
   userId: string,
   workoutPlanId: string
-): Promise<SelectUserWorkoutPlanWithDetails | undefined> => {
-  const result = await db
-    .select({
-      userWorkoutPlan: userWorkoutPlans,
-      workoutPlan: workoutPlans,
-      workoutPlanWorkout: workoutPlanWorkouts,
-      workout: workouts
-    })
-    .from(userWorkoutPlans)
-    .leftJoin(workoutPlans, eq(userWorkoutPlans.workoutPlanId, workoutPlans.id))
-    .leftJoin(
-      workoutPlanWorkouts,
-      eq(userWorkoutPlans.workoutPlanId, workoutPlanWorkouts.workoutPlanId)
-    )
-    .leftJoin(workouts, eq(workoutPlanWorkouts.workoutId, workouts.id))
-    .where(
-      and(
-        eq(userWorkoutPlans.userId, userId),
-        eq(userWorkoutPlans.id, workoutPlanId)
-      )
-    )
+) => {
+  const workoutPlan = await db.query.userWorkoutPlans.findFirst({
+    where: and(
+      eq(userWorkoutPlans.userId, userId),
+      eq(userWorkoutPlans.id, workoutPlanId)
+    ),
+    columns: {},
+    with: {
+      plan: {
+        with: {
+          workouts: {
+            with: {
+              workout: true
+            }
+          }
+        }
+      }
+    }
+  })
 
-  const userWorkoutPlan = result[0]?.userWorkoutPlan
-  const workoutPlan = result[0]?.workoutPlan
-
-  if (!userWorkoutPlan || !workoutPlan) {
+  if (!workoutPlan) {
     return undefined
   }
 
-  const workoutsFiltered = result.flatMap(({ workout }) => {
-    if (!workout) {
-      return []
-    }
-
-    return workout
-  })
-
-  return {
-    ...userWorkoutPlan,
-    details: workoutPlan,
-    workouts: workoutsFiltered
-  }
+  return transformWorkoutPlanWithPlanWorkouts(workoutPlan.plan)
 }
 
 export const createUserWorkoutPlan = async (

@@ -1,11 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
 import { exercises, exerciseMuscleGroups } from '~/db/schema/exercise.schema'
-import type {
-  InsertExercise,
-  PatchExercise,
-  SelectExerciseWithDetails
-} from '~/lib/dbSchema/exercise'
+import type { InsertExercise, PatchExercise } from '~/lib/dbSchema/exercise'
 import { transformExerciseWithDetails } from '~/utils/exercise'
 
 export const getExercises = async () => {
@@ -23,9 +19,7 @@ export const getExercises = async () => {
   return retrievedExercises.map(transformExerciseWithDetails)
 }
 
-export const getExerciseById = async (
-  exerciseId: string
-): Promise<SelectExerciseWithDetails | undefined> => {
+export const getExerciseById = async (exerciseId: string) => {
   const exercise = await db.query.exercises.findFirst({
     where: eq(exercises.id, exerciseId),
     with: {
