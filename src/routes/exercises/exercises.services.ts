@@ -1,83 +1,70 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
-import {
-  exercises,
-  exerciseMuscleGroups,
-  muscleGroups,
-  exerciseCategories
-} from '~/db/schema/exercise.schema'
+import { exercises, exerciseMuscleGroups } from '~/db/schema/exercise.schema'
 import type {
   InsertExercise,
   PatchExercise,
+  SelectExercise,
+  SelectExerciseCategory,
+  SelectMuscleGroup,
   SelectExerciseWithDetails
 } from '~/lib/dbSchema/exercise'
 
-export const getExercises = async () => {
-  const result = await db
-    .select({
-      exercise: exercises,
-      category: exerciseCategories
-    })
-    .from(exercises)
-    .leftJoin(
-      exerciseCategories,
-      eq(exercises.categoryId, exerciseCategories.id)
-    )
-  const filteredExercises = result.flatMap(({ exercise, category }) => {
-    if (!category) {
-      return []
-    }
+type ExerciseWithDetails = SelectExercise & {
+  category: SelectExerciseCategory
+  exerciseMuscleGroups: Array<{
+    muscleGroup: SelectMuscleGroup
+  }>
+}
 
-    return {
-      ...exercise,
-      category
+const transformExerciseWithDetails = (
+  exercise: ExerciseWithDetails
+): SelectExerciseWithDetails => {
+  const { exerciseMuscleGroups, ...exerciseDetails } = exercise
+
+  return {
+    ...exerciseDetails,
+    muscleGroups: exerciseMuscleGroups.map(
+      muscleGroup => muscleGroup.muscleGroup
+    )
+  }
+}
+
+export const getExercises = async () => {
+  const result = await db.query.exercises.findMany({
+    with: {
+      category: true,
+      exerciseMuscleGroups: {
+        with: {
+          muscleGroup: true
+        }
+      }
     }
   })
 
-  return filteredExercises
+  return result.map(transformExerciseWithDetails)
 }
 
 export const getExerciseById = async (
   exerciseId: string
 ): Promise<SelectExerciseWithDetails | undefined> => {
-  const result = await db
-    .select({
-      exercise: exercises,
-      muscleGroups,
-      category: exerciseCategories
-    })
-    .from(exerciseMuscleGroups)
-    .leftJoin(exercises, eq(exerciseMuscleGroups.exerciseId, exercises.id))
-    .leftJoin(
-      muscleGroups,
-      eq(exerciseMuscleGroups.muscleGroupId, muscleGroups.id)
-    )
-    .leftJoin(
-      exerciseCategories,
-      eq(exercises.categoryId, exerciseCategories.id)
-    )
-    .where(eq(exercises.id, exerciseId))
+  const result = await db.query.exercises.findFirst({
+    where: eq(exercises.id, exerciseId),
+    with: {
+      category: true,
+      exerciseMuscleGroups: {
+        with: {
+          muscleGroup: true
+        }
+      }
+    }
+  })
 
-  const exercise = result[0]?.exercise
-  const category = result[0]?.category
-
-  if (!exercise || !category) {
+  if (!result) {
     return undefined
   }
 
-  const muscles = result.flatMap(({ muscleGroups }) => {
-    if (!muscleGroups) {
-      return []
-    }
-
-    return muscleGroups
-  })
-
-  return {
-    ...exercise,
-    muscleGroups: muscles,
-    category
-  }
+  return transformExerciseWithDetails(result)
 }
 
 export const createExercise = async ({

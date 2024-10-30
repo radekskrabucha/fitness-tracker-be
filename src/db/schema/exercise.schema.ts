@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { pgTable, varchar, uuid, timestamp } from 'drizzle-orm/pg-core'
 import { timestampConfig } from './config'
 
@@ -44,5 +44,31 @@ export const exerciseMuscleGroups = pgTable(
   },
   t => ({
     pk: { columns: [t.exerciseId, t.muscleGroupId] }
+  })
+)
+
+export const exercisesRelations = relations(exercises, ({ one, many }) => ({
+  category: one(exerciseCategories, {
+    fields: [exercises.categoryId],
+    references: [exerciseCategories.id]
+  }),
+  exerciseMuscleGroups: many(exerciseMuscleGroups)
+}))
+
+export const muscleGroupsRelations = relations(muscleGroups, ({ many }) => ({
+  exerciseMuscleGroups: many(exerciseMuscleGroups)
+}))
+
+export const exerciseMuscleGroupsRelations = relations(
+  exerciseMuscleGroups,
+  ({ one }) => ({
+    exercise: one(exercises, {
+      fields: [exerciseMuscleGroups.exerciseId],
+      references: [exercises.id]
+    }),
+    muscleGroup: one(muscleGroups, {
+      fields: [exerciseMuscleGroups.muscleGroupId],
+      references: [muscleGroups.id]
+    })
   })
 )
