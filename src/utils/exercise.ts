@@ -21,8 +21,6 @@ export const transformExerciseWithDetails = (
 
   return {
     ...exerciseDetails,
-    muscleGroups: muscleGroups.map(
-      muscleGroup => muscleGroup.muscleGroup
-    )
+    muscleGroups: muscleGroups.map(muscleGroup => muscleGroup.muscleGroup)
   }
 }

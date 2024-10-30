@@ -14,7 +14,7 @@ import {
 export const getWorkouts = async () => {
   const workout = await db.query.workouts.findMany({
     with: {
-      workoutExercises: {
+      exercises: {
         with: {
           exercise: true
         }
@@ -31,7 +31,7 @@ export const getWorkout = async (
   const retrievedWorkouts = await db.query.workouts.findFirst({
     where: eq(workouts.id, workoutId),
     with: {
-      workoutExercises: {
+      exercises: {
         with: {
           exercise: {
             with: {

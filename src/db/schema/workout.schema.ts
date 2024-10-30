@@ -51,6 +51,6 @@ export const workoutExercisesRelations = relations(
 )
 
 export const workoutRelations = relations(workouts, ({ many }) => ({
-  workoutExercises: many(workoutExercises),
-  workoutPlanWorkouts: many(workoutPlanWorkouts)
+  exercises: many(workoutExercises),
+  planWorkouts: many(workoutPlanWorkouts)
 }))

@@ -12,16 +12,16 @@ type WorkoutExerciseWithDetailsRaw = SelectWorkoutExercise & {
   exercise: ExerciseWithDetailsRaw
 }
 type WorkoutWithExerciseDetailsRaw = SelectWorkout & {
-  workoutExercises: Array<WorkoutExerciseWithDetailsRaw>
+  exercises: Array<WorkoutExerciseWithDetailsRaw>
 }
 export const transformWorkoutWithExerciseDetails = (
   workout: WorkoutWithExerciseDetailsRaw
 ) => {
-  const { workoutExercises, ...rest } = workout
+  const { exercises, ...rest } = workout
 
   return {
     ...rest,
-    exercises: workoutExercises.map(({ exercise, ...rest }) => ({
+    exercises: exercises.map(({ exercise, ...rest }) => ({
       ...rest,
       details: transformExerciseWithDetails(exercise)
     }))
@@ -32,14 +32,14 @@ type WorkoutExerciseRaw = SelectWorkoutExercise & {
   exercise: SelectExercise
 }
 type WorkoutWithDetailsRaw = SelectWorkout & {
-  workoutExercises: Array<WorkoutExerciseRaw>
+  exercises: Array<WorkoutExerciseRaw>
 }
 export const transformWorkout = (workout: WorkoutWithDetailsRaw) => {
-  const { workoutExercises, ...rest } = workout
+  const { exercises, ...rest } = workout
 
   return {
     ...rest,
-    exercises: workoutExercises.map(({ exercise, ...rest }) => ({
+    exercises: exercises.map(({ exercise, ...rest }) => ({
       ...rest,
       details: exercise
     }))
