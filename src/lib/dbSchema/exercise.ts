@@ -6,6 +6,7 @@ import {
   exerciseMuscleGroups,
   exerciseCategories
 } from '~/db/schema/exercise.schema'
+import { selectUserWorkoutExerciseAttributeSchema } from './user-workout'
 
 export const insertExerciseSchema = createInsertSchema(exercises, {
   name: schema => schema.name.min(1).max(256),
@@ -61,6 +62,11 @@ export const selectExerciseWithDetailsSchema = selectExerciseSchema.extend({
   muscleGroups: z.array(selectMuscleGroupSchema)
 })
 
+export const selectExerciseWithDetailsAndAttributesSchema =
+  selectExerciseWithDetailsSchema.extend({
+    attributes: z.array(selectUserWorkoutExerciseAttributeSchema)
+  })
+
 export type InsertExercise = z.infer<typeof insertExerciseSchema>
 export type PatchExercise = z.infer<typeof patchExerciseSchema>
 export type SelectExercise = z.infer<typeof selectExerciseSchema>
@@ -89,4 +95,7 @@ export type SelectExerciseMuscleGroup = z.infer<
 
 export type SelectExerciseWithDetails = z.infer<
   typeof selectExerciseWithDetailsSchema
+>
+export type SelectExerciseWithDetailsAndAttributes = z.infer<
+  typeof selectExerciseWithDetailsAndAttributesSchema
 >

@@ -3,6 +3,7 @@ import {
   selectUserWorkoutPlanSchema,
   insertUserWorkoutPlanSchema
 } from '~/lib/dbSchema/user-workout'
+import { selectWorkoutWithDetailedExercisesWithAttributesSchema } from '~/lib/dbSchema/workout'
 import { selectWorkoutPlanWithWorkoutsSchema } from '~/lib/dbSchema/workout-plan'
 import { authMiddleware } from '~/middleware/auth'
 import {
@@ -123,3 +124,33 @@ export const deleteUserWorkoutPlan = createRoute({
   }
 })
 export type DeleteUserWorkoutPlan = typeof deleteUserWorkoutPlan
+
+export const getUserWorkoutPlanWorkoutById = createRoute({
+  method: 'get',
+  path: '/workouts/{id}',
+  tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware],
+  request: {
+    params: paramIdUUIDSchema
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'Retrieved workout plan',
+      schema: selectWorkoutWithDetailedExercisesWithAttributesSchema
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Workout plan not found'
+    }),
+    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Invalid UUID'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Unauthorized'
+    })
+  }
+})
+export type GetUserWorkoutPlanWorkoutById = typeof getUserWorkoutPlanWorkoutById

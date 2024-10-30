@@ -5,7 +5,9 @@ import {
   userWorkoutPlans,
   userWorkoutExerciseAttributes
 } from '~/db/schema/user-workout.schema'
+import { workouts } from '~/db/schema/workout.schema'
 import type { InsertUserWorkoutPlan } from '~/lib/dbSchema/user-workout'
+import { transformWorkoutWithExerciseDetailsAndAttributes } from '~/utils/workout'
 import { transformWorkoutPlanWithPlanWorkouts } from '~/utils/workoutPlan'
 
 export const getUserWorkoutPlans = async (userId: string) => {
@@ -37,7 +39,7 @@ export const getUserWorkoutPlanById = async (
   const workoutPlan = await db.query.userWorkoutPlans.findFirst({
     where: and(
       eq(userWorkoutPlans.userId, userId),
-      eq(userWorkoutPlans.id, workoutPlanId)
+      eq(userWorkoutPlans.workoutPlanId, workoutPlanId)
     ),
     columns: {},
     with: {
@@ -91,3 +93,37 @@ export const deleteWorkoutPlan = async (
     .delete(userWorkoutPlans)
     .where(and(eq(user.id, userId), eq(userWorkoutPlans.id, workoutPlanId)))
     .returning()
+
+export const getUserWorkoutPlanWorkoutById = async (
+  userId: string,
+  workoutId: string
+) => {
+  const workout = await db.query.workouts.findFirst({
+    where: eq(workouts.id, workoutId),
+    with: {
+      exercises: {
+        with: {
+          attributes: {
+            where: ({ userId: id }) => eq(id, userId)
+          },
+          exercise: {
+            with: {
+              category: true,
+              muscleGroups: {
+                with: {
+                  muscleGroup: true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  if (!workout) {
+    return undefined
+  }
+
+  return transformWorkoutWithExerciseDetailsAndAttributes(workout)
+}

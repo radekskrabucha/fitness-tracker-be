@@ -1,4 +1,5 @@
 import type { SelectExercise } from '~/lib/dbSchema/exercise'
+import type { SelectUserWorkoutExerciseAttribute } from '~/lib/dbSchema/user-workout'
 import type {
   SelectWorkoutExercise,
   SelectWorkout
@@ -7,6 +8,24 @@ import {
   transformExerciseWithDetails,
   type ExerciseWithDetailsRaw
 } from './exercise'
+
+type WorkoutExerciseRaw = SelectWorkoutExercise & {
+  exercise: SelectExercise
+}
+type WorkoutWithDetailsRaw = SelectWorkout & {
+  exercises: Array<WorkoutExerciseRaw>
+}
+export const transformWorkout = (workout: WorkoutWithDetailsRaw) => {
+  const { exercises, ...rest } = workout
+
+  return {
+    ...rest,
+    exercises: exercises.map(({ exercise, ...rest }) => ({
+      ...rest,
+      details: exercise
+    }))
+  }
+}
 
 type WorkoutExerciseWithDetailsRaw = SelectWorkoutExercise & {
   exercise: ExerciseWithDetailsRaw
@@ -28,20 +47,23 @@ export const transformWorkoutWithExerciseDetails = (
   }
 }
 
-type WorkoutExerciseRaw = SelectWorkoutExercise & {
-  exercise: SelectExercise
+type WorkoutExerciseWithDetailsAndAttributesRaw =
+  WorkoutExerciseWithDetailsRaw & {
+    attributes: Array<SelectUserWorkoutExerciseAttribute>
+  }
+type WorkoutWithExerciseDetailsAndAttributesRaw = SelectWorkout & {
+  exercises: Array<WorkoutExerciseWithDetailsAndAttributesRaw>
 }
-type WorkoutWithDetailsRaw = SelectWorkout & {
-  exercises: Array<WorkoutExerciseRaw>
-}
-export const transformWorkout = (workout: WorkoutWithDetailsRaw) => {
+export const transformWorkoutWithExerciseDetailsAndAttributes = (
+  workout: WorkoutWithExerciseDetailsAndAttributesRaw
+) => {
   const { exercises, ...rest } = workout
 
   return {
     ...rest,
     exercises: exercises.map(({ exercise, ...rest }) => ({
       ...rest,
-      details: exercise
+      details: transformExerciseWithDetails(exercise)
     }))
   }
 }
