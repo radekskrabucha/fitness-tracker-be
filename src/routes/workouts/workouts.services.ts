@@ -12,7 +12,7 @@ import {
 } from '~/utils/workout'
 
 export const getWorkouts = async () => {
-  const result = await db.query.workouts.findMany({
+  const workout = await db.query.workouts.findMany({
     with: {
       workoutExercises: {
         with: {
@@ -22,13 +22,13 @@ export const getWorkouts = async () => {
     }
   })
 
-  return result.map(transformWorkout)
+  return workout.map(transformWorkout)
 }
 
 export const getWorkout = async (
   workoutId: string
 ): Promise<SelectWorkoutWithDetailedExercises | undefined> => {
-  const result = await db.query.workouts.findFirst({
+  const retrievedWorkouts = await db.query.workouts.findFirst({
     where: eq(workouts.id, workoutId),
     with: {
       workoutExercises: {
@@ -48,11 +48,11 @@ export const getWorkout = async (
     }
   })
 
-  if (!result) {
+  if (!retrievedWorkouts) {
     return undefined
   }
 
-  return transformWorkoutWithExerciseDetails(result)
+  return transformWorkoutWithExerciseDetails(retrievedWorkouts)
 }
 
 export const createWorkout = async ({

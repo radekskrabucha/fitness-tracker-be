@@ -9,7 +9,7 @@ import type {
 import { transformExerciseWithDetails } from '~/utils/exercise'
 
 export const getExercises = async () => {
-  const result = await db.query.exercises.findMany({
+  const retrievedExercises = await db.query.exercises.findMany({
     with: {
       category: true,
       exerciseMuscleGroups: {
@@ -20,13 +20,13 @@ export const getExercises = async () => {
     }
   })
 
-  return result.map(transformExerciseWithDetails)
+  return retrievedExercises.map(transformExerciseWithDetails)
 }
 
 export const getExerciseById = async (
   exerciseId: string
 ): Promise<SelectExerciseWithDetails | undefined> => {
-  const result = await db.query.exercises.findFirst({
+  const exercise = await db.query.exercises.findFirst({
     where: eq(exercises.id, exerciseId),
     with: {
       category: true,
@@ -38,11 +38,11 @@ export const getExerciseById = async (
     }
   })
 
-  if (!result) {
+  if (!exercise) {
     return undefined
   }
 
-  return transformExerciseWithDetails(result)
+  return transformExerciseWithDetails(exercise)
 }
 
 export const createExercise = async ({
