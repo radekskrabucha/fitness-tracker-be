@@ -4,31 +4,9 @@ import { exercises, exerciseMuscleGroups } from '~/db/schema/exercise.schema'
 import type {
   InsertExercise,
   PatchExercise,
-  SelectExercise,
-  SelectExerciseCategory,
-  SelectMuscleGroup,
   SelectExerciseWithDetails
 } from '~/lib/dbSchema/exercise'
-
-type ExerciseWithDetails = SelectExercise & {
-  category: SelectExerciseCategory
-  exerciseMuscleGroups: Array<{
-    muscleGroup: SelectMuscleGroup
-  }>
-}
-
-const transformExerciseWithDetails = (
-  exercise: ExerciseWithDetails
-): SelectExerciseWithDetails => {
-  const { exerciseMuscleGroups, ...exerciseDetails } = exercise
-
-  return {
-    ...exerciseDetails,
-    muscleGroups: exerciseMuscleGroups.map(
-      muscleGroup => muscleGroup.muscleGroup
-    )
-  }
-}
+import { transformExerciseWithDetails } from '~/utils/exercise'
 
 export const getExercises = async () => {
   const result = await db.query.exercises.findMany({
