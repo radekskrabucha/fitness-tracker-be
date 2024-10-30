@@ -56,13 +56,10 @@ export const patchExerciseCategorySchema =
 export const selectExerciseCategorySchema =
   createSelectSchema(exerciseCategories).openapi('ExerciseCategory')
 
-export const selectExerciseWithCategorySchema = selectExerciseSchema.extend({
-  category: selectExerciseCategorySchema
+export const selectExerciseWithDetailsSchema = selectExerciseSchema.extend({
+  category: selectExerciseCategorySchema,
+  muscleGroups: z.array(selectMuscleGroupSchema)
 })
-export const selectExerciseWithDetailsSchema =
-  selectExerciseWithCategorySchema.extend({
-    muscleGroups: z.array(selectMuscleGroupSchema)
-  })
 
 export type InsertExercise = z.infer<typeof insertExerciseSchema>
 export type PatchExercise = z.infer<typeof patchExerciseSchema>

@@ -2,6 +2,7 @@ import { createRoute } from '@hono/zod-openapi'
 import {
   selectWorkoutSchema,
   selectWorkoutWithExercisesSchema,
+  selectWorkoutWithDetailedExercisesSchema,
   insertWorkoutSchema,
   patchWorkoutSchema
 } from '~/lib/dbSchema/workout'
@@ -34,7 +35,7 @@ export const listWorkouts = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of user workouts',
-      schema: selectWorkoutSchema.array()
+      schema: selectWorkoutWithExercisesSchema.array()
     }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
@@ -56,7 +57,7 @@ export const getWorkout = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'Retrieved workout',
-      schema: selectWorkoutWithExercisesSchema
+      schema: selectWorkoutWithDetailedExercisesSchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,

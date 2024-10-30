@@ -1,7 +1,8 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { workouts, workoutExercises } from '~/db/schema/workout.schema'
-import { selectExerciseWithCategorySchema } from './exercise'
+import { selectExerciseSchema } from './exercise'
+import { selectExerciseWithDetailsSchema } from './exercise'
 
 const insertWorkoutBaseSchema = createInsertSchema(workouts, {
   name: schema => schema.name.min(1).max(256),
@@ -43,11 +44,18 @@ export const patchWorkoutExerciseSchema = insertWorkoutExerciseSchema
 export const selectWorkoutExerciseSchema =
   createSelectSchema(workoutExercises).openapi('WorkoutExercise')
 
-export const selectWorkoutWithExercisesSchema = z.object({
-  workout: selectWorkoutSchema,
+export const selectWorkoutWithDetailedExercisesSchema =
+  selectWorkoutSchema.extend({
+    exercises: z.array(
+      selectWorkoutExerciseSchema.extend({
+        details: selectExerciseWithDetailsSchema
+      })
+    )
+  })
+export const selectWorkoutWithExercisesSchema = selectWorkoutSchema.extend({
   exercises: z.array(
     selectWorkoutExerciseSchema.extend({
-      details: selectExerciseWithCategorySchema
+      details: selectExerciseSchema
     })
   )
 })
@@ -60,6 +68,9 @@ export type InsertWorkoutExercise = z.infer<typeof insertWorkoutExerciseSchema>
 export type PatchWorkoutExercise = z.infer<typeof patchWorkoutExerciseSchema>
 export type SelectWorkoutExercise = z.infer<typeof selectWorkoutExerciseSchema>
 
+export type SelectWorkoutWithDetailedExercises = z.infer<
+  typeof selectWorkoutWithDetailedExercisesSchema
+>
 export type SelectWorkoutWithExercises = z.infer<
   typeof selectWorkoutWithExercisesSchema
 >
