@@ -11,17 +11,17 @@ export type ExerciseMuscleGroup = {
 
 export type ExerciseWithDetailsRaw = SelectExercise & {
   category: SelectExerciseCategory
-  exerciseMuscleGroups: Array<ExerciseMuscleGroup>
+  muscleGroups: Array<ExerciseMuscleGroup>
 }
 
 export const transformExerciseWithDetails = (
   exercise: ExerciseWithDetailsRaw
 ): SelectExerciseWithDetails => {
-  const { exerciseMuscleGroups, ...exerciseDetails } = exercise
+  const { muscleGroups, ...exerciseDetails } = exercise
 
   return {
     ...exerciseDetails,
-    muscleGroups: exerciseMuscleGroups.map(
+    muscleGroups: muscleGroups.map(
       muscleGroup => muscleGroup.muscleGroup
     )
   }

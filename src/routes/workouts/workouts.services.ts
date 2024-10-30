@@ -36,7 +36,7 @@ export const getWorkout = async (
           exercise: {
             with: {
               category: true,
-              exerciseMuscleGroups: {
+              muscleGroups: {
                 with: {
                   muscleGroup: true
                 }

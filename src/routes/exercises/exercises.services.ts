@@ -12,7 +12,7 @@ export const getExercises = async () => {
   const retrievedExercises = await db.query.exercises.findMany({
     with: {
       category: true,
-      exerciseMuscleGroups: {
+      muscleGroups: {
         with: {
           muscleGroup: true
         }
@@ -30,7 +30,7 @@ export const getExerciseById = async (
     where: eq(exercises.id, exerciseId),
     with: {
       category: true,
-      exerciseMuscleGroups: {
+      muscleGroups: {
         with: {
           muscleGroup: true
         }

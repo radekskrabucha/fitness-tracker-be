@@ -53,7 +53,7 @@ export const exercisesRelations = relations(exercises, ({ one, many }) => ({
     fields: [exercises.categoryId],
     references: [exerciseCategories.id]
   }),
-  exerciseMuscleGroups: many(exerciseMuscleGroups),
+  muscleGroups: many(exerciseMuscleGroups),
   workoutExercises: many(workoutExercises)
 }))
 

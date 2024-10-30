@@ -76,10 +76,10 @@ export const verification = pgTable('verification', {
 })
 
 export const userRelations = relations(user, ({ one, many }) => ({
-  fitnessProfile: one(userFitnessProfiles, {
+  profile: one(userFitnessProfiles, {
     fields: [user.id],
     references: [userFitnessProfiles.userId]
   }),
-  workoutPlans: many(userWorkoutPlans),
-  workoutExerciseAttributes: many(userWorkoutExerciseAttributes)
+  plans: many(userWorkoutPlans),
+  exerciseAttributes: many(userWorkoutExerciseAttributes)
 }))
