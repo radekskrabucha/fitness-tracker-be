@@ -14,7 +14,7 @@ import { transformWorkoutPlanWithPlanWorkouts } from '~/utils/workoutPlan'
 export const getWorkoutPlans = async () => {
   const workouts = await db.query.workoutPlans.findMany({
     with: {
-      workoutPlanWorkouts: {
+      workouts: {
         with: {
           workout: true
         }
@@ -31,7 +31,7 @@ export const getWorkoutPlanById = async (
   const workout = await db.query.workoutPlans.findFirst({
     where: eq(workoutPlans.id, workoutPlanId),
     with: {
-      workoutPlanWorkouts: {
+      workouts: {
         with: {
           workout: true
         }

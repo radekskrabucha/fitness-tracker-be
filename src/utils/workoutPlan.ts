@@ -9,17 +9,17 @@ type WorkoutPlanWorkoutRaw = SelectWorkoutPlanWorkout & {
 }
 
 type WorkoutPlanWithPlanWorkoutsRaw = SelectWorkoutPlan & {
-  workoutPlanWorkouts: Array<WorkoutPlanWorkoutRaw>
+  workouts: Array<WorkoutPlanWorkoutRaw>
 }
 
 export const transformWorkoutPlanWithPlanWorkouts = (
   workoutPlan: WorkoutPlanWithPlanWorkoutsRaw
 ) => {
-  const { workoutPlanWorkouts, ...rest } = workoutPlan
+  const { workouts, ...rest } = workoutPlan
 
   return {
     ...rest,
-    workouts: workoutPlanWorkouts.map(({ orderIndex, workout }) => ({
+    workouts: workouts.map(({ orderIndex, workout }) => ({
       ...workout,
       orderIndex
     }))
