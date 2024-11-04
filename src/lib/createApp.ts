@@ -41,7 +41,7 @@ export const createApp = () => {
     })
   )
 
-  app.on(['POST', 'GET'], '/auth/**', c => auth.handler(c.req.raw))
+  app.on(['POST', 'GET'], '/auth/*', c => auth.handler(c.req.raw))
 
   app.notFound(notFound)
   app.onError(onError)
