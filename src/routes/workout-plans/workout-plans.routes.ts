@@ -29,15 +29,10 @@ export const getWorkoutPlans = createRoute({
   path: '/',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of workout plans',
       schema: selectWorkoutPlanWithWorkoutsSchema.array()
-    }),
-    [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
     })
   }
 })
@@ -48,7 +43,6 @@ export const getWorkoutPlanById = createRoute({
   path: '/{id}',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
   request: {
     params: paramIdUUIDSchema
   },
@@ -60,10 +54,6 @@ export const getWorkoutPlanById = createRoute({
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
       description: 'Workout plan not found'
-    }),
-    [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
     })
   }
 })
