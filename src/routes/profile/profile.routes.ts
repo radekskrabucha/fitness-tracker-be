@@ -97,6 +97,10 @@ export const updateUserProfile = createRoute({
     [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
       schema: zodErrorOpenApiSchema,
       description: 'Invalid request'
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Profile not found'
     })
   }
 })
@@ -112,6 +116,10 @@ export const deleteUserProfile = createRoute({
     [OK]: jsonContentOpenAPISchema({
       description: 'Deleted fitness profile',
       schema: selectUserFitnessProfileSchema
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Profile not found'
     })
   }
 })

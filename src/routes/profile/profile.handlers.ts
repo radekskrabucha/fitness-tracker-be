@@ -1,5 +1,7 @@
+import { HTTPException } from 'hono/http-exception'
 import type { AppRouteHandler } from '~/types/app'
-import { NOT_FOUND, OK } from '~/utils/httpCodes'
+import { NOT_FOUND, OK, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
+import { gramsToKg, kgToGrams } from '~/utils/profile'
 import type {
   CreateUserProfile,
   DeleteUserProfile,
@@ -17,7 +19,13 @@ export const getUserProfile: AppRouteHandler<GetUserProfile> = async c => {
     return c.json({ message: 'Profile not found' }, NOT_FOUND)
   }
 
-  return c.json(profile, OK)
+  return c.json(
+    {
+      ...profile,
+      weight: gramsToKg(profile.weight)
+    },
+    OK
+  )
 }
 
 export const createUserProfile: AppRouteHandler<
@@ -26,9 +34,24 @@ export const createUserProfile: AppRouteHandler<
   const { id } = c.get('user')
   const profileReq = c.req.valid('json')
 
-  const [profile] = await profileService.createUserProfile(id, profileReq)
+  const [profile] = await profileService.createUserProfile(id, {
+    ...profileReq,
+    weight: kgToGrams(profileReq.weight)
+  })
 
-  return c.json(profile, OK)
+  if (!profile) {
+    throw new HTTPException(UNPROCESSABLE_ENTITY, {
+      message: 'Invalid request'
+    })
+  }
+
+  return c.json(
+    {
+      ...profile,
+      weight: gramsToKg(profile.weight)
+    },
+    OK
+  )
 }
 
 export const updateUserProfile: AppRouteHandler<
@@ -37,9 +60,22 @@ export const updateUserProfile: AppRouteHandler<
   const user = c.get('user')
   const profileReq = c.req.valid('json')
 
-  const [profile] = await profileService.updateUserProfile(user.id, profileReq)
+  const [profile] = await profileService.updateUserProfile(user.id, {
+    ...profileReq,
+    weight: profileReq.weight ? kgToGrams(profileReq.weight) : undefined
+  })
 
-  return c.json(profile, OK)
+  if (!profile) {
+    return c.json({ message: 'Profile not found' }, NOT_FOUND)
+  }
+
+  return c.json(
+    {
+      ...profile,
+      weight: gramsToKg(profile.weight)
+    },
+    OK
+  )
 }
 
 export const deleteUserProfile: AppRouteHandler<
@@ -49,5 +85,15 @@ export const deleteUserProfile: AppRouteHandler<
 
   const [profile] = await profileService.deleteUserProfile(user.id)
 
-  return c.json(profile, OK)
+  if (!profile) {
+    return c.json({ message: 'Profile not found' }, NOT_FOUND)
+  }
+
+  return c.json(
+    {
+      ...profile,
+      weight: gramsToKg(profile.weight)
+    },
+    OK
+  )
 }
