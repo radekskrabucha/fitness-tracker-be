@@ -37,7 +37,8 @@ export const userFitnessProfiles = pgTable('user_fitness_profiles', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id')
     .references(() => user.id, { onDelete: 'cascade' })
-    .notNull(),
+    .notNull()
+    .unique(),
   height: integer('height').notNull(), // in centimeters
   weight: integer('weight').notNull(), // in grams
   age: integer('age').notNull(),
