@@ -6,6 +6,7 @@ import {
 } from '~/db/schema/workout-plan.schema'
 import {
   selectWorkoutSchema,
+  selectWorkoutWithDetailedExercisesSchema,
   selectWorkoutWithDetailedExercisesWithAttributesSchema
 } from './workout'
 
@@ -45,6 +46,14 @@ export const selectWorkoutPlanWithWorkoutsSchema =
   })
 
 export const selectWorkoutPlanWithDetailedWorkoutsSchema =
+  selectWorkoutPlanSchema.extend({
+    workouts: z.array(
+      selectWorkoutWithDetailedExercisesSchema.extend({
+        orderIndex: z.number()
+      })
+    )
+  })
+export const selectWorkoutPlanWithDetailedWithAttributesWorkoutsSchema =
   selectWorkoutPlanSchema.extend({
     workouts: z.array(
       selectWorkoutWithDetailedExercisesWithAttributesSchema.extend({

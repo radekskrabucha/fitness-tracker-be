@@ -30,7 +30,7 @@ export const transformWorkout = (workout: WorkoutWithDetailsRaw) => {
 type WorkoutExerciseWithDetailsRaw = SelectWorkoutExercise & {
   exercise: ExerciseWithDetailsRaw
 }
-type WorkoutWithExerciseDetailsRaw = SelectWorkout & {
+export type WorkoutWithExerciseDetailsRaw = SelectWorkout & {
   exercises: Array<WorkoutExerciseWithDetailsRaw>
 }
 export const transformWorkoutWithExerciseDetails = (

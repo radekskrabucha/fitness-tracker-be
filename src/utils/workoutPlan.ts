@@ -4,8 +4,10 @@ import type {
   SelectWorkoutPlanWorkout
 } from '~/lib/dbSchema/workout-plan'
 import {
+  transformWorkoutWithExerciseDetails,
   transformWorkoutWithExerciseDetailsAndAttributes,
-  type WorkoutWithExerciseDetailsAndAttributesRaw
+  type WorkoutWithExerciseDetailsAndAttributesRaw,
+  type WorkoutWithExerciseDetailsRaw
 } from './workout'
 
 type WorkoutPlanWorkoutRaw = SelectWorkoutPlanWorkout & {
@@ -47,6 +49,28 @@ export const transformWorkoutPlanWithDetailedPlanWorkouts = (
     ...rest,
     workouts: workouts.map(({ orderIndex, workout }) => ({
       ...transformWorkoutWithExerciseDetailsAndAttributes(workout),
+      orderIndex
+    }))
+  }
+}
+
+type WorkoutPlanWorkoutWithDetailsRaw = SelectWorkoutPlanWorkout & {
+  workout: WorkoutWithExerciseDetailsRaw
+}
+
+type WorkoutPlanWithPlanWorkoutsWithDetailsRaw = SelectWorkoutPlan & {
+  workouts: Array<WorkoutPlanWorkoutWithDetailsRaw>
+}
+
+export const transformWorkoutPlanWithPlanWorkoutsWithDetails = (
+  workoutPlan: WorkoutPlanWithPlanWorkoutsWithDetailsRaw
+) => {
+  const { workouts, ...rest } = workoutPlan
+
+  return {
+    ...rest,
+    workouts: workouts.map(({ orderIndex, workout }) => ({
+      ...transformWorkoutWithExerciseDetails(workout),
       orderIndex
     }))
   }

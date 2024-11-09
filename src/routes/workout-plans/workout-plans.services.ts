@@ -10,7 +10,7 @@ import type {
 } from '~/lib/dbSchema/workout-plan'
 import {
   transformWorkoutPlanWithPlanWorkouts,
-  transformWorkoutPlanWithDetailedPlanWorkouts
+  transformWorkoutPlanWithPlanWorkoutsWithDetails
 } from '~/utils/workoutPlan'
 
 export const getWorkoutPlans = async () => {
@@ -37,7 +37,6 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
             with: {
               exercises: {
                 with: {
-                  attributes: true,
                   exercise: {
                     with: {
                       category: true,
@@ -61,7 +60,7 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
     return undefined
   }
 
-  return transformWorkoutPlanWithDetailedPlanWorkouts(workout)
+  return transformWorkoutPlanWithPlanWorkoutsWithDetails(workout)
 }
 
 export const createWorkoutPlan = async ({
