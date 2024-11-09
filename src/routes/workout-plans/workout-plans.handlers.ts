@@ -1,4 +1,4 @@
-import type { AppRouteHandler } from '~/types/app'
+import type { AppRouteHandler, AppRouteHandlerWithAuth } from '~/types/app'
 import { OK, NOT_FOUND } from '~/utils/httpCodes'
 import type {
   GetWorkoutPlans,
@@ -28,14 +28,14 @@ export const getWorkoutPlanById: AppRouteHandler<
   return c.json(workoutPlan, OK)
 }
 
-export const postWorkoutPlan: AppRouteHandler<PostWorkoutPlan> = async c => {
+export const postWorkoutPlan: AppRouteHandlerWithAuth<PostWorkoutPlan> = async c => {
   const workoutPlanData = c.req.valid('json')
   const newWorkoutPlan = await workoutService.createWorkoutPlan(workoutPlanData)
 
   return c.json(newWorkoutPlan, OK)
 }
 
-export const putWorkoutPlan: AppRouteHandler<PutWorkoutPlan> = async c => {
+export const putWorkoutPlan: AppRouteHandlerWithAuth<PutWorkoutPlan> = async c => {
   const { id } = c.req.valid('param')
   const workoutPlanData = c.req.valid('json')
 
@@ -51,7 +51,7 @@ export const putWorkoutPlan: AppRouteHandler<PutWorkoutPlan> = async c => {
   return c.json(updatedWorkoutPlan, OK)
 }
 
-export const deleteWorkoutPlan: AppRouteHandler<
+export const deleteWorkoutPlan: AppRouteHandlerWithAuth<
   DeleteWorkoutPlan
 > = async c => {
   const { id } = c.req.valid('param')

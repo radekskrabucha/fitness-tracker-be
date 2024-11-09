@@ -1,4 +1,4 @@
-import type { AppRouteHandler } from '~/types/app'
+import type { AppRouteHandlerWithAuth } from '~/types/app'
 import { CREATED, NOT_FOUND, OK } from '~/utils/httpCodes'
 import type {
   GetMuscleGroups,
@@ -9,13 +9,17 @@ import type {
 } from './muscle-groups.routes'
 import * as muscleGroupService from './muscle-groups.services'
 
-export const getMuscleGroups: AppRouteHandler<GetMuscleGroups> = async c => {
+export const getMuscleGroups: AppRouteHandlerWithAuth<
+  GetMuscleGroups
+> = async c => {
   const muscleGroups = await muscleGroupService.getMuscleGroups()
 
   return c.json(muscleGroups, OK)
 }
 
-export const getMuscleGroup: AppRouteHandler<GetMuscleGroup> = async c => {
+export const getMuscleGroup: AppRouteHandlerWithAuth<
+  GetMuscleGroup
+> = async c => {
   const { id } = c.req.valid('param')
   const muscleGroup = await muscleGroupService.getMuscleGroupById(id)
 
@@ -26,7 +30,7 @@ export const getMuscleGroup: AppRouteHandler<GetMuscleGroup> = async c => {
   return c.json(muscleGroup, OK)
 }
 
-export const createMuscleGroup: AppRouteHandler<
+export const createMuscleGroup: AppRouteHandlerWithAuth<
   CreateMuscleGroup
 > = async c => {
   const muscleGroupData = c.req.valid('json')
@@ -36,7 +40,7 @@ export const createMuscleGroup: AppRouteHandler<
   return c.json(muscleGroup, CREATED)
 }
 
-export const updateMuscleGroup: AppRouteHandler<
+export const updateMuscleGroup: AppRouteHandlerWithAuth<
   UpdateMuscleGroup
 > = async c => {
   const { id } = c.req.valid('param')
@@ -54,7 +58,7 @@ export const updateMuscleGroup: AppRouteHandler<
   return c.json(updatedMuscleGroup, OK)
 }
 
-export const deleteMuscleGroup: AppRouteHandler<
+export const deleteMuscleGroup: AppRouteHandlerWithAuth<
   DeleteMuscleGroup
 > = async c => {
   const { id } = c.req.valid('param')

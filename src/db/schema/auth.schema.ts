@@ -33,9 +33,6 @@ export const user = pgTable('user', {
   banExpires: integer('banExpires')
 })
 
-export type InsertUser = typeof user.$inferInsert
-export type SelectUser = typeof user.$inferSelect
-
 export const session = pgTable('session', {
   id: uuid('id').defaultRandom().primaryKey(),
   expiresAt: timestamp('expiresAt').notNull(),
@@ -48,9 +45,6 @@ export const session = pgTable('session', {
     }),
   impersonatedBy: text('impersonatedBy')
 })
-
-export type InsertSession = typeof session.$inferInsert
-export type SelectSession = typeof session.$inferSelect
 
 export const account = pgTable('account', {
   id: uuid('id').defaultRandom().primaryKey(),

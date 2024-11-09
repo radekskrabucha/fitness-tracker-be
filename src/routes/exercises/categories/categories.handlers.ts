@@ -1,4 +1,4 @@
-import type { AppRouteHandler } from '~/types/app'
+import type { AppRouteHandlerWithAuth } from '~/types/app'
 import { NOT_FOUND, OK } from '~/utils/httpCodes'
 import type {
   GetExerciseCategories,
@@ -9,7 +9,7 @@ import type {
 } from './categories.routes'
 import * as exerciseCategoryService from './categories.services'
 
-export const getExerciseCategories: AppRouteHandler<
+export const getExerciseCategories: AppRouteHandlerWithAuth<
   GetExerciseCategories
 > = async c => {
   const exerciseCategories =
@@ -18,7 +18,7 @@ export const getExerciseCategories: AppRouteHandler<
   return c.json(exerciseCategories, OK)
 }
 
-export const getExerciseCategory: AppRouteHandler<
+export const getExerciseCategory: AppRouteHandlerWithAuth<
   GetExerciseCategory
 > = async c => {
   const { id } = c.req.valid('param')
@@ -32,7 +32,7 @@ export const getExerciseCategory: AppRouteHandler<
   return c.json(exerciseCategory, OK)
 }
 
-export const createExerciseCategory: AppRouteHandler<
+export const createExerciseCategory: AppRouteHandlerWithAuth<
   CreateExerciseCategory
 > = async c => {
   const exerciseCategoryData = c.req.valid('json')
@@ -42,7 +42,7 @@ export const createExerciseCategory: AppRouteHandler<
   return c.json(createdExerciseCategory, OK)
 }
 
-export const updateExerciseCategory: AppRouteHandler<
+export const updateExerciseCategory: AppRouteHandlerWithAuth<
   UpdateExerciseCategory
 > = async c => {
   const { id } = c.req.valid('param')
@@ -61,7 +61,7 @@ export const updateExerciseCategory: AppRouteHandler<
   return c.json(updatedExerciseCategory, OK)
 }
 
-export const deleteExerciseCategory: AppRouteHandler<
+export const deleteExerciseCategory: AppRouteHandlerWithAuth<
   DeleteExerciseCategory
 > = async c => {
   const { id } = c.req.valid('param')

@@ -64,7 +64,7 @@ export const postWorkoutPlan = createRoute({
   path: '/',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     body: jsonContentOpenAPISchema({
       description: 'Create a new workout plan',
@@ -98,7 +98,7 @@ export const putWorkoutPlan = createRoute({
   path: '/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     params: paramIdUUIDSchema,
     body: jsonContentOpenAPISchema({
@@ -137,7 +137,7 @@ export const deleteWorkoutPlan = createRoute({
   path: '/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     params: paramIdUUIDSchema
   },

@@ -1,5 +1,5 @@
 import { HTTPException } from 'hono/http-exception'
-import type { AppRouteHandler } from '~/types/app'
+import type { AppRouteHandlerWithAuth } from '~/types/app'
 import { NOT_FOUND, OK, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
 import { gramsToKg, kgToGrams } from '~/utils/profile'
 import type {
@@ -10,7 +10,9 @@ import type {
 } from './profile.routes'
 import * as profileService from './profile.services'
 
-export const getUserProfile: AppRouteHandler<GetUserProfile> = async c => {
+export const getUserProfile: AppRouteHandlerWithAuth<
+  GetUserProfile
+> = async c => {
   const user = c.get('user')
 
   const profile = await profileService.getUserProfile(user.id)
@@ -28,7 +30,7 @@ export const getUserProfile: AppRouteHandler<GetUserProfile> = async c => {
   )
 }
 
-export const createUserProfile: AppRouteHandler<
+export const createUserProfile: AppRouteHandlerWithAuth<
   CreateUserProfile
 > = async c => {
   const { id } = c.get('user')
@@ -54,7 +56,7 @@ export const createUserProfile: AppRouteHandler<
   )
 }
 
-export const updateUserProfile: AppRouteHandler<
+export const updateUserProfile: AppRouteHandlerWithAuth<
   UpdateUserProfile
 > = async c => {
   const user = c.get('user')
@@ -78,7 +80,7 @@ export const updateUserProfile: AppRouteHandler<
   )
 }
 
-export const deleteUserProfile: AppRouteHandler<
+export const deleteUserProfile: AppRouteHandlerWithAuth<
   DeleteUserProfile
 > = async c => {
   const user = c.get('user')

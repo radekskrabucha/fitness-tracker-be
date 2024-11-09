@@ -1,4 +1,4 @@
-import type { AppRouteHandler } from '~/types/app'
+import type { AppRouteHandlerWithAuth } from '~/types/app'
 import { NOT_FOUND, OK } from '~/utils/httpCodes'
 import type {
   ListWorkouts,
@@ -9,13 +9,13 @@ import type {
 } from './workouts.routes'
 import * as workoutService from './workouts.services'
 
-export const listWorkouts: AppRouteHandler<ListWorkouts> = async c => {
+export const listWorkouts: AppRouteHandlerWithAuth<ListWorkouts> = async c => {
   const userWorkouts = await workoutService.getWorkouts()
 
   return c.json(userWorkouts, OK)
 }
 
-export const getWorkout: AppRouteHandler<GetWorkout> = async c => {
+export const getWorkout: AppRouteHandlerWithAuth<GetWorkout> = async c => {
   const { id } = c.req.valid('param')
 
   const workout = await workoutService.getWorkout(id)
@@ -27,7 +27,9 @@ export const getWorkout: AppRouteHandler<GetWorkout> = async c => {
   return c.json(workout, OK)
 }
 
-export const createWorkout: AppRouteHandler<CreateWorkout> = async c => {
+export const createWorkout: AppRouteHandlerWithAuth<
+  CreateWorkout
+> = async c => {
   const workoutData = c.req.valid('json')
 
   const workout = await workoutService.createWorkout(workoutData)
@@ -35,7 +37,9 @@ export const createWorkout: AppRouteHandler<CreateWorkout> = async c => {
   return c.json(workout, OK)
 }
 
-export const updateWorkout: AppRouteHandler<UpdateWorkout> = async c => {
+export const updateWorkout: AppRouteHandlerWithAuth<
+  UpdateWorkout
+> = async c => {
   const { id } = c.req.valid('param')
   const workoutData = c.req.valid('json')
 
@@ -48,7 +52,9 @@ export const updateWorkout: AppRouteHandler<UpdateWorkout> = async c => {
   return c.json(updatedWorkout, OK)
 }
 
-export const deleteWorkout: AppRouteHandler<DeleteWorkout> = async c => {
+export const deleteWorkout: AppRouteHandlerWithAuth<
+  DeleteWorkout
+> = async c => {
   const { id } = c.req.valid('param')
 
   const [deletedWorkout] = await workoutService.deleteWorkout(id)

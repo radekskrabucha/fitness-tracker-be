@@ -31,7 +31,7 @@ export const getWorkoutExercises = createRoute({
   path: '/{id}/exercises',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware] as const,
   request: {
     params: paramIdUUIDSchema
   },
@@ -57,7 +57,7 @@ export const addWorkoutExercise = createRoute({
   path: '/{id}/exercises',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     params: paramIdUUIDSchema,
     body: jsonContentOpenAPISchema({
@@ -96,7 +96,7 @@ export const updateWorkoutExercise = createRoute({
   path: '/{id}/exercises/{exerciseId}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     params: paramIdUUIDSchema.extend({
       exerciseId: UUIDSchema('exerciseId')
@@ -137,7 +137,7 @@ export const removeWorkoutExercise = createRoute({
   path: '/{id}/exercises/{exerciseId}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     params: paramIdUUIDSchema.extend({
       exerciseId: UUIDSchema('exerciseId')

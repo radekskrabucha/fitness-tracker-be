@@ -28,7 +28,7 @@ export const getExerciseCategories = createRoute({
   path: '/',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware] as const,
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of exercise categories',
@@ -47,7 +47,7 @@ export const getExerciseCategory = createRoute({
   path: '/{id}',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware] as const,
   request: {
     params: paramIdUUIDSchema
   },
@@ -77,7 +77,7 @@ export const createExerciseCategory = createRoute({
   path: '/',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     body: jsonContentOpenAPISchema({
       description: 'Exercise category to create',
@@ -110,7 +110,7 @@ export const updateExerciseCategory = createRoute({
   path: '/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     params: paramIdUUIDSchema,
     body: jsonContentOpenAPISchema({
@@ -148,7 +148,7 @@ export const deleteExerciseCategory = createRoute({
   path: '/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     params: paramIdUUIDSchema
   },

@@ -31,7 +31,7 @@ export const listWorkouts = createRoute({
   path: '/',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware] as const,
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of user workouts',
@@ -50,7 +50,7 @@ export const getWorkout = createRoute({
   path: '/{id}',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware] as const,
   request: {
     params: paramIdUUIDSchema
   },
@@ -77,7 +77,7 @@ export const createWorkout = createRoute({
   path: '/',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     body: jsonContentOpenAPISchema({
       description: 'Create a new workout',
@@ -111,7 +111,7 @@ export const updateWorkout = createRoute({
   path: '/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     params: paramIdUUIDSchema,
     body: jsonContentOpenAPISchema({
@@ -150,7 +150,7 @@ export const deleteWorkout = createRoute({
   path: '/{id}',
   tags: adminTags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware, adminMiddleware],
+  middleware: [authMiddleware, adminMiddleware] as const,
   request: {
     params: paramIdUUIDSchema
   },

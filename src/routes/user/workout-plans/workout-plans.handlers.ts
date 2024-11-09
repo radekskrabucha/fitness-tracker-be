@@ -1,4 +1,4 @@
-import type { AppRouteHandler } from '~/types/app'
+import type { AppRouteHandlerWithAuth } from '~/types/app'
 import { NOT_FOUND, OK } from '~/utils/httpCodes'
 import type {
   CreateUserWorkoutPlan,
@@ -9,7 +9,7 @@ import type {
 } from './workout-plans.routes'
 import * as userWorkoutPlanService from './workout-plans.services'
 
-export const getUserWorkoutPlans: AppRouteHandler<
+export const getUserWorkoutPlans: AppRouteHandlerWithAuth<
   GetUserWorkoutPlans
 > = async c => {
   const user = c.get('user')
@@ -20,7 +20,7 @@ export const getUserWorkoutPlans: AppRouteHandler<
   return c.json(userWorkoutPlans, OK)
 }
 
-export const getUserWorkoutPlanById: AppRouteHandler<
+export const getUserWorkoutPlanById: AppRouteHandlerWithAuth<
   GetUserWorkoutPlanById
 > = async c => {
   const { id } = c.req.valid('param')
@@ -38,7 +38,7 @@ export const getUserWorkoutPlanById: AppRouteHandler<
   return c.json(userWorkoutPlan, OK)
 }
 
-export const createUserWorkoutPlan: AppRouteHandler<
+export const createUserWorkoutPlan: AppRouteHandlerWithAuth<
   CreateUserWorkoutPlan
 > = async c => {
   const user = c.get('user')
@@ -52,7 +52,7 @@ export const createUserWorkoutPlan: AppRouteHandler<
   return c.json(workoutPlan, OK)
 }
 
-export const deleteUserWorkoutPlan: AppRouteHandler<
+export const deleteUserWorkoutPlan: AppRouteHandlerWithAuth<
   DeleteUserWorkoutPlan
 > = async c => {
   const user = c.get('user')
@@ -68,7 +68,7 @@ export const deleteUserWorkoutPlan: AppRouteHandler<
   return c.json(deletedUserWorkoutPlan, OK)
 }
 
-export const getUserWorkoutPlanWorkoutById: AppRouteHandler<
+export const getUserWorkoutPlanWorkoutById: AppRouteHandlerWithAuth<
   GetUserWorkoutPlanWorkoutById
 > = async c => {
   const user = c.get('user')

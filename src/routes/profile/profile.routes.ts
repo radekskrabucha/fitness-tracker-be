@@ -24,7 +24,7 @@ export const getUserProfile = createRoute({
   path: '/',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware] as const,
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'Retrieved profile',
@@ -47,7 +47,7 @@ export const createUserProfile = createRoute({
   path: '/',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware] as const,
   request: {
     body: jsonContentOpenAPISchema({
       description: 'Create a fitness profile',
@@ -77,7 +77,7 @@ export const updateUserProfile = createRoute({
   path: '/',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware] as const,
   request: {
     body: jsonContentOpenAPISchema({
       description: 'Update fitness profile',
@@ -111,7 +111,7 @@ export const deleteUserProfile = createRoute({
   path: '/',
   tags,
   security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware],
+  middleware: [authMiddleware] as const,
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'Deleted fitness profile',

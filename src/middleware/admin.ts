@@ -1,8 +1,8 @@
 import { createMiddleware } from 'hono/factory'
-import type { AppBindings } from '~/types/app'
 import { UNAUTHORIZED, FORBIDDEN } from '~/utils/httpCodes'
+import type { AppBindingsWithAuth } from './auth'
 
-export const adminMiddleware = createMiddleware<AppBindings>(
+export const adminMiddleware = createMiddleware<AppBindingsWithAuth>(
   async (c, next) => {
     const user = c.get('user')
 

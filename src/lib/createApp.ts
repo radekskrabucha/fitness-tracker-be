@@ -10,8 +10,8 @@ import { UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
 import { auth } from './auth'
 import { formatZodError } from './zod'
 
-export const createRouter = () => {
-  return new OpenAPIHono<AppBindings>({
+export const createRouter = <T extends AppBindings = AppBindings>() => {
+  return new OpenAPIHono<T>({
     strict: false,
     defaultHook: (result, c) => {
       if (!result.success) {
