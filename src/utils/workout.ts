@@ -47,11 +47,11 @@ export const transformWorkoutWithExerciseDetails = (
   }
 }
 
-type WorkoutExerciseWithDetailsAndAttributesRaw =
+export type WorkoutExerciseWithDetailsAndAttributesRaw =
   WorkoutExerciseWithDetailsRaw & {
     attributes: Array<SelectUserWorkoutExerciseAttribute>
   }
-type WorkoutWithExerciseDetailsAndAttributesRaw = SelectWorkout & {
+export type WorkoutWithExerciseDetailsAndAttributesRaw = SelectWorkout & {
   exercises: Array<WorkoutExerciseWithDetailsAndAttributesRaw>
 }
 export const transformWorkoutWithExerciseDetailsAndAttributes = (

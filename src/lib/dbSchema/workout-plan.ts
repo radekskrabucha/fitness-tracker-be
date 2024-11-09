@@ -4,7 +4,10 @@ import {
   workoutPlans,
   workoutPlanWorkouts
 } from '~/db/schema/workout-plan.schema'
-import { selectWorkoutSchema } from './workout'
+import {
+  selectWorkoutSchema,
+  selectWorkoutWithDetailedExercisesWithAttributesSchema
+} from './workout'
 
 export const insertWorkoutPlanBaseSchema = createInsertSchema(workoutPlans, {
   name: schema => schema.name.min(1).max(256),
@@ -36,6 +39,15 @@ export const selectWorkoutPlanWithWorkoutsSchema =
   selectWorkoutPlanSchema.extend({
     workouts: z.array(
       selectWorkoutSchema.extend({
+        orderIndex: z.number()
+      })
+    )
+  })
+
+export const selectWorkoutPlanWithDetailedWorkoutsSchema =
+  selectWorkoutPlanSchema.extend({
+    workouts: z.array(
+      selectWorkoutWithDetailedExercisesWithAttributesSchema.extend({
         orderIndex: z.number()
       })
     )

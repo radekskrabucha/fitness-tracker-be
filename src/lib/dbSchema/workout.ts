@@ -88,3 +88,7 @@ export type SelectWorkoutWithDetailedExercises = z.infer<
 export type SelectWorkoutWithExercises = z.infer<
   typeof selectWorkoutWithExercisesSchema
 >
+
+export type SelectWorkoutWithDetailedExercisesWithAttributes = z.infer<
+  typeof selectWorkoutWithDetailedExercisesWithAttributesSchema
+>

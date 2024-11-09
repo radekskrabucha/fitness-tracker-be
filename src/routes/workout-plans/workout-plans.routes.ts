@@ -3,6 +3,7 @@ import {
   insertWorkoutPlanSchema,
   patchWorkoutPlanSchema,
   selectWorkoutPlanSchema,
+  selectWorkoutPlanWithDetailedWorkoutsSchema,
   selectWorkoutPlanWithWorkoutsSchema
 } from '~/lib/dbSchema/workout-plan'
 import { withAdminTag } from '~/lib/openApi'
@@ -49,7 +50,7 @@ export const getWorkoutPlanById = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'Retrieved workout plan',
-      schema: selectWorkoutPlanWithWorkoutsSchema
+      schema: selectWorkoutPlanWithDetailedWorkoutsSchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,

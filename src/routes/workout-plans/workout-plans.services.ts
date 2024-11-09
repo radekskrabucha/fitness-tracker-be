@@ -8,7 +8,10 @@ import type {
   InsertWorkoutPlan,
   PatchWorkoutPlan
 } from '~/lib/dbSchema/workout-plan'
-import { transformWorkoutPlanWithPlanWorkouts } from '~/utils/workoutPlan'
+import {
+  transformWorkoutPlanWithPlanWorkouts,
+  transformWorkoutPlanWithDetailedPlanWorkouts
+} from '~/utils/workoutPlan'
 
 export const getWorkoutPlans = async () => {
   const workouts = await db.query.workoutPlans.findMany({
@@ -30,7 +33,25 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
     with: {
       workouts: {
         with: {
-          workout: true
+          workout: {
+            with: {
+              exercises: {
+                with: {
+                  attributes: true,
+                  exercise: {
+                    with: {
+                      category: true,
+                      muscleGroups: {
+                        with: {
+                          muscleGroup: true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -40,7 +61,7 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
     return undefined
   }
 
-  return transformWorkoutPlanWithPlanWorkouts(workout)
+  return transformWorkoutPlanWithDetailedPlanWorkouts(workout)
 }
 
 export const createWorkoutPlan = async ({
