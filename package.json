@@ -17,18 +17,18 @@
     "docker:compose": "docker-compose up --build"
   },
   "dependencies": {
-    "@hono/node-server": "1.13.5",
+    "@hono/node-server": "1.13.6",
     "@hono/swagger-ui": "0.4.1",
     "@hono/zod-openapi": "0.17.0",
     "@neondatabase/serverless": "0.10.3",
-    "better-auth": "0.8.1-beta.4",
+    "better-auth": "0.8.2-beta.1",
     "dotenv": "16.4.5",
     "drizzle-orm": "0.36.1",
     "drizzle-zod": "0.5.1",
     "hono": "4.6.9",
     "hono-pino": "0.6.0",
     "pino": "9.5.0",
-    "pino-pretty": "12.1.0",
+    "pino-pretty": "13.0.0",
     "typescript": "5.6.3",
     "zod": "3.23.8"
   },
