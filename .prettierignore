@@ -1,3 +1,4 @@
 .github
 .gitignore
 pnpm-lock.yaml
+src/lib/openApi.ts
