@@ -2,7 +2,10 @@ import { relations, sql } from 'drizzle-orm'
 import { pgTable, uuid, varchar, timestamp, integer } from 'drizzle-orm/pg-core'
 import { timestampConfig } from './config'
 import { exercises } from './exercise.schema'
-import { userWorkoutExerciseAttributes } from './user-workout.schema'
+import {
+  exerciseAttributeNameEnum,
+  userWorkoutExerciseAttributes
+} from './user-workout.schema'
 import { workoutPlanWorkouts } from './workout-plan.schema'
 
 export const workouts = pgTable('workouts', {
@@ -32,6 +35,23 @@ export const workoutExercises = pgTable('workout_exercises', {
     .$onUpdate(() => sql`now()`)
 })
 
+export const defaultWorkoutExerciseAttributes = pgTable(
+  'default_workout_exercise_attributes',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    workoutExerciseId: uuid('workout_exercise_id')
+      .notNull()
+      .references(() => workoutExercises.id),
+    attributeName: exerciseAttributeNameEnum('attribute_name').notNull(),
+    value: integer('value').notNull(),
+    createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', timestampConfig)
+      .defaultNow()
+      .notNull()
+      .$onUpdate(() => sql`now()`)
+  }
+)
+
 export const workoutExercisesRelations = relations(
   workoutExercises,
   ({ one, many }) => ({
@@ -43,7 +63,8 @@ export const workoutExercisesRelations = relations(
       fields: [workoutExercises.workoutId],
       references: [workouts.id]
     }),
-    attributes: many(userWorkoutExerciseAttributes)
+    attributes: many(userWorkoutExerciseAttributes),
+    defaultAttributes: many(defaultWorkoutExerciseAttributes)
   })
 )
 
@@ -51,3 +72,13 @@ export const workoutRelations = relations(workouts, ({ many }) => ({
   exercises: many(workoutExercises),
   planWorkouts: many(workoutPlanWorkouts)
 }))
+
+export const defaultWorkoutExerciseAttributesRelations = relations(
+  defaultWorkoutExerciseAttributes,
+  ({ one }) => ({
+    workoutExercise: one(workoutExercises, {
+      fields: [defaultWorkoutExerciseAttributes.workoutExerciseId],
+      references: [workoutExercises.id]
+    })
+  })
+)
