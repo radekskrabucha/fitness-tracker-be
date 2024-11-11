@@ -1,12 +1,24 @@
 import { relations, sql } from 'drizzle-orm'
-import { pgTable, uuid, varchar, timestamp, integer } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  uuid,
+  varchar,
+  timestamp,
+  integer,
+  pgEnum
+} from 'drizzle-orm/pg-core'
 import { timestampConfig } from './config'
 import { exercises } from './exercise.schema'
-import {
-  exerciseAttributeNameEnum,
-  userWorkoutExerciseAttributes
-} from './user-workout.schema'
+import { userWorkoutExerciseAttributes } from './user-workout.schema'
 import { workoutPlanWorkouts } from './workout-plan.schema'
+
+export const exerciseAttributeNameEnum = pgEnum('exercise_attribute_name', [
+  'sets',
+  'reps',
+  'weight',
+  'duration',
+  'distance'
+])
 
 export const workouts = pgTable('workouts', {
   id: uuid('id').defaultRandom().primaryKey(),
