@@ -1,7 +1,7 @@
 import { createInsertSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { userWorkoutPlans } from '~/db/schema/user-workout.schema'
-import { insertWorkoutWithExercisesSchema } from './workout'
+import { insertWorkoutExtraExercisesSchema } from './workout'
 import { insertWorkoutPlanWorkout } from './workout-plan'
 
 export const insertUserWorkoutPlanSchema = createInsertSchema(
@@ -12,15 +12,15 @@ export const insertUserWorkoutPlanSchema = createInsertSchema(
   updatedAt: true,
   userId: true
 })
-export const insertUserWorkoutPlanWithAttributesSchema = z.object({
+export const insertUserWorkoutPlanExtraAttributesSchema = z.object({
   workouts: insertWorkoutPlanWorkout
-    .extend(insertWorkoutWithExercisesSchema.shape)
+    .extend(insertWorkoutExtraExercisesSchema.shape)
     .array()
 })
 // @ts-expect-error - we use empty object to make it work
 export type InsertUserWorkoutPlan<T extends InsertUserWorkoutPlanExtras = {}> =
   z.infer<typeof insertUserWorkoutPlanSchema> & T
-export type InsertUserWorkoutPlanWithAttributes = z.infer<
-  typeof insertUserWorkoutPlanWithAttributesSchema
+export type InsertUserWorkoutPlanExtraAttributes = z.infer<
+  typeof insertUserWorkoutPlanExtraAttributesSchema
 >
-export type InsertUserWorkoutPlanExtras = InsertUserWorkoutPlanWithAttributes
+export type InsertUserWorkoutPlanExtras = InsertUserWorkoutPlanExtraAttributes

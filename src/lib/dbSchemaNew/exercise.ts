@@ -17,31 +17,32 @@ export const insertExerciseSchema = createInsertSchema(exercises, {
   updatedAt: true
 })
 
-export const insertExerciseWithCategoryIdSchema = z.object({
+export const insertExerciseExtraCategoryIdSchema = z.object({
   categoryId: z.string()
 })
-export const insertExerciseWithMuscleGroupIdsSchema = z.object({
+export const insertExerciseExtraMuscleGroupIdsSchema = z.object({
   muscleGroupIds: z.array(z.string().uuid()).min(1)
 })
 export const insertExerciseWithExtrasSchema = insertExerciseSchema
-  .extend(insertExerciseWithCategoryIdSchema.shape)
-  .extend(insertExerciseWithMuscleGroupIdsSchema.shape)
+  .extend(insertExerciseExtraCategoryIdSchema.shape)
+  .extend(insertExerciseExtraMuscleGroupIdsSchema.shape)
 // @ts-expect-error - we use empty object to make it work
 export type InsertExercise<T extends InsertExerciseExtras = {}> = z.infer<
   typeof insertExerciseSchema
 > &
   T
 export type InsertExerciseWithDetails =
-  InsertExercise<InsertExerciseDetailsExtras>
-export type InsertExerciseCategoryIdExtras = z.infer<
-  typeof insertExerciseWithCategoryIdSchema
+  InsertExercise<InsertExerciseExtraDetails>
+
+export type InsertExerciseExtraCategoryId = z.infer<
+  typeof insertExerciseExtraCategoryIdSchema
 >
-export type InsertExerciseMuscleGroupExtras = z.infer<
-  typeof insertExerciseWithMuscleGroupIdsSchema
+export type InsertExerciseExtraMuscleGroup = z.infer<
+  typeof insertExerciseExtraMuscleGroupIdsSchema
 >
-export type InsertExerciseDetailsExtras = InsertExerciseCategoryIdExtras &
-  InsertExerciseMuscleGroupExtras
-export type InsertExerciseExtras = InsertExerciseDetailsExtras
+export type InsertExerciseExtraDetails = InsertExerciseExtraCategoryId &
+  InsertExerciseExtraMuscleGroup
+export type InsertExerciseExtras = InsertExerciseExtraDetails
 
 export const patchExerciseSchema = insertExerciseSchema.partial()
 export const patchExerciseWithExtrasSchema =
@@ -54,49 +55,52 @@ export type PatchExerciseWithExtras = z.infer<
 
 export const selectExerciseSchema =
   createSelectSchema(exercises).openapi('Exercise')
-export const selectExerciseWithCategorySchema = z.object({
+export const selectExerciseExtraCategorySchema = z.object({
   category: selectExerciseCategorySchema
 })
-export const selectExerciseWithMuscleGroupsSchema = z.object({
+export const selectExerciseExtraMuscleGroupsSchema = z.object({
   muscleGroups: z.array(selectMuscleGroupSchema)
 })
-export const selectExerciseWithAttributesSchema = z.object({
+export const selectExerciseExtraAttributesSchema = z.object({
   attributes: z.array(selectUserWorkoutExerciseAttributeSchema)
 })
-export const selectExerciseWithDefaultAttributesSchema = z.object({
+export const selectExerciseExtraDefaultAttributesSchema = z.object({
   defaultAttributes: z.array(selectDefaultWorkoutExerciseAttributeSchema)
 })
 export const selectExerciseWithDetailsSchema = selectExerciseSchema
-  .extend(selectExerciseWithCategorySchema.shape)
-  .extend(selectExerciseWithMuscleGroupsSchema.shape)
+  .extend(selectExerciseExtraCategorySchema.shape)
+  .extend(selectExerciseExtraMuscleGroupsSchema.shape)
 export const selectExerciseWithDetailsAndAttributesSchema =
   selectExerciseWithDetailsSchema.extend(
-    selectExerciseWithAttributesSchema.shape
+    selectExerciseExtraAttributesSchema.shape
   )
 export const selectExerciseWithDetailsAndDefaultAttributesSchema =
   selectExerciseWithDetailsSchema.extend(
-    selectExerciseWithDefaultAttributesSchema.shape
+    selectExerciseExtraDefaultAttributesSchema.shape
   )
 // @ts-expect-error - we use empty object to make it work
 export type SelectExercise<T extends SelectExerciseExtras = {}> = z.infer<
   typeof selectExerciseSchema
 > &
   T
-export type SelectExerciseWithCategory = z.infer<
-  typeof selectExerciseWithCategorySchema
+export type SelectExerciseWithDetails =
+  SelectExercise<SelectExerciseExtraDetails>
+
+export type SelectExerciseExtraCategory = z.infer<
+  typeof selectExerciseExtraCategorySchema
 >
-export type SelectExerciseWithMuscleGroups = z.infer<
-  typeof selectExerciseWithMuscleGroupsSchema
+export type SelectExerciseExtraMuscleGroups = z.infer<
+  typeof selectExerciseExtraMuscleGroupsSchema
 >
-export type SelectExerciseWithDetails = SelectExerciseWithCategory &
-  SelectExerciseWithMuscleGroups
-export type SelectExerciseWithAttributes = z.infer<
-  typeof selectExerciseWithAttributesSchema
+export type SelectExerciseExtraDetails = SelectExerciseExtraCategory &
+  SelectExerciseExtraMuscleGroups
+export type SelectExerciseExtraAttributes = z.infer<
+  typeof selectExerciseExtraAttributesSchema
 >
-export type SelectExerciseWithDefaultAttributes = z.infer<
-  typeof selectExerciseWithDefaultAttributesSchema
+export type SelectExerciseExtraDefaultAttributes = z.infer<
+  typeof selectExerciseExtraDefaultAttributesSchema
 >
 export type SelectExerciseExtras =
-  | SelectExerciseWithDetails
-  | (SelectExerciseWithDetails & SelectExerciseWithAttributes)
-  | (SelectExerciseWithDetails & SelectExerciseWithDefaultAttributes)
+  | SelectExerciseExtraDetails
+  | (SelectExerciseExtraDetails & SelectExerciseExtraAttributes)
+  | (SelectExerciseExtraDetails & SelectExerciseExtraDefaultAttributes)

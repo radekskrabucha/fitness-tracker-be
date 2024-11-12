@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { userWorkoutExerciseAttributes } from '~/db/schema/user-workout.schema'
 import { defaultWorkoutExerciseAttributes } from '~/db/schema/workout.schema'
 
-export const insertUserWorkoutExerciseAttributeSchemaRaw = createInsertSchema(
+export const insertWorkoutExerciseAttributeSchemaRaw = createInsertSchema(
   userWorkoutExerciseAttributes,
   {
     value: schema => schema.value.min(1)
@@ -14,20 +14,20 @@ export const insertUserWorkoutExerciseAttributeSchemaRaw = createInsertSchema(
   updatedAt: true,
   userId: true
 })
-export const insertUserWorkoutExerciseAttributeSchema =
-  insertUserWorkoutExerciseAttributeSchemaRaw.omit({
+export const insertWorkoutExerciseAttributeSchema =
+  insertWorkoutExerciseAttributeSchemaRaw.omit({
     workoutExerciseId: true
   })
-export type InsertUserWorkoutExerciseAttributeRaw = z.infer<
-  typeof insertUserWorkoutExerciseAttributeSchemaRaw
+export type InsertWorkoutExerciseAttributeRaw = z.infer<
+  typeof insertWorkoutExerciseAttributeSchemaRaw
 >
-export type InsertUserWorkoutExerciseAttribute = z.infer<
-  typeof insertUserWorkoutExerciseAttributeSchema
+export type InsertWorkoutExerciseAttribute = z.infer<
+  typeof insertWorkoutExerciseAttributeSchema
 >
-export const patchUserWorkoutExerciseAttributeSchemaRaw =
-  insertUserWorkoutExerciseAttributeSchemaRaw.partial()
-export type PatchUserWorkoutExerciseAttributeRaw = z.infer<
-  typeof patchUserWorkoutExerciseAttributeSchemaRaw
+export const patchWorkoutExerciseAttributeSchemaRaw =
+  insertWorkoutExerciseAttributeSchemaRaw.partial()
+export type PatchWorkoutExerciseAttributeRaw = z.infer<
+  typeof patchWorkoutExerciseAttributeSchemaRaw
 >
 
 export const selectUserWorkoutExerciseAttributeSchema = createSelectSchema(
@@ -36,26 +36,6 @@ export const selectUserWorkoutExerciseAttributeSchema = createSelectSchema(
 export type SelectUserWorkoutExerciseAttribute = z.infer<
   typeof selectUserWorkoutExerciseAttributeSchema
 >
-
-export const insertDefaultWorkoutExerciseAttributeSchema = createInsertSchema(
-  defaultWorkoutExerciseAttributes,
-  {
-    value: schema => schema.value.min(1)
-  }
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true
-})
-export type InsertDefaultWorkoutExerciseAttribute = z.infer<
-  typeof insertDefaultWorkoutExerciseAttributeSchema
->
-export const patchDefaultWorkoutExerciseAttributeSchema =
-  insertDefaultWorkoutExerciseAttributeSchema.partial()
-export type PatchDefaultWorkoutExerciseAttribute = z.infer<
-  typeof patchDefaultWorkoutExerciseAttributeSchema
->
-
 export const selectDefaultWorkoutExerciseAttributeSchema = createSelectSchema(
   defaultWorkoutExerciseAttributes
 ).openapi('DefaultWorkoutExerciseAttribute')

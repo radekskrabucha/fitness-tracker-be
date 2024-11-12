@@ -15,21 +15,21 @@ export const insertWorkoutPlanWorkout = z.object({
   // TODO add workout attributes
   id: z.string().uuid()
 })
-export const insertWorkoutPlanWithAttributesSchema = z.object({
+export const insertWorkoutPlanExtraAttributesSchema = z.object({
   workouts: insertWorkoutPlanWorkout.array()
 })
 export const insertWorkoutPlanWithExtrasSchema = insertWorkoutPlanSchema.extend(
-  insertWorkoutPlanWithAttributesSchema.shape
+  insertWorkoutPlanExtraAttributesSchema.shape
 )
 // @ts-expect-error - we use empty object to make it work
 export type InsertWorkoutPlan<T extends InsertWorkoutPlanExtras = {}> = z.infer<
   typeof insertWorkoutPlanSchema
 > &
   T
-export type InsertWorkoutPlanWithWorkouts = z.infer<
-  typeof insertWorkoutPlanWithAttributesSchema
+export type InsertWorkoutPlanExtraWorkouts = z.infer<
+  typeof insertWorkoutPlanExtraAttributesSchema
 >
-export type InsertWorkoutPlanExtras = InsertWorkoutPlanWithWorkouts
+export type InsertWorkoutPlanExtras = InsertWorkoutPlanExtraWorkouts
 
 export const patchWorkoutPlanSchema = insertWorkoutPlanSchema.partial()
 export const patchWorkoutPlanWithExtrasSchema =
@@ -47,11 +47,11 @@ export type SelectWorkoutPlan<T extends SelectWorkoutPlanExtras = {}> = z.infer<
 > &
   T
 // @ts-expect-error - we use empty object to make it work
-export type SelectWorkoutPlanWithWorkouts<W extends SelectWorkoutExtras = {}> =
+export type SelectWorkoutPlanExtraWorkouts<W extends SelectWorkoutExtras = {}> =
   {
     workouts: Array<SelectWorkout<W>>
   }
 
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkoutPlanExtras<T extends SelectWorkoutExtras = {}> =
-  SelectWorkoutPlanWithWorkouts<T>
+  SelectWorkoutPlanExtraWorkouts<T>

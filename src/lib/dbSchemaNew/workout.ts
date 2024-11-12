@@ -2,7 +2,7 @@ import { createInsertSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { workouts } from '~/db/schema/workout.schema'
 import type { SelectExercise, SelectExerciseExtras } from './exercise'
-import { insertUserWorkoutExerciseAttributeSchema } from './workoutExerciseAttributes'
+import { insertWorkoutExerciseAttributeSchema } from './workoutExerciseAttributes'
 
 const insertWorkoutSchema = createInsertSchema(workouts, {
   name: schema => schema.name.min(1).max(256),
@@ -14,23 +14,23 @@ const insertWorkoutSchema = createInsertSchema(workouts, {
 })
 export const insertWorkoutExercise = z.object({
   id: z.string().uuid(),
-  attributes: insertUserWorkoutExerciseAttributeSchema
+  attributes: insertWorkoutExerciseAttributeSchema
 })
-export const insertWorkoutWithExercisesSchema = z.object({
+export const insertWorkoutExtraExercisesSchema = z.object({
   exercises: insertWorkoutExercise.array()
 })
 export const insertWorkoutWithExtrasSchema = insertWorkoutSchema.extend(
-  insertWorkoutWithExercisesSchema.shape
+  insertWorkoutExtraExercisesSchema.shape
 )
 // @ts-expect-error - we use empty object to make it work
 export type InsertWorkout<T extends InsertWorkoutExtras = {}> = z.infer<
   typeof insertWorkoutSchema
 > &
   T
-export type InsertWorkoutWithExercises = z.infer<
-  typeof insertWorkoutWithExercisesSchema
+export type InsertWorkoutExtraExercises = z.infer<
+  typeof insertWorkoutExtraExercisesSchema
 >
-export type InsertWorkoutExtras = InsertWorkoutWithExercises
+export type InsertWorkoutExtras = InsertWorkoutExtraExercises
 
 export const patchExerciseSchema = insertWorkoutSchema.partial()
 export const patchWorkoutWithExtrasSchema =
@@ -42,16 +42,17 @@ export type PatchWorkoutWithExtras = z.infer<
 
 export const selectWorkoutSchema =
   createInsertSchema(workouts).openapi('Workout')
+
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkout<T extends SelectWorkoutExtras = {}> = z.infer<
   typeof selectWorkoutSchema
 > &
   T
 // @ts-expect-error - we use empty object to make it work
-export type SelectWorkoutWithExercises<E extends SelectExerciseExtras = {}> = {
+export type SelectWorkoutExtraExercises<E extends SelectExerciseExtras = {}> = {
   exercises: Array<SelectExercise<E>>
 }
 
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkoutExtras<E extends SelectExerciseExtras = {}> =
-  SelectWorkoutWithExercises<E>
+  SelectWorkoutExtraExercises<E>
