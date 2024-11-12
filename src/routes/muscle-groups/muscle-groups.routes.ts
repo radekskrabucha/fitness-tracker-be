@@ -1,9 +1,9 @@
 import { createRoute } from '@hono/zod-openapi'
 import {
-  selectMuscleGroupSchema,
   insertMuscleGroupSchema,
-  patchMuscleGroupSchema
-} from '~/lib/dbSchema/exercise'
+  patchMuscleGroupSchema,
+  selectMuscleGroupSchema
+} from '~/lib/dbSchemaNew/muscleGroups'
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'
