@@ -12,11 +12,12 @@ const insertWorkoutSchema = createInsertSchema(workouts, {
   createdAt: true,
   updatedAt: true
 })
-const insertWorkoutWithExercisesSchema = z.object({
-  exercises: z.object({
-    id: z.string().uuid().array().min(1),
-    attributes: insertUserWorkoutExerciseAttributeSchema.array()
-  })
+export const insertWorkoutExercise = z.object({
+  id: z.string().uuid(),
+  attributes: insertUserWorkoutExerciseAttributeSchema
+})
+export const insertWorkoutWithExercisesSchema = z.object({
+  exercises: insertWorkoutExercise.array()
 })
 export const insertWorkoutWithExtrasSchema = insertWorkoutSchema.extend(
   insertWorkoutWithExercisesSchema.shape
