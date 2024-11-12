@@ -1,8 +1,11 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
 import { exercises, exerciseMuscleGroups } from '~/db/schema/exercise.schema'
-import type { InsertExercise, PatchExercise } from '~/lib/dbSchema/exercise'
-import { transformExerciseWithDetails } from '~/utils/exercise'
+import type {
+  InsertExerciseWithDetails,
+  PatchExerciseWithExtras
+} from '~/lib/dbSchemaNew/exercise'
+import { transformRawExercise } from '~/utils/new/exercise'
 
 export const getExercises = async () => {
   const retrievedExercises = await db.query.exercises.findMany({
@@ -16,7 +19,7 @@ export const getExercises = async () => {
     }
   })
 
-  return retrievedExercises.map(transformExerciseWithDetails)
+  return retrievedExercises.map(transformRawExercise)
 }
 
 export const getExerciseById = async (exerciseId: string) => {
@@ -36,13 +39,13 @@ export const getExerciseById = async (exerciseId: string) => {
     return undefined
   }
 
-  return transformExerciseWithDetails(exercise)
+  return transformRawExercise(exercise)
 }
 
 export const createExercise = async ({
   muscleGroupIds,
   ...exerciseData
-}: InsertExercise) => {
+}: InsertExerciseWithDetails) => {
   const [exercise] = await db.insert(exercises).values(exerciseData).returning()
 
   if (!exercise) {
@@ -61,7 +64,7 @@ export const createExercise = async ({
 
 export const updateExercise = async (
   id: string,
-  { muscleGroupIds, ...exerciseData }: PatchExercise
+  { muscleGroupIds, ...exerciseData }: PatchExerciseWithExtras
 ) => {
   const [updatedExercise] = await db
     .update(exercises)

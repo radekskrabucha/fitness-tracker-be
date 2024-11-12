@@ -1,10 +1,10 @@
 import { createRoute } from '@hono/zod-openapi'
 import {
-  insertExerciseSchema,
-  selectExerciseSchema,
+  insertExerciseWithExtrasSchema,
   patchExerciseSchema,
+  selectExerciseSchema,
   selectExerciseWithDetailsSchema
-} from '~/lib/dbSchema/exercise'
+} from '~/lib/dbSchemaNew/exercise'
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'
@@ -83,7 +83,7 @@ export const createExercise = createRoute({
   request: {
     body: jsonContentOpenAPISchema({
       description: 'Exercise to create',
-      schema: insertExerciseSchema
+      schema: insertExerciseWithExtrasSchema
     })
   },
   responses: {

@@ -31,15 +31,17 @@ export type InsertExercise<T extends InsertExerciseExtras = {}> = z.infer<
   typeof insertExerciseSchema
 > &
   T
-export type InsertExerciseWithCategoryId = z.infer<
+export type InsertExerciseWithDetails =
+  InsertExercise<InsertExerciseDetailsExtras>
+export type InsertExerciseCategoryIdExtras = z.infer<
   typeof insertExerciseWithCategoryIdSchema
 >
-export type InsertExerciseWithMuscleGroupIds = z.infer<
+export type InsertExerciseMuscleGroupExtras = z.infer<
   typeof insertExerciseWithMuscleGroupIdsSchema
 >
-export type InsertExerciseWithDetails = InsertExerciseWithCategoryId &
-  InsertExerciseWithMuscleGroupIds
-export type InsertExerciseExtras = InsertExerciseWithDetails
+export type InsertExerciseDetailsExtras = InsertExerciseCategoryIdExtras &
+  InsertExerciseMuscleGroupExtras
+export type InsertExerciseExtras = InsertExerciseDetailsExtras
 
 export const patchExerciseSchema = insertExerciseSchema.partial()
 export const patchExerciseWithExtrasSchema =
