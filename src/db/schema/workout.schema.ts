@@ -10,7 +10,7 @@ import {
 import { timestampConfig } from './config'
 import { exercises } from './exercise.schema'
 import { userWorkoutExerciseAttributes } from './user-workout.schema'
-import { workoutPlanWorkouts } from './workout-plan.schema'
+import { workoutPlans, workoutPlanWorkouts } from './workout-plan.schema'
 
 export const exerciseAttributeNameEnum = pgEnum('exercise_attribute_name', [
   'sets',
@@ -54,6 +54,9 @@ export const defaultWorkoutExerciseAttributes = pgTable(
     workoutExerciseId: uuid('workout_exercise_id')
       .notNull()
       .references(() => workoutExercises.id),
+    workoutPlanId: uuid('workout_plan_id')
+      .notNull()
+      .references(() => workoutPlans.id),
     attributeName: exerciseAttributeNameEnum('attribute_name').notNull(),
     value: integer('value').notNull(),
     createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
@@ -91,6 +94,10 @@ export const defaultWorkoutExerciseAttributesRelations = relations(
     workoutExercise: one(workoutExercises, {
       fields: [defaultWorkoutExerciseAttributes.workoutExerciseId],
       references: [workoutExercises.id]
+    }),
+    workoutPlan: one(workoutPlans, {
+      fields: [defaultWorkoutExerciseAttributes.workoutPlanId],
+      references: [workoutPlans.id]
     })
   })
 )
