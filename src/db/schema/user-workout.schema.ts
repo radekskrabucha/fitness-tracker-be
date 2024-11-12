@@ -15,6 +15,9 @@ export const userWorkoutExerciseAttributes = pgTable(
     workoutExerciseId: uuid('workout_exercise_id')
       .notNull()
       .references(() => workoutExercises.id),
+    workoutPlanId: uuid('workout_plan_id')
+      .notNull()
+      .references(() => workoutPlans.id),
     attributeName: exerciseAttributeNameEnum('attribute_name').notNull(),
     value: integer('value').notNull(),
     createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
@@ -64,6 +67,10 @@ export const userWorkoutExerciseAttributesRelations = relations(
     exercise: one(workoutExercises, {
       fields: [userWorkoutExerciseAttributes.workoutExerciseId],
       references: [workoutExercises.id]
+    }),
+    workoutPlan: one(workoutPlans, {
+      fields: [userWorkoutExerciseAttributes.workoutPlanId],
+      references: [workoutPlans.id]
     })
   })
 )
