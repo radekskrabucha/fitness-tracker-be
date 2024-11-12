@@ -3,7 +3,7 @@ import {
   insertExerciseCategorySchema,
   patchExerciseCategorySchema,
   selectExerciseCategorySchema
-} from '~/lib/dbSchema/exercise'
+} from '~/lib/dbSchemaNew/exerciseCategory'
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'
