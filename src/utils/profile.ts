@@ -1,3 +1,3 @@
-export const gramsToKg = (grams: number) => grams / 1000
+export const dekagramsToKg = (dekagrams: number) => dekagrams / 100
 
-export const kgToGrams = (kg: number) => kg * 1000
+export const kgToDekagrams = (kg: number) => kg * 100
