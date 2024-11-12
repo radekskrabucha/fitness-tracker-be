@@ -1,10 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
-import {
-  workouts,
-  workoutExercises,
-  defaultWorkoutExerciseAttributes
-} from '~/db/schema/workout.schema'
+import { workouts, workoutExercises } from '~/db/schema/workout.schema'
 import type {
   InsertWorkoutWithExercises,
   PatchWorkout
@@ -16,7 +12,6 @@ export const getWorkouts = async () => {
     with: {
       exercises: {
         with: {
-          defaultAttributes: true,
           exercise: {
             with: {
               category: true,
@@ -41,7 +36,6 @@ export const getWorkout = async (workoutId: string) => {
     with: {
       exercises: {
         with: {
-          defaultAttributes: true,
           exercise: {
             with: {
               category: true,
@@ -77,33 +71,12 @@ export const createWorkout = async ({
     throw new Error('Workout not found')
   }
 
-  const exercisesToInsert = exercises.map(({ id }, index) => ({
+  const exercisesToInsert = exercises.map((id, index) => ({
     exerciseId: id,
     orderIndex: index,
     workoutId: workoutInserted.id
   }))
-  const insertedExercises = await db
-    .insert(workoutExercises)
-    .values(exercisesToInsert)
-    .returning()
-
-  const attributesToInsert = exercises.flatMap(({ attributes, id }) => {
-    const workoutExercise = insertedExercises.find(
-      exercise => exercise.exerciseId === id
-    )
-
-    if (!workoutExercise) {
-      return []
-    }
-
-    return attributes.map(({ attributeName, value }) => ({
-      attributeName,
-      value,
-      workoutExerciseId: workoutExercise.id
-    }))
-  })
-
-  await db.insert(defaultWorkoutExerciseAttributes).values(attributesToInsert)
+  await db.insert(workoutExercises).values(exercisesToInsert)
 
   return workoutInserted
 }

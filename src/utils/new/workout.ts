@@ -1,17 +1,18 @@
 import type {
   SelectWorkout,
-  SelectWorkoutWithExercises
+  SelectWorkoutWithExercises,
+  SelectWorkoutWithExercisesWithAttributes
 } from '~/lib/dbSchemaNew/workout'
 import type { SelectWorkoutExercise } from '~/lib/dbSchemaNew/workoutExercise'
 import type { SelectDefaultWorkoutExerciseAttribute } from '~/lib/dbSchemaNew/workoutExerciseAttributes'
 import {
+  transformRawExercise,
   transformRawExerciseWithAttributes,
   type ExerciseRaw
 } from './exercise'
 
 export type WorkoutExerciseRaw = SelectWorkoutExercise & {
   exercise: ExerciseRaw
-  defaultAttributes: Array<SelectDefaultWorkoutExerciseAttribute>
 }
 
 export type WorkoutRaw<T> = SelectWorkout & {
@@ -21,6 +22,25 @@ export type WorkoutRaw<T> = SelectWorkout & {
 export const transformRawWorkout = (
   workout: WorkoutRaw<WorkoutExerciseRaw>
 ): SelectWorkoutWithExercises => {
+  const { exercises, ...rest } = workout
+  const sortedExercises = exercises.sort((a, b) => a.orderIndex - b.orderIndex)
+
+  return {
+    ...rest,
+    exercises: sortedExercises.map(({ exercise }) =>
+      transformRawExercise(exercise)
+    )
+  }
+}
+
+export type WorkoutExerciseWithAttributesRaw = SelectWorkoutExercise & {
+  exercise: ExerciseRaw
+  defaultAttributes: Array<SelectDefaultWorkoutExerciseAttribute>
+}
+
+export const transformRawWorkoutWithExercisesAttributes = (
+  workout: WorkoutRaw<WorkoutExerciseWithAttributesRaw>
+): SelectWorkoutWithExercisesWithAttributes => {
   const { exercises, ...rest } = workout
   const sortedExercises = exercises.sort((a, b) => a.orderIndex - b.orderIndex)
 

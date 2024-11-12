@@ -38,7 +38,12 @@ export type SelectUserWorkoutExerciseAttribute = z.infer<
 >
 export const selectDefaultWorkoutExerciseAttributeSchema = createSelectSchema(
   defaultWorkoutExerciseAttributes
-).openapi('DefaultWorkoutExerciseAttribute')
+)
+  .omit({
+    workoutPlanId: true,
+    workoutExerciseId: true
+  })
+  .openapi('DefaultWorkoutExerciseAttribute')
 export type SelectDefaultWorkoutExerciseAttribute = z.infer<
   typeof selectDefaultWorkoutExerciseAttributeSchema
 >

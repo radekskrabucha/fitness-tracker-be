@@ -3,11 +3,12 @@ import { z } from 'zod'
 import { workouts } from '~/db/schema/workout.schema'
 import {
   selectExerciseWithDetailsAndAttributesSchema,
+  selectExerciseWithDetailsSchema,
   type SelectExercise,
   type SelectExerciseExtras,
+  type SelectExerciseWithDetails,
   type SelectExerciseWithDetailsAndAttributes
 } from './exercise'
-import { insertWorkoutExerciseAttributeSchema } from './workoutExerciseAttributes'
 
 const insertWorkoutSchema = createInsertSchema(workouts, {
   name: schema => schema.name.min(1).max(256),
@@ -17,12 +18,8 @@ const insertWorkoutSchema = createInsertSchema(workouts, {
   createdAt: true,
   updatedAt: true
 })
-export const insertWorkoutExercise = z.object({
-  id: z.string().uuid(),
-  attributes: insertWorkoutExerciseAttributeSchema.array()
-})
 export const insertWorkoutExtraExercisesSchema = z.object({
-  exercises: insertWorkoutExercise.array()
+  exercises: z.string().array()
 })
 export const insertWorkoutWithExtrasSchema = insertWorkoutSchema.extend(
   insertWorkoutExtraExercisesSchema.shape
@@ -51,11 +48,18 @@ export type PatchWorkoutWithExtras = z.infer<
 export const selectWorkoutSchema =
   createInsertSchema(workouts).openapi('Workout')
 export const selectWorkoutExtraExercisesSchema = z.object({
+  exercises: selectExerciseWithDetailsSchema.array()
+})
+export const selectWorkoutExtraExercisesWithAttributesSchema = z.object({
   exercises: selectExerciseWithDetailsAndAttributesSchema.array()
 })
 export const selectWorkoutWithExercisesSchema = selectWorkoutSchema.extend(
   selectWorkoutExtraExercisesSchema.shape
 )
+export const selectWorkoutWithExercisesWithAttributesSchema =
+  selectWorkoutSchema.extend(
+    selectWorkoutExtraExercisesWithAttributesSchema.shape
+  )
 
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkout<T extends SelectWorkoutExtras = {}> = z.infer<
@@ -63,6 +67,9 @@ export type SelectWorkout<T extends SelectWorkoutExtras = {}> = z.infer<
 > &
   T
 export type SelectWorkoutWithExercises = SelectWorkout<
+  SelectWorkoutExtraExercises<SelectExerciseWithDetails>
+>
+export type SelectWorkoutWithExercisesWithAttributes = SelectWorkout<
   SelectWorkoutExtraExercises<SelectExerciseWithDetailsAndAttributes>
 >
 // @ts-expect-error - we use empty object to make it work
