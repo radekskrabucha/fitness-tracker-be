@@ -1,24 +1,38 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
-import { workouts, workoutExercises } from '~/db/schema/workout.schema'
-import type { InsertWorkout, PatchWorkout } from '~/lib/dbSchema/workout'
 import {
-  transformWorkout,
-  transformWorkoutWithExerciseDetails
-} from '~/utils/workout'
+  workouts,
+  workoutExercises,
+  defaultWorkoutExerciseAttributes
+} from '~/db/schema/workout.schema'
+import type {
+  InsertWorkoutWithExercises,
+  PatchWorkout
+} from '~/lib/dbSchemaNew/workout'
+import { transformRawWorkout } from '~/utils/new/workout'
 
 export const getWorkouts = async () => {
   const workout = await db.query.workouts.findMany({
     with: {
       exercises: {
         with: {
-          exercise: true
+          defaultAttributes: true,
+          exercise: {
+            with: {
+              category: true,
+              muscleGroups: {
+                with: {
+                  muscleGroup: true
+                }
+              }
+            }
+          }
         }
       }
     }
   })
 
-  return workout.map(transformWorkout)
+  return workout.map(transformRawWorkout)
 }
 
 export const getWorkout = async (workoutId: string) => {
@@ -27,6 +41,7 @@ export const getWorkout = async (workoutId: string) => {
     with: {
       exercises: {
         with: {
+          defaultAttributes: true,
           exercise: {
             with: {
               category: true,
@@ -46,13 +61,13 @@ export const getWorkout = async (workoutId: string) => {
     return undefined
   }
 
-  return transformWorkoutWithExerciseDetails(retrievedWorkouts)
+  return transformRawWorkout(retrievedWorkouts)
 }
 
 export const createWorkout = async ({
   exercises,
   ...workout
-}: InsertWorkout) => {
+}: InsertWorkoutWithExercises) => {
   const [workoutInserted] = await db
     .insert(workouts)
     .values(workout)
@@ -62,13 +77,33 @@ export const createWorkout = async ({
     throw new Error('Workout not found')
   }
 
-  const exerciseIds = exercises.map(({ id }, index) => ({
+  const exercisesToInsert = exercises.map(({ id }, index) => ({
     exerciseId: id,
     orderIndex: index,
     workoutId: workoutInserted.id
   }))
+  const insertedExercises = await db
+    .insert(workoutExercises)
+    .values(exercisesToInsert)
+    .returning()
 
-  await db.insert(workoutExercises).values(exerciseIds).returning()
+  const attributesToInsert = exercises.flatMap(({ attributes, id }) => {
+    const workoutExercise = insertedExercises.find(
+      exercise => exercise.exerciseId === id
+    )
+
+    if (!workoutExercise) {
+      return []
+    }
+
+    return attributes.map(({ attributeName, value }) => ({
+      attributeName,
+      value,
+      workoutExerciseId: workoutExercise.id
+    }))
+  })
+
+  await db.insert(defaultWorkoutExerciseAttributes).values(attributesToInsert)
 
   return workoutInserted
 }

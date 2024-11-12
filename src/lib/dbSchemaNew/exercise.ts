@@ -3,10 +3,7 @@ import { z } from 'zod'
 import { exercises } from '~/db/schema/exercise.schema'
 import { selectExerciseCategorySchema } from './exerciseCategory'
 import { selectMuscleGroupSchema } from './muscleGroups'
-import {
-  selectDefaultWorkoutExerciseAttributeSchema,
-  selectUserWorkoutExerciseAttributeSchema
-} from './workoutExerciseAttributes'
+import { selectDefaultWorkoutExerciseAttributeSchema } from './workoutExerciseAttributes'
 
 export const insertExerciseSchema = createInsertSchema(exercises, {
   name: schema => schema.name.min(1).max(256),
@@ -62,10 +59,7 @@ export const selectExerciseExtraMuscleGroupsSchema = z.object({
   muscleGroups: z.array(selectMuscleGroupSchema)
 })
 export const selectExerciseExtraAttributesSchema = z.object({
-  attributes: z.array(selectUserWorkoutExerciseAttributeSchema)
-})
-export const selectExerciseExtraDefaultAttributesSchema = z.object({
-  defaultAttributes: z.array(selectDefaultWorkoutExerciseAttributeSchema)
+  attributes: z.array(selectDefaultWorkoutExerciseAttributeSchema)
 })
 export const selectExerciseWithDetailsSchema = selectExerciseSchema
   .extend(selectExerciseExtraCategorySchema.shape)
@@ -74,10 +68,6 @@ export const selectExerciseWithDetailsAndAttributesSchema =
   selectExerciseWithDetailsSchema.extend(
     selectExerciseExtraAttributesSchema.shape
   )
-export const selectExerciseWithDetailsAndDefaultAttributesSchema =
-  selectExerciseWithDetailsSchema.extend(
-    selectExerciseExtraDefaultAttributesSchema.shape
-  )
 // @ts-expect-error - we use empty object to make it work
 export type SelectExercise<T extends SelectExerciseExtras = {}> = z.infer<
   typeof selectExerciseSchema
@@ -85,6 +75,9 @@ export type SelectExercise<T extends SelectExerciseExtras = {}> = z.infer<
   T
 export type SelectExerciseWithDetails =
   SelectExercise<SelectExerciseExtraDetails>
+export type SelectExerciseWithDetailsAndAttributes = SelectExercise<
+  SelectExerciseExtraDetails & SelectExerciseExtraAttributes
+>
 
 export type SelectExerciseExtraCategory = z.infer<
   typeof selectExerciseExtraCategorySchema
@@ -97,10 +90,6 @@ export type SelectExerciseExtraDetails = SelectExerciseExtraCategory &
 export type SelectExerciseExtraAttributes = z.infer<
   typeof selectExerciseExtraAttributesSchema
 >
-export type SelectExerciseExtraDefaultAttributes = z.infer<
-  typeof selectExerciseExtraDefaultAttributesSchema
->
 export type SelectExerciseExtras =
   | SelectExerciseExtraDetails
   | (SelectExerciseExtraDetails & SelectExerciseExtraAttributes)
-  | (SelectExerciseExtraDetails & SelectExerciseExtraDefaultAttributes)
