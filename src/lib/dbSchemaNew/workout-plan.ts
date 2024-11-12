@@ -1,7 +1,13 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { workoutPlans } from '~/db/schema/workout-plan.schema'
-import type { SelectWorkout, SelectWorkoutExtras } from './workout'
+import {
+  selectWorkoutWithExercisesWithAttributesSchema,
+  type SelectWorkout,
+  type SelectWorkoutExtras,
+  type SelectWorkoutWithExercisesWithAttributes
+} from './workout'
+import { insertWorkoutExerciseAttributeSchema } from './workoutExerciseAttributes'
 
 export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans, {
   name: schema => schema.name.min(1).max(256),
@@ -11,9 +17,14 @@ export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans, {
   createdAt: true,
   updatedAt: true
 })
+export const insertWorkoutExercise = z.object({
+  id: z.string().uuid(),
+  attributes: insertWorkoutExerciseAttributeSchema.array()
+})
 export const insertWorkoutPlanWorkout = z.object({
   // TODO add workout attributes
-  id: z.string().uuid()
+  id: z.string().uuid(),
+  exercises: insertWorkoutExercise.array()
 })
 export const insertWorkoutPlanExtraAttributesSchema = z.object({
   workouts: insertWorkoutPlanWorkout.array()
@@ -26,6 +37,8 @@ export type InsertWorkoutPlan<T extends InsertWorkoutPlanExtras = {}> = z.infer<
   typeof insertWorkoutPlanSchema
 > &
   T
+export type InsertWorkoutPlanWithExtras =
+  InsertWorkoutPlan<InsertWorkoutPlanExtraWorkouts>
 export type InsertWorkoutPlanExtraWorkouts = z.infer<
   typeof insertWorkoutPlanExtraAttributesSchema
 >
@@ -41,11 +54,19 @@ export type PatchWorkoutPlanWithExtras = z.infer<
 
 export const selectWorkoutPlanSchema =
   createSelectSchema(workoutPlans).openapi('WorkoutPlan')
+export const selectWorkoutPlanExtraWorkoutsSchema = z.object({
+  workouts: selectWorkoutWithExercisesWithAttributesSchema.array()
+})
+export const selectWorkoutPlanWithWorkoutsSchema =
+  selectWorkoutPlanSchema.extend(selectWorkoutPlanExtraWorkoutsSchema.shape)
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkoutPlan<T extends SelectWorkoutPlanExtras = {}> = z.infer<
   typeof selectWorkoutPlanSchema
 > &
   T
+export type SelectWorkoutPlanWithWorkoutsWithExercises = SelectWorkoutPlan<
+  SelectWorkoutPlanExtraWorkouts<SelectWorkoutWithExercisesWithAttributes>
+>
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkoutPlanExtraWorkouts<W extends SelectWorkoutExtras = {}> =
   {

@@ -16,7 +16,8 @@ export const insertWorkoutExerciseAttributeSchemaRaw = createInsertSchema(
 })
 export const insertWorkoutExerciseAttributeSchema =
   insertWorkoutExerciseAttributeSchemaRaw.omit({
-    workoutExerciseId: true
+    workoutExerciseId: true,
+    workoutPlanId: true
   })
 export type InsertWorkoutExerciseAttributeRaw = z.infer<
   typeof insertWorkoutExerciseAttributeSchemaRaw
