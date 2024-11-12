@@ -39,7 +39,7 @@ export const signInEmail = createRoute({
         email: z.string().email(),
         password: z.string(),
         callbackURL: z.string().optional(),
-        dontRememberMe: z.boolean().default(false).optional()
+        rememberMe: z.boolean().default(false).optional()
       }),
       description: 'Sign in with email',
       required: true
