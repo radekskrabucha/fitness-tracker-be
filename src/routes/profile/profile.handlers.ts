@@ -1,7 +1,7 @@
 import { HTTPException } from 'hono/http-exception'
 import type { AppRouteHandlerWithAuth } from '~/types/app'
 import { NOT_FOUND, OK, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
-import { gramsToKg, kgToGrams } from '~/utils/profile'
+import { dekagramsToKg, kgToDekagrams } from '~/utils/profile'
 import type {
   CreateUserProfile,
   DeleteUserProfile,
@@ -24,7 +24,7 @@ export const getUserProfile: AppRouteHandlerWithAuth<
   return c.json(
     {
       ...profile,
-      weight: gramsToKg(profile.weight)
+      weight: dekagramsToKg(profile.weight)
     },
     OK
   )
@@ -38,7 +38,7 @@ export const createUserProfile: AppRouteHandlerWithAuth<
 
   const [profile] = await profileService.createUserProfile(id, {
     ...profileReq,
-    weight: kgToGrams(profileReq.weight)
+    weight: kgToDekagrams(profileReq.weight)
   })
 
   if (!profile) {
@@ -50,7 +50,7 @@ export const createUserProfile: AppRouteHandlerWithAuth<
   return c.json(
     {
       ...profile,
-      weight: gramsToKg(profile.weight)
+      weight: dekagramsToKg(profile.weight)
     },
     OK
   )
@@ -64,7 +64,7 @@ export const updateUserProfile: AppRouteHandlerWithAuth<
 
   const [profile] = await profileService.updateUserProfile(user.id, {
     ...profileReq,
-    weight: profileReq.weight ? kgToGrams(profileReq.weight) : undefined
+    weight: profileReq.weight ? kgToDekagrams(profileReq.weight) : undefined
   })
 
   if (!profile) {
@@ -74,7 +74,7 @@ export const updateUserProfile: AppRouteHandlerWithAuth<
   return c.json(
     {
       ...profile,
-      weight: gramsToKg(profile.weight)
+      weight: dekagramsToKg(profile.weight)
     },
     OK
   )
@@ -94,7 +94,7 @@ export const deleteUserProfile: AppRouteHandlerWithAuth<
   return c.json(
     {
       ...profile,
-      weight: gramsToKg(profile.weight)
+      weight: dekagramsToKg(profile.weight)
     },
     OK
   )
