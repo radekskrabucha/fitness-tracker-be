@@ -7,7 +7,8 @@ export default [
   {
     languageOptions: { globals: globals.node },
     rules: {
-      '@typescript-eslint/no-non-null-assertion': 'warn'
+      '@typescript-eslint/no-non-null-assertion': 'warn',
+      '@typescript-eslint/no-empty-object-type': ['off', { allowObjectTypes: true }]
     }
   },
   pluginJs.configs.recommended,
