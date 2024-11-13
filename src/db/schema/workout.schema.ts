@@ -5,11 +5,15 @@ import {
   varchar,
   timestamp,
   integer,
-  pgEnum
+  pgEnum,
+  boolean
 } from 'drizzle-orm/pg-core'
 import { timestampConfig } from './config'
 import { exercises } from './exercise.schema'
-import { userWorkoutExerciseAttributes } from './user-workout.schema'
+import {
+  userWorkoutAttributes,
+  userWorkoutExerciseAttributes
+} from './user-workout.schema'
 import { workoutPlans, workoutPlanWorkouts } from './workout-plan.schema'
 
 export const exerciseAttributeNameEnum = pgEnum('exercise_attribute_name', [
@@ -18,6 +22,14 @@ export const exerciseAttributeNameEnum = pgEnum('exercise_attribute_name', [
   'weight',
   'duration',
   'distance'
+])
+export const workoutAttributeNameEnum = pgEnum('exercise_attribute_name', [
+  'days_of_week',
+  'intensity_level',
+  'duration_goal',
+  'warmup_required',
+  'cooldown_required',
+  'rest_period_between_sets'
 ])
 
 export const workouts = pgTable('workouts', {
@@ -53,10 +65,10 @@ export const defaultWorkoutExerciseAttributes = pgTable(
     id: uuid('id').defaultRandom().primaryKey(),
     workoutExerciseId: uuid('workout_exercise_id')
       .notNull()
-      .references(() => workoutExercises.id),
+      .references(() => workoutExercises.id, { onDelete: 'cascade' }),
     workoutPlanId: uuid('workout_plan_id')
       .notNull()
-      .references(() => workoutPlans.id),
+      .references(() => workoutPlans.id, { onDelete: 'cascade' }),
     attributeName: exerciseAttributeNameEnum('attribute_name').notNull(),
     value: integer('value').notNull(),
     createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
@@ -65,6 +77,35 @@ export const defaultWorkoutExerciseAttributes = pgTable(
       .notNull()
       .$onUpdate(() => sql`now()`)
   }
+)
+
+export const defaultWorkoutAttributes = pgTable(
+  'default_workout_attributes',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    workoutId: uuid('workout_id')
+      .notNull()
+      .references(() => workouts.id, { onDelete: 'cascade' }),
+    workoutPlanId: uuid('workout_plan_id')
+      .notNull()
+      .references(() => workoutPlans.id, { onDelete: 'cascade' }),
+    attributeName: workoutAttributeNameEnum('attribute_name').notNull(),
+    integerValue: integer('integer_value'),
+    textValue: varchar('description', { length: 256 }),
+    booleanValue: boolean('boolean_value'),
+    createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', timestampConfig)
+      .defaultNow()
+      .notNull()
+      .$onUpdate(() => sql`now()`)
+  },
+  table => ({
+    onlyOneValueConstraint: sql`CHECK (
+    (${table.integerValue} IS NOT NULL)::int + 
+    (${table.textValue} IS NOT NULL)::int + 
+    (${table.booleanValue} IS NOT NULL)::int = 1
+  )`
+  })
 )
 
 export const workoutExercisesRelations = relations(
@@ -85,7 +126,9 @@ export const workoutExercisesRelations = relations(
 
 export const workoutRelations = relations(workouts, ({ many }) => ({
   exercises: many(workoutExercises),
-  planWorkouts: many(workoutPlanWorkouts)
+  planWorkouts: many(workoutPlanWorkouts),
+  attributes: many(userWorkoutAttributes),
+  defaultAttributes: many(defaultWorkoutAttributes)
 }))
 
 export const defaultWorkoutExerciseAttributesRelations = relations(
@@ -97,6 +140,19 @@ export const defaultWorkoutExerciseAttributesRelations = relations(
     }),
     workoutPlan: one(workoutPlans, {
       fields: [defaultWorkoutExerciseAttributes.workoutPlanId],
+      references: [workoutPlans.id]
+    })
+  })
+)
+export const defaultWorkoutAttributesRelations = relations(
+  defaultWorkoutAttributes,
+  ({ one }) => ({
+    workout: one(workouts, {
+      fields: [defaultWorkoutAttributes.workoutId],
+      references: [workouts.id]
+    }),
+    workoutPlan: one(workoutPlans, {
+      fields: [defaultWorkoutAttributes.workoutPlanId],
       references: [workoutPlans.id]
     })
   })

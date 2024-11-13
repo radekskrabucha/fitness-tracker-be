@@ -9,7 +9,7 @@ export const exercises = pgTable('exercises', {
   description: varchar('description', { length: 1024 }),
   categoryId: uuid('category_id')
     .notNull()
-    .references(() => exerciseCategories.id),
+    .references(() => exerciseCategories.id, { onDelete: 'cascade' }),
   createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', timestampConfig)
     .defaultNow()
