@@ -11,7 +11,7 @@ import {
 import type {
   InsertWorkoutPlanWithExtras,
   PatchWorkoutPlan
-} from '~/lib/dbSchemaNew/workoutPlan'
+} from '~/lib/dbSchema/workoutPlan'
 import { transformRawWorkoutPlan } from '~/utils/transforms/workoutPlan'
 
 export const getWorkoutPlans = async () => {

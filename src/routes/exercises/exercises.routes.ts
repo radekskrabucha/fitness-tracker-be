@@ -4,7 +4,7 @@ import {
   patchExerciseSchema,
   selectExerciseSchema,
   selectExerciseWithDetailsSchema
-} from '~/lib/dbSchemaNew/exercise'
+} from '~/lib/dbSchema/exercise'
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'

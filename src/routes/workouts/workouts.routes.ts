@@ -4,7 +4,7 @@ import {
   selectWorkoutSchema,
   insertWorkoutWithExtrasSchema,
   patchWorkoutSchema
-} from '~/lib/dbSchemaNew/workout'
+} from '~/lib/dbSchema/workout'
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'

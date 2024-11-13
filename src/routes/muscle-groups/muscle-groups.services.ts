@@ -4,7 +4,7 @@ import { muscleGroups } from '~/db/schema/exercise.schema'
 import type {
   InsertMuscleGroup,
   PatchMuscleGroup
-} from '~/lib/dbSchemaNew/muscleGroups'
+} from '~/lib/dbSchema/muscleGroups'
 
 export const getMuscleGroups = () => db.query.muscleGroups.findMany()
 

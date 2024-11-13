@@ -4,7 +4,7 @@ import { userFitnessProfiles } from '~/db/schema/profile.schema'
 import type {
   InsertUserFitnessProfile,
   PatchUserFitnessProfile
-} from '~/lib/dbSchemaNew/profile'
+} from '~/lib/dbSchema/profile'
 
 export const getUserProfile = (id: string) =>
   db.query.userFitnessProfiles.findFirst({

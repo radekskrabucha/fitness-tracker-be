@@ -2,8 +2,8 @@ import { createRoute } from '@hono/zod-openapi'
 import {
   insertUserWorkoutPlanWithExtrasSchema,
   selectUserWorkoutPlanSchema
-} from '~/lib/dbSchemaNew/userWorkoutPlan'
-import { selectWorkoutPlanWithWorkoutsSchema } from '~/lib/dbSchemaNew/workoutPlan'
+} from '~/lib/dbSchema/userWorkoutPlan'
+import { selectWorkoutPlanWithWorkoutsSchema } from '~/lib/dbSchema/workoutPlan'
 import { authMiddleware } from '~/middleware/auth'
 import {
   NOT_FOUND,

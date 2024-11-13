@@ -3,7 +3,7 @@ import {
   insertUserFitnessProfileSchema,
   patchUserFitnessProfileSchema,
   selectUserFitnessProfileSchema
-} from '~/lib/dbSchemaNew/profile'
+} from '~/lib/dbSchema/profile'
 import { authMiddleware } from '~/middleware/auth'
 import {
   NOT_FOUND,

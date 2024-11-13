@@ -2,10 +2,10 @@ import type {
   SelectExercise,
   SelectExerciseWithDetails,
   SelectExerciseWithDetailsAndAttributes
-} from '~/lib/dbSchemaNew/exercise'
-import type { SelectExerciseCategory } from '~/lib/dbSchemaNew/exerciseCategory'
-import type { SelectMuscleGroup } from '~/lib/dbSchemaNew/muscleGroups'
-import type { SelectDefaultWorkoutExerciseAttribute } from '~/lib/dbSchemaNew/workoutExerciseAttributes'
+} from '~/lib/dbSchema/exercise'
+import type { SelectExerciseCategory } from '~/lib/dbSchema/exerciseCategory'
+import type { SelectMuscleGroup } from '~/lib/dbSchema/muscleGroups'
+import type { SelectDefaultWorkoutExerciseAttribute } from '~/lib/dbSchema/workoutExerciseAttributes'
 
 export type ExerciseMuscleGroupRaw = {
   muscleGroup: SelectMuscleGroup

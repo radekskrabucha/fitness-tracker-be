@@ -6,7 +6,7 @@ import {
   userWorkoutExerciseAttributes
 } from '~/db/schema/user-workout.schema'
 import { workoutExercises } from '~/db/schema/workout.schema'
-import type { InsertUserWorkoutPlanWithExtras } from '~/lib/dbSchemaNew/userWorkoutPlan'
+import type { InsertUserWorkoutPlanWithExtras } from '~/lib/dbSchema/userWorkoutPlan'
 import { transformRawWorkoutPlan } from '~/utils/transforms/workoutPlan'
 
 export const getUserWorkoutPlans = async (userId: string) => {

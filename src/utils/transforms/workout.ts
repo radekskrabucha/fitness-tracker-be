@@ -2,9 +2,9 @@ import type {
   SelectWorkout,
   SelectWorkoutWithExercises,
   SelectWorkoutWithExercisesWithAttributes
-} from '~/lib/dbSchemaNew/workout'
-import type { SelectWorkoutExercise } from '~/lib/dbSchemaNew/workoutExercise'
-import type { SelectDefaultWorkoutExerciseAttribute } from '~/lib/dbSchemaNew/workoutExerciseAttributes'
+} from '~/lib/dbSchema/workout'
+import type { SelectWorkoutExercise } from '~/lib/dbSchema/workoutExercise'
+import type { SelectDefaultWorkoutExerciseAttribute } from '~/lib/dbSchema/workoutExerciseAttributes'
 import {
   transformRawExercise,
   transformRawExerciseWithAttributes,

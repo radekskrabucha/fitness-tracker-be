@@ -4,7 +4,7 @@ import { workouts, workoutExercises } from '~/db/schema/workout.schema'
 import type {
   InsertWorkoutWithExercises,
   PatchWorkout
-} from '~/lib/dbSchemaNew/workout'
+} from '~/lib/dbSchema/workout'
 import { transformRawWorkout } from '~/utils/transforms/workout'
 
 export const getWorkouts = async () => {

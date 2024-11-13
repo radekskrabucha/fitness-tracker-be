@@ -1,8 +1,8 @@
 import type {
   SelectWorkoutPlan,
   SelectWorkoutPlanWithWorkoutsWithExercises
-} from '~/lib/dbSchemaNew/workoutPlan'
-import type { SelectWorkoutPlanWorkout } from '~/lib/dbSchemaNew/workoutPlanWorkout'
+} from '~/lib/dbSchema/workoutPlan'
+import type { SelectWorkoutPlanWorkout } from '~/lib/dbSchema/workoutPlanWorkout'
 import {
   transformRawUserWorkoutWithExercisesAttributes,
   transformRawWorkoutWithExercisesAttributes,

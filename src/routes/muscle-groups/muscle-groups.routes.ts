@@ -3,7 +3,7 @@ import {
   insertMuscleGroupSchema,
   patchMuscleGroupSchema,
   selectMuscleGroupSchema
-} from '~/lib/dbSchemaNew/muscleGroups'
+} from '~/lib/dbSchema/muscleGroups'
 import { withAdminTag } from '~/lib/openApi'
 import { adminMiddleware } from '~/middleware/admin'
 import { authMiddleware } from '~/middleware/auth'
