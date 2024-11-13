@@ -1,26 +1,32 @@
 import type {
   SelectWorkout,
   SelectWorkoutWithExercises,
-  SelectWorkoutWithExercisesWithAttributes
+  SelectWorkoutWithAttributesAndExercises
 } from '~/lib/dbSchema/workout'
+import {
+  selectWorkoutAttributeSchema,
+  type SelectWorkoutAttributesRaw
+} from '~/lib/dbSchema/workoutAttributes'
 import type { SelectWorkoutExercise } from '~/lib/dbSchema/workoutExercise'
-import type { SelectDefaultWorkoutExerciseAttribute } from '~/lib/dbSchema/workoutExerciseAttributes'
 import {
   transformRawExercise,
-  transformRawExerciseWithAttributes,
-  type ExerciseRaw
+  transformRawExerciseWithAttributes
 } from './exercise'
 
+type TransformExerciseParameters = Parameters<
+  typeof transformRawExerciseWithAttributes
+>
+
 export type WorkoutExerciseRaw = SelectWorkoutExercise & {
-  exercise: ExerciseRaw
+  exercise: TransformExerciseParameters[0]
 }
 
-export type WorkoutRaw<T> = SelectWorkout & {
-  exercises: Array<T>
+export type WorkoutRaw = SelectWorkout & {
+  exercises: Array<WorkoutExerciseRaw>
 }
 
 export const transformRawWorkout = (
-  workout: WorkoutRaw<WorkoutExerciseRaw>
+  workout: WorkoutRaw
 ): SelectWorkoutWithExercises => {
   const { exercises, ...rest } = workout
   const sortedExercises = exercises.sort((a, b) => a.orderIndex - b.orderIndex)
@@ -34,37 +40,49 @@ export const transformRawWorkout = (
 }
 
 export type WorkoutExerciseWithAttributesRaw = WorkoutExerciseRaw & {
-  defaultAttributes: Array<SelectDefaultWorkoutExerciseAttribute>
+  defaultAttributes: TransformExerciseParameters[1]
+}
+
+export type WorkoutRawWithAttributes = SelectWorkout & {
+  exercises: Array<WorkoutExerciseWithAttributesRaw>
+  defaultAttributes: Array<SelectWorkoutAttributesRaw>
 }
 
 export const transformRawWorkoutWithExercisesAttributes = (
-  workout: WorkoutRaw<WorkoutExerciseWithAttributesRaw>
-): SelectWorkoutWithExercisesWithAttributes => {
-  const { exercises, ...rest } = workout
+  workout: WorkoutRawWithAttributes
+): SelectWorkoutWithAttributesAndExercises => {
+  const { exercises, defaultAttributes, ...rest } = workout
   const sortedExercises = exercises.sort((a, b) => a.orderIndex - b.orderIndex)
 
   return {
     ...rest,
     exercises: sortedExercises.map(({ exercise, defaultAttributes }) =>
       transformRawExerciseWithAttributes(exercise, defaultAttributes)
-    )
+    ),
+    attributes: selectWorkoutAttributeSchema.array().parse(defaultAttributes)
   }
 }
 
 export type UserWorkoutExerciseWithAttributesRaw = WorkoutExerciseRaw & {
-  attributes: Array<SelectDefaultWorkoutExerciseAttribute>
+  attributes: TransformExerciseParameters[1]
+}
+
+export type WorkoutRawWithUserAttributes = SelectWorkout & {
+  exercises: Array<UserWorkoutExerciseWithAttributesRaw>
+  attributes: Array<SelectWorkoutAttributesRaw>
 }
 
 export const transformRawUserWorkoutWithExercisesAttributes = (
-  workout: WorkoutRaw<UserWorkoutExerciseWithAttributesRaw>
-): SelectWorkoutWithExercisesWithAttributes => {
-  const { exercises, ...rest } = workout
+  workout: WorkoutRawWithUserAttributes
+): SelectWorkoutWithAttributesAndExercises => {
+  const { exercises, attributes, ...rest } = workout
   const sortedExercises = exercises.sort((a, b) => a.orderIndex - b.orderIndex)
 
   return {
     ...rest,
     exercises: sortedExercises.map(({ exercise, attributes }) =>
       transformRawExerciseWithAttributes(exercise, attributes)
-    )
+    ),
+    attributes: selectWorkoutAttributeSchema.array().parse(attributes)
   }
 }

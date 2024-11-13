@@ -6,7 +6,8 @@ import {
 } from '~/db/schema/workout-plan.schema'
 import {
   defaultWorkoutExerciseAttributes,
-  workoutExercises
+  workoutExercises,
+  workouts
 } from '~/db/schema/workout.schema'
 import type {
   InsertWorkoutPlanWithExtras,
@@ -15,16 +16,30 @@ import type {
 import { transformRawWorkoutPlan } from '~/utils/transforms/workoutPlan'
 
 export const getWorkoutPlans = async () => {
-  const workouts = await db.query.workoutPlans.findMany({
+  const retrievedWorkouts = await db.query.workoutPlans.findMany({
     with: {
       workouts: {
         with: {
           workout: {
             with: {
+              defaultAttributes: {
+                where: fields =>
+                  and(
+                    eq(fields.workoutPlanId, workoutPlans.id),
+                    eq(fields.workoutId, workouts.id)
+                  )
+              },
               exercises: {
                 with: {
                   defaultAttributes: {
-                    where: fields => eq(fields.workoutPlanId, workoutPlans.id)
+                    where: fields =>
+                      and(
+                        eq(fields.workoutPlanId, workoutPlans.id),
+                        eq(
+                          fields.workoutExerciseId,
+                          workoutExercises.exerciseId
+                        )
+                      )
                   },
                   exercise: {
                     with: {
@@ -45,7 +60,7 @@ export const getWorkoutPlans = async () => {
     }
   })
 
-  return workouts.map(transformRawWorkoutPlan)
+  return retrievedWorkouts.map(transformRawWorkoutPlan)
 }
 
 export const getWorkoutPlanById = async (workoutPlanId: string) => {
@@ -56,6 +71,13 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
         with: {
           workout: {
             with: {
+              defaultAttributes: {
+                where: fields =>
+                  and(
+                    eq(fields.workoutPlanId, workoutPlans.id),
+                    eq(fields.workoutId, workouts.id)
+                  )
+              },
               exercises: {
                 with: {
                   defaultAttributes: {

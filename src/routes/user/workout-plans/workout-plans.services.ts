@@ -5,9 +5,10 @@ import {
   userWorkoutPlans,
   userWorkoutExerciseAttributes
 } from '~/db/schema/user-workout.schema'
-import { workoutExercises } from '~/db/schema/workout.schema'
+import { workoutPlans } from '~/db/schema/workout-plan.schema'
+import { workoutExercises, workouts } from '~/db/schema/workout.schema'
 import type { InsertUserWorkoutPlanWithExtras } from '~/lib/dbSchema/userWorkoutPlan'
-import { transformRawWorkoutPlan } from '~/utils/transforms/workoutPlan'
+import { transformRawUserWorkoutPlan } from '~/utils/transforms/workoutPlan'
 
 export const getUserWorkoutPlans = async (userId: string) => {
   const retrievedWorkoutPlans = await db.query.userWorkoutPlans.findMany({
@@ -20,13 +21,28 @@ export const getUserWorkoutPlans = async (userId: string) => {
             with: {
               workout: {
                 with: {
+                  attributes: {
+                    where: fields =>
+                      and(
+                        eq(fields.workoutPlanId, workoutPlans.id),
+                        eq(fields.workoutId, workouts.id),
+                        eq(fields.userId, userId)
+                      )
+                  },
                   exercises: {
                     with: {
-                      defaultAttributes: {
+                      attributes: {
                         where: fields =>
-                          eq(
-                            fields.workoutPlanId,
-                            userWorkoutPlans.workoutPlanId
+                          and(
+                            eq(
+                              fields.workoutPlanId,
+                              userWorkoutPlans.workoutPlanId
+                            ),
+                            eq(
+                              fields.workoutExerciseId,
+                              workoutExercises.exerciseId
+                            ),
+                            eq(fields.userId, userId)
                           )
                       },
                       exercise: {
@@ -50,7 +66,9 @@ export const getUserWorkoutPlans = async (userId: string) => {
     }
   })
 
-  return retrievedWorkoutPlans.map(({ plan }) => transformRawWorkoutPlan(plan))
+  return retrievedWorkoutPlans.map(({ plan }) =>
+    transformRawUserWorkoutPlan(plan)
+  )
 }
 
 export const getUserWorkoutPlanById = async (
@@ -70,9 +88,17 @@ export const getUserWorkoutPlanById = async (
             with: {
               workout: {
                 with: {
+                  attributes: {
+                    where: fields =>
+                      and(
+                        eq(fields.workoutPlanId, workoutPlans.id),
+                        eq(fields.workoutId, workouts.id),
+                        eq(fields.userId, userId)
+                      )
+                  },
                   exercises: {
                     with: {
-                      defaultAttributes: {
+                      attributes: {
                         where: fields =>
                           and(
                             eq(
@@ -82,7 +108,8 @@ export const getUserWorkoutPlanById = async (
                             eq(
                               fields.workoutExerciseId,
                               workoutExercises.exerciseId
-                            )
+                            ),
+                            eq(fields.userId, userId)
                           )
                       },
                       exercise: {
@@ -110,7 +137,7 @@ export const getUserWorkoutPlanById = async (
     return undefined
   }
 
-  return transformRawWorkoutPlan(workoutPlan.plan)
+  return transformRawUserWorkoutPlan(workoutPlan.plan)
 }
 
 export const createUserWorkoutPlan = async (

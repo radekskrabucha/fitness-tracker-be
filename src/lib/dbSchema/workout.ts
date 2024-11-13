@@ -9,6 +9,10 @@ import {
   type SelectExerciseWithDetails,
   type SelectExerciseWithDetailsAndAttributes
 } from './exercise'
+import {
+  selectWorkoutAttributeValuesTransformedSchema,
+  type SelectWorkoutAttribute
+} from './workoutAttributes'
 
 const insertWorkoutSchema = createInsertSchema(workouts, {
   name: schema => schema.name.min(1).max(256),
@@ -53,13 +57,15 @@ export const selectWorkoutExtraExercisesSchema = z.object({
 export const selectWorkoutExtraExercisesWithAttributesSchema = z.object({
   exercises: selectExerciseWithDetailsAndAttributesSchema.array()
 })
+export const selectWorkoutExtraAttributesSchema = z.object({
+  attributes: selectWorkoutAttributeValuesTransformedSchema.array()
+})
 export const selectWorkoutWithExercisesSchema = selectWorkoutSchema.extend(
   selectWorkoutExtraExercisesSchema.shape
 )
-export const selectWorkoutWithExercisesWithAttributesSchema =
-  selectWorkoutSchema.extend(
-    selectWorkoutExtraExercisesWithAttributesSchema.shape
-  )
+export const selectWorkoutWithAttributesAndExercisesSchema = selectWorkoutSchema
+  .extend(selectWorkoutExtraExercisesWithAttributesSchema.shape)
+  .extend(selectWorkoutExtraAttributesSchema.shape)
 
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkout<T extends SelectWorkoutExtras = {}> = z.infer<
@@ -69,14 +75,19 @@ export type SelectWorkout<T extends SelectWorkoutExtras = {}> = z.infer<
 export type SelectWorkoutWithExercises = SelectWorkout<
   SelectWorkoutExtraExercises<SelectExerciseWithDetails>
 >
-export type SelectWorkoutWithExercisesWithAttributes = SelectWorkout<
-  SelectWorkoutExtraExercises<SelectExerciseWithDetailsAndAttributes>
+export type SelectWorkoutWithAttributesAndExercises = SelectWorkout<
+  SelectWorkoutExtraExercises<SelectExerciseWithDetailsAndAttributes> &
+    SelectWorkoutExtraAttributes
 >
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkoutExtraExercises<E extends SelectExerciseExtras = {}> = {
   exercises: Array<SelectExercise<E>>
 }
+export type SelectWorkoutExtraAttributes = {
+  attributes: Array<SelectWorkoutAttribute>
+}
 
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkoutExtras<E extends SelectExerciseExtras = {}> =
-  SelectWorkoutExtraExercises<E>
+  | SelectWorkoutExtraExercises<E>
+  | (SelectWorkoutExtraExercises<E> & SelectWorkoutExtraAttributes)

@@ -5,22 +5,22 @@ import type {
 import type { SelectWorkoutPlanWorkout } from '~/lib/dbSchema/workoutPlanWorkout'
 import {
   transformRawUserWorkoutWithExercisesAttributes,
-  transformRawWorkoutWithExercisesAttributes,
-  type UserWorkoutExerciseWithAttributesRaw,
-  type WorkoutExerciseWithAttributesRaw,
-  type WorkoutRaw
+  transformRawWorkoutWithExercisesAttributes
 } from './workout'
 
-export type WorkoutPlanWorkoutRaw<T> = SelectWorkoutPlanWorkout & {
-  workout: WorkoutRaw<T>
-}
+type TransformRawWorkoutParameters = Parameters<
+  typeof transformRawWorkoutWithExercisesAttributes
+>
 
+export type WorkoutPlanWorkoutRaw = SelectWorkoutPlanWorkout & {
+  workout: TransformRawWorkoutParameters[0]
+}
 export type WorkoutPlanRaw<T> = SelectWorkoutPlan & {
-  workouts: Array<WorkoutPlanWorkoutRaw<T>>
+  workouts: Array<T>
 }
 
 export const transformRawWorkoutPlan = (
-  workoutPlan: WorkoutPlanRaw<WorkoutExerciseWithAttributesRaw>
+  workoutPlan: WorkoutPlanRaw<WorkoutPlanWorkoutRaw>
 ): SelectWorkoutPlanWithWorkoutsWithExercises => {
   const { workouts, ...rest } = workoutPlan
   const sortedWorkouts = workouts.sort((a, b) => a.orderIndex - b.orderIndex)
@@ -32,8 +32,15 @@ export const transformRawWorkoutPlan = (
     )
   }
 }
+
+type TransformRawUserWorkoutParameters = Parameters<
+  typeof transformRawUserWorkoutWithExercisesAttributes
+>
+export type UserWorkoutPlanWorkoutRaw = SelectWorkoutPlanWorkout & {
+  workout: TransformRawUserWorkoutParameters[0]
+}
 export const transformRawUserWorkoutPlan = (
-  workoutPlan: WorkoutPlanRaw<UserWorkoutExerciseWithAttributesRaw>
+  workoutPlan: WorkoutPlanRaw<UserWorkoutPlanWorkoutRaw>
 ): SelectWorkoutPlanWithWorkoutsWithExercises => {
   const { workouts, ...rest } = workoutPlan
   const sortedWorkouts = workouts.sort((a, b) => a.orderIndex - b.orderIndex)
