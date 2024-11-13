@@ -4,7 +4,7 @@ import { exerciseCategories } from '~/db/schema/exercise.schema'
 import type {
   InsertExerciseCategory,
   PatchExerciseCategory
-} from '~/lib/dbSchema/exercise'
+} from '~/lib/dbSchemaNew/exerciseCategory'
 
 export const getExerciseCategories = () =>
   db.query.exerciseCategories.findMany()
