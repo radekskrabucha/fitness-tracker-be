@@ -5,7 +5,7 @@ import type {
   InsertWorkoutWithExercises,
   PatchWorkout
 } from '~/lib/dbSchemaNew/workout'
-import { transformRawWorkout } from '~/utils/new/workout'
+import { transformRawWorkout } from '~/utils/transforms/workout'
 
 export const getWorkouts = async () => {
   const workout = await db.query.workouts.findMany({

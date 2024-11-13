@@ -12,7 +12,7 @@ import type {
   InsertWorkoutPlanWithExtras,
   PatchWorkoutPlan
 } from '~/lib/dbSchemaNew/workoutPlan'
-import { transformRawWorkoutPlan } from '~/utils/new/workoutPlan'
+import { transformRawWorkoutPlan } from '~/utils/transforms/workoutPlan'
 
 export const getWorkoutPlans = async () => {
   const workouts = await db.query.workoutPlans.findMany({

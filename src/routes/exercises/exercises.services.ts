@@ -5,7 +5,7 @@ import type {
   InsertExerciseWithDetails,
   PatchExerciseWithExtras
 } from '~/lib/dbSchemaNew/exercise'
-import { transformRawExercise } from '~/utils/new/exercise'
+import { transformRawExercise } from '~/utils/transforms/exercise'
 
 export const getExercises = async () => {
   const retrievedExercises = await db.query.exercises.findMany({

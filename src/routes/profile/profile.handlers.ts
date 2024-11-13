@@ -1,7 +1,7 @@
 import { HTTPException } from 'hono/http-exception'
 import type { AppRouteHandlerWithAuth } from '~/types/app'
 import { NOT_FOUND, OK, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
-import { dekagramsToKg, kgToDekagrams } from '~/utils/profile'
+import { dekagramsToKg, kgToDekagrams } from '~/utils/transforms/profile'
 import type {
   CreateUserProfile,
   DeleteUserProfile,

@@ -7,7 +7,7 @@ import {
 } from '~/db/schema/user-workout.schema'
 import { workoutExercises } from '~/db/schema/workout.schema'
 import type { InsertUserWorkoutPlanWithExtras } from '~/lib/dbSchemaNew/userWorkoutPlan'
-import { transformRawWorkoutPlan } from '~/utils/new/workoutPlan'
+import { transformRawWorkoutPlan } from '~/utils/transforms/workoutPlan'
 
 export const getUserWorkoutPlans = async (userId: string) => {
   const retrievedWorkoutPlans = await db.query.userWorkoutPlans.findMany({
