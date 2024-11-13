@@ -4,8 +4,7 @@ import type {
   CreateUserWorkoutPlan,
   GetUserWorkoutPlanById,
   GetUserWorkoutPlans,
-  DeleteUserWorkoutPlan,
-  GetUserWorkoutPlanWorkoutById
+  DeleteUserWorkoutPlan
 } from './workout-plans.routes'
 import * as userWorkoutPlanService from './workout-plans.services'
 
@@ -66,22 +65,4 @@ export const deleteUserWorkoutPlan: AppRouteHandlerWithAuth<
   }
 
   return c.json(deletedUserWorkoutPlan, OK)
-}
-
-export const getUserWorkoutPlanWorkoutById: AppRouteHandlerWithAuth<
-  GetUserWorkoutPlanWorkoutById
-> = async c => {
-  const user = c.get('user')
-  const { id } = c.req.valid('param')
-
-  const workout = await userWorkoutPlanService.getUserWorkoutPlanWorkoutById(
-    user.id,
-    id
-  )
-
-  if (!workout) {
-    return c.json({ message: 'User workout not found' }, NOT_FOUND)
-  }
-
-  return c.json(workout, OK)
 }

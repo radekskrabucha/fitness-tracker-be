@@ -7,7 +7,3 @@ export const userWorkoutsRouter = createRouter()
   .openapi(routes.getUserWorkoutPlanById, handlers.getUserWorkoutPlanById)
   .openapi(routes.createUserWorkoutPlan, handlers.createUserWorkoutPlan)
   .openapi(routes.deleteUserWorkoutPlan, handlers.deleteUserWorkoutPlan)
-  .openapi(
-    routes.getUserWorkoutPlanWorkoutById,
-    handlers.getUserWorkoutPlanWorkoutById
-  )

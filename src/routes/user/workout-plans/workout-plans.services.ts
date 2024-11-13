@@ -5,10 +5,9 @@ import {
   userWorkoutPlans,
   userWorkoutExerciseAttributes
 } from '~/db/schema/user-workout.schema'
-import { workouts } from '~/db/schema/workout.schema'
-import type { InsertUserWorkoutPlan } from '~/lib/dbSchema/user-workout'
-import { transformWorkoutWithExerciseDetailsAndAttributes } from '~/utils/workout'
-import { transformWorkoutPlanWithPlanWorkouts } from '~/utils/workoutPlan'
+import { workoutExercises } from '~/db/schema/workout.schema'
+import type { InsertUserWorkoutPlanWithExtras } from '~/lib/dbSchemaNew/userWorkoutPlan'
+import { transformRawWorkoutPlan } from '~/utils/new/workoutPlan'
 
 export const getUserWorkoutPlans = async (userId: string) => {
   const retrievedWorkoutPlans = await db.query.userWorkoutPlans.findMany({
@@ -19,7 +18,31 @@ export const getUserWorkoutPlans = async (userId: string) => {
         with: {
           workouts: {
             with: {
-              workout: true
+              workout: {
+                with: {
+                  exercises: {
+                    with: {
+                      defaultAttributes: {
+                        where: fields =>
+                          eq(
+                            fields.workoutPlanId,
+                            userWorkoutPlans.workoutPlanId
+                          )
+                      },
+                      exercise: {
+                        with: {
+                          category: true,
+                          muscleGroups: {
+                            with: {
+                              muscleGroup: true
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -27,9 +50,7 @@ export const getUserWorkoutPlans = async (userId: string) => {
     }
   })
 
-  return retrievedWorkoutPlans.map(({ plan }) =>
-    transformWorkoutPlanWithPlanWorkouts(plan)
-  )
+  return retrievedWorkoutPlans.map(({ plan }) => transformRawWorkoutPlan(plan))
 }
 
 export const getUserWorkoutPlanById = async (
@@ -47,7 +68,37 @@ export const getUserWorkoutPlanById = async (
         with: {
           workouts: {
             with: {
-              workout: true
+              workout: {
+                with: {
+                  exercises: {
+                    with: {
+                      defaultAttributes: {
+                        where: fields =>
+                          and(
+                            eq(
+                              fields.workoutPlanId,
+                              userWorkoutPlans.workoutPlanId
+                            ),
+                            eq(
+                              fields.workoutExerciseId,
+                              workoutExercises.exerciseId
+                            )
+                          )
+                      },
+                      exercise: {
+                        with: {
+                          category: true,
+                          muscleGroups: {
+                            with: {
+                              muscleGroup: true
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -59,28 +110,34 @@ export const getUserWorkoutPlanById = async (
     return undefined
   }
 
-  return transformWorkoutPlanWithPlanWorkouts(workoutPlan.plan)
+  return transformRawWorkoutPlan(workoutPlan.plan)
 }
 
 export const createUserWorkoutPlan = async (
   userId: string,
-  { exerciseAttributes, ...workoutPlan }: InsertUserWorkoutPlan
+  { workoutPlanId, workouts }: InsertUserWorkoutPlanWithExtras
 ) => {
   const [insertedUSerWorkoutPlan] = await db
     .insert(userWorkoutPlans)
-    .values({ ...workoutPlan, userId })
+    .values({ workoutPlanId, userId })
     .returning()
 
   if (!insertedUSerWorkoutPlan) {
     throw new Error('User workout plan not found')
   }
 
-  const exerciseAttributesIds = exerciseAttributes.map(item => ({
-    ...item,
-    userId
-  }))
+  const attributesToInsert = workouts.flatMap(({ exercises }) => {
+    return exercises.flatMap(({ id, attributes }) =>
+      attributes.flatMap(attributes => ({
+        ...attributes,
+        workoutExerciseId: id,
+        workoutPlanId: insertedUSerWorkoutPlan.id,
+        userId
+      }))
+    )
+  })
 
-  await db.insert(userWorkoutExerciseAttributes).values(exerciseAttributesIds)
+  await db.insert(userWorkoutExerciseAttributes).values(attributesToInsert)
 
   return insertedUSerWorkoutPlan
 }
@@ -93,37 +150,3 @@ export const deleteWorkoutPlan = async (
     .delete(userWorkoutPlans)
     .where(and(eq(user.id, userId), eq(userWorkoutPlans.id, workoutPlanId)))
     .returning()
-
-export const getUserWorkoutPlanWorkoutById = async (
-  userId: string,
-  workoutId: string
-) => {
-  const workout = await db.query.workouts.findFirst({
-    where: eq(workouts.id, workoutId),
-    with: {
-      exercises: {
-        with: {
-          attributes: {
-            where: ({ userId: id }) => eq(id, userId)
-          },
-          exercise: {
-            with: {
-              category: true,
-              muscleGroups: {
-                with: {
-                  muscleGroup: true
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  })
-
-  if (!workout) {
-    return undefined
-  }
-
-  return transformWorkoutWithExerciseDetailsAndAttributes(workout)
-}

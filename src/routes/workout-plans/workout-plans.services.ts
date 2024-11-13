@@ -1,14 +1,17 @@
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { db } from '~/db'
 import {
   workoutPlans,
   workoutPlanWorkouts
 } from '~/db/schema/workout-plan.schema'
-import { defaultWorkoutExerciseAttributes } from '~/db/schema/workout.schema'
+import {
+  defaultWorkoutExerciseAttributes,
+  workoutExercises
+} from '~/db/schema/workout.schema'
 import type {
   InsertWorkoutPlanWithExtras,
   PatchWorkoutPlan
-} from '~/lib/dbSchemaNew/workout-plan'
+} from '~/lib/dbSchemaNew/workoutPlan'
 import { transformRawWorkoutPlan } from '~/utils/new/workoutPlan'
 
 export const getWorkoutPlans = async () => {
@@ -56,7 +59,14 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
               exercises: {
                 with: {
                   defaultAttributes: {
-                    where: fields => eq(fields.workoutPlanId, workoutPlans.id)
+                    where: fields =>
+                      and(
+                        eq(fields.workoutPlanId, workoutPlans.id),
+                        eq(
+                          fields.workoutExerciseId,
+                          workoutExercises.exerciseId
+                        )
+                      )
                   },
                   exercise: {
                     with: {

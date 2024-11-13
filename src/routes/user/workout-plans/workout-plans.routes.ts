@@ -1,10 +1,9 @@
 import { createRoute } from '@hono/zod-openapi'
 import {
-  selectUserWorkoutPlanSchema,
-  insertUserWorkoutPlanSchema
-} from '~/lib/dbSchema/user-workout'
-import { selectWorkoutWithDetailedExercisesWithAttributesSchema } from '~/lib/dbSchema/workout'
-import { selectWorkoutPlanWithWorkoutsSchema } from '~/lib/dbSchema/workout-plan'
+  insertUserWorkoutPlanWithExtrasSchema,
+  selectUserWorkoutPlanSchema
+} from '~/lib/dbSchemaNew/userWorkoutPlan'
+import { selectWorkoutPlanWithWorkoutsSchema } from '~/lib/dbSchemaNew/workoutPlan'
 import { authMiddleware } from '~/middleware/auth'
 import {
   NOT_FOUND,
@@ -78,7 +77,7 @@ export const createUserWorkoutPlan = createRoute({
   request: {
     body: jsonContentOpenAPISchema({
       description: 'Create a new workout plan',
-      schema: insertUserWorkoutPlanSchema,
+      schema: insertUserWorkoutPlanWithExtrasSchema,
       required: true
     })
   },
@@ -124,33 +123,3 @@ export const deleteUserWorkoutPlan = createRoute({
   }
 })
 export type DeleteUserWorkoutPlan = typeof deleteUserWorkoutPlan
-
-export const getUserWorkoutPlanWorkoutById = createRoute({
-  method: 'get',
-  path: '/workouts/{id}',
-  tags,
-  security: [{ cookieAuth: [] }],
-  middleware: [authMiddleware] as const,
-  request: {
-    params: paramIdUUIDSchema
-  },
-  responses: {
-    [OK]: jsonContentOpenAPISchema({
-      description: 'Retrieved user workout',
-      schema: selectWorkoutWithDetailedExercisesWithAttributesSchema
-    }),
-    [NOT_FOUND]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'User workout not found'
-    }),
-    [UNPROCESSABLE_ENTITY]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Invalid UUID'
-    }),
-    [UNAUTHORIZED]: jsonContentOpenAPISchema({
-      schema: errorOpenApiSchema,
-      description: 'Unauthorized'
-    })
-  }
-})
-export type GetUserWorkoutPlanWorkoutById = typeof getUserWorkoutPlanWorkoutById
