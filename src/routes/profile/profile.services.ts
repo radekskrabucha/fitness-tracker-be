@@ -17,18 +17,24 @@ export const createUserProfile = (
 ) =>
   db
     .insert(userFitnessProfiles)
-    .values({ ...profile, userId })
+    .values({ ...profile, userId, dateOfBirth: new Date(profile.dateOfBirth) })
     .returning()
 
 export const updateUserProfile = (
   id: string,
   profile: PatchUserFitnessProfile
-) =>
-  db
+) => {
+  const { dateOfBirth, ...rest } = profile
+
+  return db
     .update(userFitnessProfiles)
-    .set(profile)
+    .set({
+      ...rest,
+      ...(dateOfBirth ? { dateOfBirth: new Date(dateOfBirth) } : {})
+    })
     .where(eq(userFitnessProfiles.userId, id))
     .returning()
+}
 
 export const deleteUserProfile = (id: string) =>
   db
