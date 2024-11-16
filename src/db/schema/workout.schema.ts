@@ -23,7 +23,7 @@ export const exerciseAttributeNameEnum = pgEnum('exercise_attribute_name', [
   'duration',
   'distance'
 ])
-export const workoutAttributeNameEnum = pgEnum('exercise_attribute_name', [
+export const workoutAttributeNameEnum = pgEnum('workout_attribute_name', [
   'days_of_week',
   'intensity_level',
   'duration_goal',
