@@ -7,6 +7,7 @@ import {
   type SelectWorkoutExtras,
   type SelectWorkoutWithAttributesAndExercises
 } from './workout'
+import { insertWorkoutAttributeSchema } from './workoutAttributes'
 import { insertWorkoutExerciseAttributeSchema } from './workoutExerciseAttributes'
 
 export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans, {
@@ -22,8 +23,8 @@ export const insertWorkoutExercise = z.object({
   attributes: insertWorkoutExerciseAttributeSchema.array()
 })
 export const insertWorkoutPlanWorkout = z.object({
-  // TODO add workout attributes
   id: z.string().uuid(),
+  attributes: insertWorkoutAttributeSchema.array(),
   exercises: insertWorkoutExercise.array()
 })
 export const insertWorkoutPlanExtraAttributesSchema = z.object({

@@ -3,7 +3,8 @@ import { db } from '~/db'
 import { user } from '~/db/schema/auth.schema'
 import {
   userWorkoutPlans,
-  userWorkoutExerciseAttributes
+  userWorkoutExerciseAttributes,
+  userWorkoutAttributes
 } from '~/db/schema/user-workout.schema'
 import { workoutPlans } from '~/db/schema/workout-plan.schema'
 import { workoutExercises, workouts } from '~/db/schema/workout.schema'
@@ -146,6 +147,51 @@ export const createUserWorkoutPlan = async (
   if (!insertedUSerWorkoutPlan) {
     throw new Error('User workout plan not found')
   }
+
+  const workoutAttributesToInsert = workouts.flatMap(({ id, attributes }) => {
+    const base = {
+      workoutPlanId,
+      workoutId: id,
+      userId
+    }
+
+    return attributes.flatMap(({ attributeName, value }) => {
+      if (
+        attributeName === 'days_of_week' ||
+        attributeName === 'intensity_level'
+      ) {
+        return {
+          ...base,
+          attributeName,
+          textValue: value as string
+        }
+      }
+      if (
+        attributeName === 'duration_goal' ||
+        attributeName === 'rest_period_between_sets'
+      ) {
+        return {
+          ...base,
+          attributeName,
+          integerValue: value as number
+        }
+      }
+      if (
+        attributeName === 'warmup_required' ||
+        attributeName === 'cooldown_required'
+      ) {
+        return {
+          ...base,
+          attributeName,
+          booleanValue: value as boolean
+        }
+      }
+
+      return []
+    })
+  })
+
+  await db.insert(userWorkoutAttributes).values(workoutAttributesToInsert)
 
   const attributesToInsert = workouts.flatMap(({ exercises }) => {
     return exercises.flatMap(({ id, attributes }) =>

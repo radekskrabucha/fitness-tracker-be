@@ -5,6 +5,7 @@ import {
   workoutPlanWorkouts
 } from '~/db/schema/workout-plan.schema'
 import {
+  defaultWorkoutAttributes,
   defaultWorkoutExerciseAttributes,
   workoutExercises,
   workouts
@@ -133,8 +134,58 @@ export const createWorkoutPlan = async ({
     .insert(workoutPlanWorkouts)
     .values(planWorkouts)
     .returning()
+  const workoutAttributesToInsert = workouts.flatMap(({ id, attributes }) => {
+    const workoutPlan = insertedWorkouts.find(
+      ({ workoutId }) => workoutId === id
+    )
 
-  const attributesToInsert = workouts.flatMap(({ exercises, id }) => {
+    if (!workoutPlan) {
+      return []
+    }
+
+    const base = {
+      workoutPlanId: workoutPlan.workoutPlanId,
+      workoutId: workoutPlan.workoutId
+    }
+    return attributes.flatMap(({ attributeName, value }) => {
+      if (
+        attributeName === 'days_of_week' ||
+        attributeName === 'intensity_level'
+      ) {
+        return {
+          ...base,
+          attributeName,
+          textValue: value as string
+        }
+      }
+      if (
+        attributeName === 'duration_goal' ||
+        attributeName === 'rest_period_between_sets'
+      ) {
+        return {
+          ...base,
+          attributeName,
+          integerValue: value as number
+        }
+      }
+      if (
+        attributeName === 'warmup_required' ||
+        attributeName === 'cooldown_required'
+      ) {
+        return {
+          ...base,
+          attributeName,
+          booleanValue: value as boolean
+        }
+      }
+
+      return []
+    })
+  })
+
+  await db.insert(defaultWorkoutAttributes).values(workoutAttributesToInsert)
+
+  const exerciseAttributesToInsert = workouts.flatMap(({ exercises, id }) => {
     const workoutPlan = insertedWorkouts.find(
       ({ workoutId }) => workoutId === id
     )
@@ -152,7 +203,9 @@ export const createWorkoutPlan = async ({
     )
   })
 
-  await db.insert(defaultWorkoutExerciseAttributes).values(attributesToInsert)
+  await db
+    .insert(defaultWorkoutExerciseAttributes)
+    .values(exerciseAttributesToInsert)
 
   return workoutPlanInserted
 }
