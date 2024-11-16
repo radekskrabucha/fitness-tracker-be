@@ -38,10 +38,7 @@ export const getUserWorkoutPlans = async (userId: string) => {
                               fields.workoutPlanId,
                               userWorkoutPlans.workoutPlanId
                             ),
-                            eq(
-                              fields.workoutExerciseId,
-                              workoutExercises.exerciseId
-                            ),
+                            eq(fields.workoutExerciseId, workoutExercises.id),
                             eq(fields.userId, userId)
                           )
                       },
@@ -105,10 +102,7 @@ export const getUserWorkoutPlanById = async (
                               fields.workoutPlanId,
                               userWorkoutPlans.workoutPlanId
                             ),
-                            eq(
-                              fields.workoutExerciseId,
-                              workoutExercises.exerciseId
-                            ),
+                            eq(fields.workoutExerciseId, workoutExercises.id),
                             eq(fields.userId, userId)
                           )
                       },

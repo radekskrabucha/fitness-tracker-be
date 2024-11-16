@@ -35,10 +35,7 @@ export const getWorkoutPlans = async () => {
                     where: fields =>
                       and(
                         eq(fields.workoutPlanId, workoutPlans.id),
-                        eq(
-                          fields.workoutExerciseId,
-                          workoutExercises.exerciseId
-                        )
+                        eq(fields.workoutExerciseId, workoutExercises.id)
                       )
                   },
                   exercise: {
@@ -84,10 +81,7 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
                     where: fields =>
                       and(
                         eq(fields.workoutPlanId, workoutPlans.id),
-                        eq(
-                          fields.workoutExerciseId,
-                          workoutExercises.exerciseId
-                        )
+                        eq(fields.workoutExerciseId, workoutExercises.id)
                       )
                   },
                   exercise: {
