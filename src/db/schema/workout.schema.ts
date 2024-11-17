@@ -91,7 +91,7 @@ export const defaultWorkoutAttributes = pgTable(
       .references(() => workoutPlans.id, { onDelete: 'cascade' }),
     attributeName: workoutAttributeNameEnum('attribute_name').notNull(),
     integerValue: integer('integer_value'),
-    textValue: varchar('description', { length: 256 }),
+    textValue: varchar('text_value', { length: 256 }),
     booleanValue: boolean('boolean_value'),
     createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', timestampConfig)
