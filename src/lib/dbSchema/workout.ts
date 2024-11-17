@@ -49,8 +49,12 @@ export type PatchWorkoutWithExtras = z.infer<
   typeof patchWorkoutWithExtrasSchema
 >
 
-export const selectWorkoutSchema =
-  createInsertSchema(workouts).openapi('Workout')
+export const selectWorkoutSchema = createInsertSchema(workouts)
+  .omit({
+    createdAt: true,
+    updatedAt: true
+  })
+  .openapi('Workout')
 export const selectWorkoutExtraExercisesSchema = z.object({
   exercises: selectExerciseWithDetailsSchema.array()
 })

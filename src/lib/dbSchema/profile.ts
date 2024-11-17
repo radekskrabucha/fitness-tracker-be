@@ -21,8 +21,16 @@ export const insertUserFitnessProfileSchema = createInsertSchema(
   })
 export const patchUserFitnessProfileSchema =
   insertUserFitnessProfileSchema.partial()
-export const selectUserFitnessProfileSchema =
-  createSelectSchema(userFitnessProfiles).openapi('UserFitnessProfile')
+export const selectUserFitnessProfileSchema = createSelectSchema(
+  userFitnessProfiles
+)
+  .omit({
+    createdAt: true,
+    updatedAt: true,
+    userId: true,
+    id: true
+  })
+  .openapi('UserFitnessProfile')
 
 export type InsertUserFitnessProfile = z.infer<
   typeof insertUserFitnessProfileSchema

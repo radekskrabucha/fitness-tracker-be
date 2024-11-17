@@ -8,7 +8,13 @@ import type {
 
 export const getUserProfile = (id: string) =>
   db.query.userFitnessProfiles.findFirst({
-    where: ({ userId }) => eq(userId, id)
+    where: ({ userId }) => eq(userId, id),
+    columns: {
+      createdAt: false,
+      updatedAt: false,
+      userId: false,
+      id: false
+    }
   })
 
 export const createUserProfile = (

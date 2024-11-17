@@ -14,6 +14,10 @@ export type InsertMuscleGroup = z.infer<typeof insertMuscleGroupSchema>
 export const patchMuscleGroupSchema = insertMuscleGroupSchema.partial()
 export type PatchMuscleGroup = z.infer<typeof patchMuscleGroupSchema>
 
-export const selectMuscleGroupSchema =
-  createSelectSchema(muscleGroups).openapi('MuscleGroup')
+export const selectMuscleGroupSchema = createSelectSchema(muscleGroups)
+  .omit({
+    createdAt: true,
+    updatedAt: true
+  })
+  .openapi('MuscleGroup')
 export type SelectMuscleGroup = z.infer<typeof selectMuscleGroupSchema>

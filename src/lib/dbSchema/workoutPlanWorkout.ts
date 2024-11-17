@@ -19,7 +19,12 @@ export type PatchWorkoutPlanWorkout = z.infer<
 
 export const selectWorkoutPlanWorkoutSchema = createSelectSchema(
   workoutPlanWorkouts
-).openapi('WorkoutPlan Workout')
+)
+  .omit({
+    workoutId: true,
+    workoutPlanId: true
+  })
+  .openapi('WorkoutPlan Workout')
 export type SelectWorkoutPlanWorkout = z.infer<
   typeof selectWorkoutPlanWorkoutSchema
 >

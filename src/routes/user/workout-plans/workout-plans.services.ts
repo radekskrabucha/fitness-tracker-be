@@ -17,38 +17,73 @@ export const getUserWorkoutPlans = async (userId: string) => {
     columns: {},
     with: {
       plan: {
+        columns: {
+          createdAt: false,
+          updatedAt: false
+        },
         with: {
           workouts: {
+            columns: {
+              orderIndex: true
+            },
             with: {
               workout: {
+                columns: {
+                  createdAt: false,
+                  updatedAt: false
+                },
                 with: {
                   attributes: {
+                    columns: {
+                      workoutId: false,
+                      workoutPlanId: false,
+                      createdAt: false,
+                      updatedAt: false,
+                      userId: false
+                    },
                     where: fields =>
                       and(
+                        eq(fields.userId, userId),
                         eq(fields.workoutPlanId, workoutPlans.id),
-                        eq(fields.workoutId, workouts.id),
-                        eq(fields.userId, userId)
+                        eq(fields.workoutId, workouts.id)
                       )
                   },
                   exercises: {
+                    columns: {
+                      id: true,
+                      orderIndex: true
+                    },
                     with: {
                       attributes: {
+                        columns: {
+                          id: true,
+                          name: true,
+                          value: true
+                        },
                         where: fields =>
                           and(
-                            eq(
-                              fields.workoutPlanId,
-                              userWorkoutPlans.workoutPlanId
-                            ),
-                            eq(fields.workoutExerciseId, workoutExercises.id),
-                            eq(fields.userId, userId)
+                            eq(fields.userId, userId),
+                            eq(fields.workoutPlanId, workoutPlans.id),
+                            eq(fields.workoutExerciseId, workoutExercises.id)
                           )
                       },
                       exercise: {
+                        columns: {
+                          createdAt: false,
+                          updatedAt: false,
+                          categoryId: false
+                        },
                         with: {
                           category: true,
                           muscleGroups: {
+                            columns: {},
                             with: {
-                              muscleGroup: true
+                              muscleGroup: {
+                                columns: {
+                                  createdAt: false,
+                                  updatedAt: false
+                                }
+                              }
                             }
                           }
                         }
@@ -81,38 +116,73 @@ export const getUserWorkoutPlanById = async (
     columns: {},
     with: {
       plan: {
+        columns: {
+          createdAt: false,
+          updatedAt: false
+        },
         with: {
           workouts: {
+            columns: {
+              orderIndex: true
+            },
             with: {
               workout: {
+                columns: {
+                  createdAt: false,
+                  updatedAt: false
+                },
                 with: {
                   attributes: {
+                    columns: {
+                      workoutId: false,
+                      workoutPlanId: false,
+                      createdAt: false,
+                      updatedAt: false,
+                      userId: false
+                    },
                     where: fields =>
                       and(
+                        eq(fields.userId, userId),
                         eq(fields.workoutPlanId, workoutPlans.id),
-                        eq(fields.workoutId, workouts.id),
-                        eq(fields.userId, userId)
+                        eq(fields.workoutId, workouts.id)
                       )
                   },
                   exercises: {
+                    columns: {
+                      id: true,
+                      orderIndex: true
+                    },
                     with: {
                       attributes: {
+                        columns: {
+                          id: true,
+                          name: true,
+                          value: true
+                        },
                         where: fields =>
                           and(
-                            eq(
-                              fields.workoutPlanId,
-                              userWorkoutPlans.workoutPlanId
-                            ),
-                            eq(fields.workoutExerciseId, workoutExercises.id),
-                            eq(fields.userId, userId)
+                            eq(fields.userId, userId),
+                            eq(fields.workoutPlanId, workoutPlans.id),
+                            eq(fields.workoutExerciseId, workoutExercises.id)
                           )
                       },
                       exercise: {
+                        columns: {
+                          createdAt: false,
+                          updatedAt: false,
+                          categoryId: false
+                        },
                         with: {
                           category: true,
                           muscleGroups: {
+                            columns: {},
                             with: {
-                              muscleGroup: true
+                              muscleGroup: {
+                                columns: {
+                                  createdAt: false,
+                                  updatedAt: false
+                                }
+                              }
                             }
                           }
                         }
@@ -156,30 +226,21 @@ export const createUserWorkoutPlan = async (
     }
 
     return attributes.flatMap(({ name, value }) => {
-      if (
-        name === 'days_of_week' ||
-        name === 'intensity_level'
-      ) {
+      if (name === 'days_of_week' || name === 'intensity_level') {
         return {
           ...base,
           name,
           textValue: value as string
         }
       }
-      if (
-        name === 'duration_goal' ||
-        name === 'rest_period_between_sets'
-      ) {
+      if (name === 'duration_goal' || name === 'rest_period_between_sets') {
         return {
           ...base,
           name,
           integerValue: value as number
         }
       }
-      if (
-        name === 'warmup_required' ||
-        name === 'cooldown_required'
-      ) {
+      if (name === 'warmup_required' || name === 'cooldown_required') {
         return {
           ...base,
           name,

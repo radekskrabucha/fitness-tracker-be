@@ -6,11 +6,21 @@ import type {
   PatchMuscleGroup
 } from '~/lib/dbSchema/muscleGroups'
 
-export const getMuscleGroups = () => db.query.muscleGroups.findMany()
+export const getMuscleGroups = () =>
+  db.query.muscleGroups.findMany({
+    columns: {
+      updatedAt: false,
+      createdAt: false
+    }
+  })
 
 export const getMuscleGroupById = (id: string) =>
   db.query.muscleGroups.findFirst({
-    where: eq(muscleGroups.id, id)
+    where: eq(muscleGroups.id, id),
+    columns: {
+      createdAt: false,
+      updatedAt: false
+    }
   })
 
 export const createMuscleGroup = (data: InsertMuscleGroup) =>

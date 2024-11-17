@@ -5,7 +5,7 @@ import type {
 } from '~/lib/dbSchema/exercise'
 import type { SelectExerciseCategory } from '~/lib/dbSchema/exerciseCategory'
 import type { SelectMuscleGroup } from '~/lib/dbSchema/muscleGroups'
-import type { SelectDefaultWorkoutExerciseAttribute } from '~/lib/dbSchema/workoutExerciseAttributes'
+import type { SelectWorkoutExerciseAttribute } from '~/lib/dbSchema/workoutExerciseAttributes'
 
 export type ExerciseMuscleGroupRaw = {
   muscleGroup: SelectMuscleGroup
@@ -29,18 +29,10 @@ export const transformRawExercise = (
 
 export const transformRawExerciseWithAttributes = (
   exercise: ExerciseRaw,
-  attributes: Array<SelectDefaultWorkoutExerciseAttribute>,
+  attributes: Array<SelectWorkoutExerciseAttribute>,
   workoutExerciseId: string
 ): SelectExerciseWithDetailsAndAttributes => ({
   workoutExerciseId,
   ...transformRawExercise(exercise),
-  attributes: attributes.map(
-    ({ name, createdAt, id, updatedAt, value }) => ({
-      name,
-      createdAt,
-      id,
-      updatedAt,
-      value
-    })
-  )
+  attributes
 })

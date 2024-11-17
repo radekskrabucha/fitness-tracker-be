@@ -18,12 +18,29 @@ import { transformRawWorkoutPlan } from '~/utils/transforms/workoutPlan'
 
 export const getWorkoutPlans = async () => {
   const retrievedWorkouts = await db.query.workoutPlans.findMany({
+    columns: {
+      createdAt: false,
+      updatedAt: false
+    },
     with: {
       workouts: {
+        columns: {
+          orderIndex: true
+        },
         with: {
           workout: {
+            columns: {
+              createdAt: false,
+              updatedAt: false
+            },
             with: {
               defaultAttributes: {
+                columns: {
+                  workoutId: false,
+                  workoutPlanId: false,
+                  createdAt: false,
+                  updatedAt: false
+                },
                 where: fields =>
                   and(
                     eq(fields.workoutPlanId, workoutPlans.id),
@@ -31,8 +48,17 @@ export const getWorkoutPlans = async () => {
                   )
               },
               exercises: {
+                columns: {
+                  id: true,
+                  orderIndex: true
+                },
                 with: {
                   defaultAttributes: {
+                    columns: {
+                      id: true,
+                      name: true,
+                      value: true
+                    },
                     where: fields =>
                       and(
                         eq(fields.workoutPlanId, workoutPlans.id),
@@ -40,11 +66,22 @@ export const getWorkoutPlans = async () => {
                       )
                   },
                   exercise: {
+                    columns: {
+                      createdAt: false,
+                      updatedAt: false,
+                      categoryId: false
+                    },
                     with: {
                       category: true,
                       muscleGroups: {
+                        columns: {},
                         with: {
-                          muscleGroup: true
+                          muscleGroup: {
+                            columns: {
+                              createdAt: false,
+                              updatedAt: false
+                            }
+                          }
                         }
                       }
                     }
@@ -64,12 +101,29 @@ export const getWorkoutPlans = async () => {
 export const getWorkoutPlanById = async (workoutPlanId: string) => {
   const workout = await db.query.workoutPlans.findFirst({
     where: eq(workoutPlans.id, workoutPlanId),
+    columns: {
+      createdAt: false,
+      updatedAt: false
+    },
     with: {
       workouts: {
+        columns: {
+          orderIndex: true
+        },
         with: {
           workout: {
+            columns: {
+              createdAt: false,
+              updatedAt: false
+            },
             with: {
               defaultAttributes: {
+                columns: {
+                  workoutId: false,
+                  workoutPlanId: false,
+                  createdAt: false,
+                  updatedAt: false
+                },
                 where: fields =>
                   and(
                     eq(fields.workoutPlanId, workoutPlanId),
@@ -77,8 +131,17 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
                   )
               },
               exercises: {
+                columns: {
+                  id: true,
+                  orderIndex: true
+                },
                 with: {
                   defaultAttributes: {
+                    columns: {
+                      id: true,
+                      name: true,
+                      value: true
+                    },
                     where: fields =>
                       and(
                         eq(fields.workoutPlanId, workoutPlanId),
@@ -86,11 +149,22 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
                       )
                   },
                   exercise: {
+                    columns: {
+                      createdAt: false,
+                      updatedAt: false,
+                      categoryId: false
+                    },
                     with: {
                       category: true,
                       muscleGroups: {
+                        columns: {},
                         with: {
-                          muscleGroup: true
+                          muscleGroup: {
+                            columns: {
+                              createdAt: false,
+                              updatedAt: false
+                            }
+                          }
                         }
                       }
                     }

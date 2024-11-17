@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { exercises } from '~/db/schema/exercise.schema'
 import { selectExerciseCategorySchema } from './exerciseCategory'
 import { selectMuscleGroupSchema } from './muscleGroups'
-import { selectDefaultWorkoutExerciseAttributeSchema } from './workoutExerciseAttributes'
+import { selectWorkoutExerciseAttributeSchema } from './workoutExerciseAttributes'
 
 export const insertExerciseSchema = createInsertSchema(exercises, {
   name: schema => schema.name.min(1).max(256),
@@ -50,8 +50,13 @@ export type PatchExerciseWithExtras = z.infer<
   typeof patchExerciseWithExtrasSchema
 >
 
-export const selectExerciseSchema =
-  createSelectSchema(exercises).openapi('Exercise')
+export const selectExerciseSchema = createSelectSchema(exercises)
+  .omit({
+    createdAt: true,
+    updatedAt: true,
+    categoryId: true
+  })
+  .openapi('Exercise')
 export const selectExerciseExtraCategorySchema = z.object({
   category: selectExerciseCategorySchema
 })
@@ -59,7 +64,7 @@ export const selectExerciseExtraMuscleGroupsSchema = z.object({
   muscleGroups: z.array(selectMuscleGroupSchema)
 })
 export const selectExerciseExtraAttributesSchema = z.object({
-  attributes: z.array(selectDefaultWorkoutExerciseAttributeSchema),
+  attributes: z.array(selectWorkoutExerciseAttributeSchema),
   workoutExerciseId: z.string()
 })
 export const selectExerciseWithDetailsSchema = selectExerciseSchema

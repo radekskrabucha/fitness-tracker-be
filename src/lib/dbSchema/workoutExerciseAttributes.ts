@@ -1,18 +1,16 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
-import { userWorkoutExerciseAttributes } from '~/db/schema/user-workout.schema'
 import { defaultWorkoutExerciseAttributes } from '~/db/schema/workout.schema'
 
 export const insertWorkoutExerciseAttributeSchemaRaw = createInsertSchema(
-  userWorkoutExerciseAttributes,
+  defaultWorkoutExerciseAttributes,
   {
     value: schema => schema.value.min(1)
   }
 ).omit({
   id: true,
   createdAt: true,
-  updatedAt: true,
-  userId: true
+  updatedAt: true
 })
 export const insertWorkoutExerciseAttributeSchema =
   insertWorkoutExerciseAttributeSchemaRaw.omit({
@@ -31,20 +29,16 @@ export type PatchWorkoutExerciseAttributeRaw = z.infer<
   typeof patchWorkoutExerciseAttributeSchemaRaw
 >
 
-export const selectUserWorkoutExerciseAttributeSchema = createSelectSchema(
-  userWorkoutExerciseAttributes
-).openapi('UserWorkoutExerciseAttribute')
-export type SelectUserWorkoutExerciseAttribute = z.infer<
-  typeof selectUserWorkoutExerciseAttributeSchema
->
-export const selectDefaultWorkoutExerciseAttributeSchema = createSelectSchema(
+export const selectWorkoutExerciseAttributeSchema = createSelectSchema(
   defaultWorkoutExerciseAttributes
 )
   .omit({
     workoutPlanId: true,
-    workoutExerciseId: true
+    workoutExerciseId: true,
+    createdAt: true,
+    updatedAt: true
   })
   .openapi('DefaultWorkoutExerciseAttribute')
-export type SelectDefaultWorkoutExerciseAttribute = z.infer<
-  typeof selectDefaultWorkoutExerciseAttributeSchema
+export type SelectWorkoutExerciseAttribute = z.infer<
+  typeof selectWorkoutExerciseAttributeSchema
 >

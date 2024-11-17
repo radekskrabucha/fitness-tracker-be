@@ -9,15 +9,34 @@ import { transformRawWorkout } from '~/utils/transforms/workout'
 
 export const getWorkouts = async () => {
   const workout = await db.query.workouts.findMany({
+    columns: {
+      createdAt: false,
+      updatedAt: false
+    },
     with: {
       exercises: {
+        columns: {
+          id: true,
+          orderIndex: true
+        },
         with: {
           exercise: {
+            columns: {
+              createdAt: false,
+              updatedAt: false,
+              categoryId: false
+            },
             with: {
               category: true,
               muscleGroups: {
+                columns: {},
                 with: {
-                  muscleGroup: true
+                  muscleGroup: {
+                    columns: {
+                      createdAt: false,
+                      updatedAt: false
+                    }
+                  }
                 }
               }
             }
@@ -33,15 +52,34 @@ export const getWorkouts = async () => {
 export const getWorkout = async (workoutId: string) => {
   const retrievedWorkouts = await db.query.workouts.findFirst({
     where: eq(workouts.id, workoutId),
+    columns: {
+      createdAt: false,
+      updatedAt: false
+    },
     with: {
       exercises: {
+        columns: {
+          id: true,
+          orderIndex: true
+        },
         with: {
           exercise: {
+            columns: {
+              createdAt: false,
+              updatedAt: false,
+              categoryId: false
+            },
             with: {
               category: true,
               muscleGroups: {
+                columns: {},
                 with: {
-                  muscleGroup: true
+                  muscleGroup: {
+                    columns: {
+                      createdAt: false,
+                      updatedAt: false
+                    }
+                  }
                 }
               }
             }
