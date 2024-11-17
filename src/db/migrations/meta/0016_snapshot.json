@@ -1,6 +1,6 @@
 {
-  "id": "2fff180f-9d6f-46db-8a49-8f390a57be89",
-  "prevId": "95d26e68-3964-4297-8a0a-34c8f11ceea5",
+  "id": "69ec0e7f-8d3e-4c71-a013-361991189a18",
+  "prevId": "2fff180f-9d6f-46db-8a49-8f390a57be89",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -598,8 +598,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "attribute_name": {
-          "name": "attribute_name",
+        "name": {
+          "name": "name",
           "type": "workout_attribute_name",
           "typeSchema": "public",
           "primaryKey": false,
@@ -703,8 +703,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "attribute_name": {
-          "name": "attribute_name",
+        "name": {
+          "name": "name",
           "type": "exercise_attribute_name",
           "typeSchema": "public",
           "primaryKey": false,
@@ -958,8 +958,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "attribute_name": {
-          "name": "attribute_name",
+        "name": {
+          "name": "name",
           "type": "workout_attribute_name",
           "typeSchema": "public",
           "primaryKey": false,
@@ -1048,8 +1048,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "attribute_name": {
-          "name": "attribute_name",
+        "name": {
+          "name": "name",
           "type": "exercise_attribute_name",
           "typeSchema": "public",
           "primaryKey": false,
