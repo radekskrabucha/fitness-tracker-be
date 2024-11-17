@@ -10,7 +10,7 @@ import {
   type SelectExerciseWithDetailsAndAttributes
 } from './exercise'
 import {
-  selectWorkoutAttributeValuesTransformedSchema,
+  selectWorkoutAttributeSchema,
   type SelectWorkoutAttribute
 } from './workoutAttributes'
 
@@ -58,7 +58,7 @@ export const selectWorkoutExtraExercisesWithAttributesSchema = z.object({
   exercises: selectExerciseWithDetailsAndAttributesSchema.array()
 })
 export const selectWorkoutExtraAttributesSchema = z.object({
-  attributes: selectWorkoutAttributeValuesTransformedSchema.array()
+  attributes: selectWorkoutAttributeSchema.array()
 })
 export const selectWorkoutWithExercisesSchema = selectWorkoutSchema.extend(
   selectWorkoutExtraExercisesSchema.shape

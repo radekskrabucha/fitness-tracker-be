@@ -155,34 +155,34 @@ export const createUserWorkoutPlan = async (
       userId
     }
 
-    return attributes.flatMap(({ attributeName, value }) => {
+    return attributes.flatMap(({ name, value }) => {
       if (
-        attributeName === 'days_of_week' ||
-        attributeName === 'intensity_level'
+        name === 'days_of_week' ||
+        name === 'intensity_level'
       ) {
         return {
           ...base,
-          attributeName,
+          name,
           textValue: value as string
         }
       }
       if (
-        attributeName === 'duration_goal' ||
-        attributeName === 'rest_period_between_sets'
+        name === 'duration_goal' ||
+        name === 'rest_period_between_sets'
       ) {
         return {
           ...base,
-          attributeName,
+          name,
           integerValue: value as number
         }
       }
       if (
-        attributeName === 'warmup_required' ||
-        attributeName === 'cooldown_required'
+        name === 'warmup_required' ||
+        name === 'cooldown_required'
       ) {
         return {
           ...base,
-          attributeName,
+          name,
           booleanValue: value as boolean
         }
       }

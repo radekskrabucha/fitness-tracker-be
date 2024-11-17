@@ -29,12 +29,14 @@ export const transformRawExercise = (
 
 export const transformRawExerciseWithAttributes = (
   exercise: ExerciseRaw,
-  attributes: Array<SelectDefaultWorkoutExerciseAttribute>
+  attributes: Array<SelectDefaultWorkoutExerciseAttribute>,
+  workoutExerciseId: string
 ): SelectExerciseWithDetailsAndAttributes => ({
+  workoutExerciseId,
   ...transformRawExercise(exercise),
   attributes: attributes.map(
-    ({ attributeName, createdAt, id, updatedAt, value }) => ({
-      attributeName,
+    ({ name, createdAt, id, updatedAt, value }) => ({
+      name,
       createdAt,
       id,
       updatedAt,

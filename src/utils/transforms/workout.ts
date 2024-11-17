@@ -5,7 +5,7 @@ import type {
 } from '~/lib/dbSchema/workout'
 import {
   selectWorkoutAttributeSchema,
-  type SelectWorkoutAttributesRaw
+  type SelectWorkoutAttributeRaw
 } from '~/lib/dbSchema/workoutAttributes'
 import type { SelectWorkoutExercise } from '~/lib/dbSchema/workoutExercise'
 import {
@@ -45,7 +45,7 @@ export type WorkoutExerciseWithAttributesRaw = WorkoutExerciseRaw & {
 
 export type WorkoutRawWithAttributes = SelectWorkout & {
   exercises: Array<WorkoutExerciseWithAttributesRaw>
-  defaultAttributes: Array<SelectWorkoutAttributesRaw>
+  defaultAttributes: Array<SelectWorkoutAttributeRaw>
 }
 
 export const transformRawWorkoutWithExercisesAttributes = (
@@ -56,10 +56,10 @@ export const transformRawWorkoutWithExercisesAttributes = (
 
   return {
     ...rest,
-    exercises: sortedExercises.map(({ exercise, defaultAttributes }) =>
-      transformRawExerciseWithAttributes(exercise, defaultAttributes)
-    ),
-    attributes: selectWorkoutAttributeSchema.array().parse(defaultAttributes)
+    attributes: selectWorkoutAttributeSchema.array().parse(defaultAttributes),
+    exercises: sortedExercises.map(({ exercise, defaultAttributes, id }) =>
+      transformRawExerciseWithAttributes(exercise, defaultAttributes, id)
+    )
   }
 }
 
@@ -69,7 +69,7 @@ export type UserWorkoutExerciseWithAttributesRaw = WorkoutExerciseRaw & {
 
 export type WorkoutRawWithUserAttributes = SelectWorkout & {
   exercises: Array<UserWorkoutExerciseWithAttributesRaw>
-  attributes: Array<SelectWorkoutAttributesRaw>
+  attributes: Array<SelectWorkoutAttributeRaw>
 }
 
 export const transformRawUserWorkoutWithExercisesAttributes = (
@@ -80,9 +80,9 @@ export const transformRawUserWorkoutWithExercisesAttributes = (
 
   return {
     ...rest,
-    exercises: sortedExercises.map(({ exercise, attributes }) =>
-      transformRawExerciseWithAttributes(exercise, attributes)
-    ),
-    attributes: selectWorkoutAttributeSchema.array().parse(attributes)
+    attributes: selectWorkoutAttributeSchema.array().parse(attributes),
+    exercises: sortedExercises.map(({ exercise, attributes, id }) =>
+      transformRawExerciseWithAttributes(exercise, attributes, id)
+    )
   }
 }

@@ -72,7 +72,7 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
               defaultAttributes: {
                 where: fields =>
                   and(
-                    eq(fields.workoutPlanId, workoutPlans.id),
+                    eq(fields.workoutPlanId, workoutPlanId),
                     eq(fields.workoutId, workouts.id)
                   )
               },
@@ -81,7 +81,7 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
                   defaultAttributes: {
                     where: fields =>
                       and(
-                        eq(fields.workoutPlanId, workoutPlans.id),
+                        eq(fields.workoutPlanId, workoutPlanId),
                         eq(fields.workoutExerciseId, workoutExercises.id)
                       )
                   },
@@ -147,34 +147,25 @@ export const createWorkoutPlan = async ({
       workoutPlanId: workoutPlan.workoutPlanId,
       workoutId: workoutPlan.workoutId
     }
-    return attributes.flatMap(({ attributeName, value }) => {
-      if (
-        attributeName === 'days_of_week' ||
-        attributeName === 'intensity_level'
-      ) {
+    return attributes.flatMap(({ name, value }) => {
+      if (name === 'days_of_week' || name === 'intensity_level') {
         return {
           ...base,
-          attributeName,
+          name,
           textValue: value as string
         }
       }
-      if (
-        attributeName === 'duration_goal' ||
-        attributeName === 'rest_period_between_sets'
-      ) {
+      if (name === 'duration_goal' || name === 'rest_period_between_sets') {
         return {
           ...base,
-          attributeName,
+          name,
           integerValue: value as number
         }
       }
-      if (
-        attributeName === 'warmup_required' ||
-        attributeName === 'cooldown_required'
-      ) {
+      if (name === 'warmup_required' || name === 'cooldown_required') {
         return {
           ...base,
-          attributeName,
+          name,
           booleanValue: value as boolean
         }
       }
