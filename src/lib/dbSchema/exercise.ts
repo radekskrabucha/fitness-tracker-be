@@ -59,7 +59,8 @@ export const selectExerciseExtraMuscleGroupsSchema = z.object({
   muscleGroups: z.array(selectMuscleGroupSchema)
 })
 export const selectExerciseExtraAttributesSchema = z.object({
-  attributes: z.array(selectDefaultWorkoutExerciseAttributeSchema)
+  attributes: z.array(selectDefaultWorkoutExerciseAttributeSchema),
+  workoutExerciseId: z.string()
 })
 export const selectExerciseWithDetailsSchema = selectExerciseSchema
   .extend(selectExerciseExtraCategorySchema.shape)
