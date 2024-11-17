@@ -30,7 +30,7 @@ export const userWorkoutExerciseAttributes = pgTable(
     workoutPlanId: uuid('workout_plan_id')
       .notNull()
       .references(() => workoutPlans.id, { onDelete: 'cascade' }),
-    attributeName: exerciseAttributeNameEnum('attribute_name').notNull(),
+    name: exerciseAttributeNameEnum('name').notNull(),
     value: integer('value').notNull(),
     createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', timestampConfig)
@@ -53,7 +53,7 @@ export const userWorkoutAttributes = pgTable(
     workoutPlanId: uuid('workout_plan_id')
       .notNull()
       .references(() => workoutPlans.id, { onDelete: 'cascade' }),
-    attributeName: workoutAttributeNameEnum('attribute_name').notNull(),
+    name: workoutAttributeNameEnum('name').notNull(),
     integerValue: integer('integer_value'),
     textValue: varchar('description', { length: 256 }),
     booleanValue: boolean('boolean_value'),
