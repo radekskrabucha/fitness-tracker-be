@@ -12,7 +12,6 @@ export const getUserProfile = (id: string) =>
     columns: {
       createdAt: false,
       updatedAt: false,
-      userId: false,
       id: false
     }
   })
@@ -25,6 +24,7 @@ export const createUserProfile = (
     .insert(userFitnessProfiles)
     .values({ ...profile, userId, dateOfBirth: new Date(profile.dateOfBirth) })
     .returning({
+      userId: userFitnessProfiles.userId,
       height: userFitnessProfiles.height,
       weight: userFitnessProfiles.weight,
       dateOfBirth: userFitnessProfiles.dateOfBirth,
@@ -48,6 +48,7 @@ export const updateUserProfile = (
     })
     .where(eq(userFitnessProfiles.userId, id))
     .returning({
+      userId: userFitnessProfiles.userId,
       height: userFitnessProfiles.height,
       weight: userFitnessProfiles.weight,
       dateOfBirth: userFitnessProfiles.dateOfBirth,
@@ -63,6 +64,7 @@ export const deleteUserProfile = (id: string) =>
     .delete(userFitnessProfiles)
     .where(eq(userFitnessProfiles.userId, id))
     .returning({
+      userId: userFitnessProfiles.userId,
       height: userFitnessProfiles.height,
       weight: userFitnessProfiles.weight,
       dateOfBirth: userFitnessProfiles.dateOfBirth,

@@ -27,7 +27,6 @@ export const selectUserFitnessProfileSchema = createSelectSchema(
   .omit({
     createdAt: true,
     updatedAt: true,
-    userId: true,
     id: true
   })
   .openapi('UserFitnessProfile')
