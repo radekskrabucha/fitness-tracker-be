@@ -103,7 +103,11 @@ export const createWorkout = async ({
   const [workoutInserted] = await db
     .insert(workouts)
     .values(workout)
-    .returning()
+    .returning({
+      id: workouts.id,
+      name: workouts.name,
+      description: workouts.description
+    })
 
   if (!workoutInserted) {
     throw new Error('Workout not found')
@@ -120,7 +124,15 @@ export const createWorkout = async ({
 }
 
 export const updateWorkout = (workoutId: string, workout: PatchWorkout) =>
-  db.update(workouts).set(workout).where(eq(workouts.id, workoutId)).returning()
+  db.update(workouts).set(workout).where(eq(workouts.id, workoutId)).returning({
+    id: workouts.id,
+    name: workouts.name,
+    description: workouts.description
+  })
 
 export const deleteWorkout = (workoutId: string) =>
-  db.delete(workouts).where(eq(workouts.id, workoutId)).returning()
+  db.delete(workouts).where(eq(workouts.id, workoutId)).returning({
+    id: workouts.id,
+    name: workouts.name,
+    description: workouts.description
+  })

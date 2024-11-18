@@ -192,7 +192,12 @@ export const createWorkoutPlan = async ({
   const [workoutPlanInserted] = await db
     .insert(workoutPlans)
     .values(workoutPlanData)
-    .returning()
+    .returning({
+      id: workoutPlans.id,
+      name: workoutPlans.name,
+      description: workoutPlans.description,
+      difficultyLevel: workoutPlans.difficultyLevel
+    })
 
   if (!workoutPlanInserted) {
     throw new Error('Workout plan not found')
@@ -283,7 +288,17 @@ export const updateWorkoutPlan = (
     .update(workoutPlans)
     .set(workoutPlanData)
     .where(eq(workoutPlans.id, id))
-    .returning()
+    .returning({
+      id: workoutPlans.id,
+      name: workoutPlans.name,
+      description: workoutPlans.description,
+      difficultyLevel: workoutPlans.difficultyLevel
+    })
 
 export const deleteWorkoutPlan = (id: string) =>
-  db.delete(workoutPlans).where(eq(workoutPlans.id, id)).returning()
+  db.delete(workoutPlans).where(eq(workoutPlans.id, id)).returning({
+    id: workoutPlans.id,
+    name: workoutPlans.name,
+    description: workoutPlans.description,
+    difficultyLevel: workoutPlans.difficultyLevel
+  })

@@ -212,7 +212,10 @@ export const createUserWorkoutPlan = async (
   const [insertedUSerWorkoutPlan] = await db
     .insert(userWorkoutPlans)
     .values({ workoutPlanId, userId })
-    .returning()
+    .returning({
+      id: userWorkoutPlans.id,
+      workoutPlanId: userWorkoutPlans.workoutPlanId
+    })
 
   if (!insertedUSerWorkoutPlan) {
     throw new Error('User workout plan not found')
@@ -277,4 +280,7 @@ export const deleteWorkoutPlan = async (
   db
     .delete(userWorkoutPlans)
     .where(and(eq(user.id, userId), eq(userWorkoutPlans.id, workoutPlanId)))
-    .returning()
+    .returning({
+      id: userWorkoutPlans.id,
+      workoutPlanId: userWorkoutPlans.workoutPlanId
+    })

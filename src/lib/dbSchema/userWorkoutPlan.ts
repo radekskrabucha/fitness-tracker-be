@@ -24,7 +24,12 @@ export type InsertUserWorkoutPlan<T extends InsertWorkoutPlanExtras = {}> =
 export type InsertUserWorkoutPlanWithExtras =
   InsertUserWorkoutPlan<InsertWorkoutPlanExtras>
 
-export const selectUserWorkoutPlanSchema =
-  createInsertSchema(userWorkoutPlans).openapi('UserWorkoutPlan')
+export const selectUserWorkoutPlanSchema = createInsertSchema(userWorkoutPlans)
+  .omit({
+    createdAt: true,
+    updatedAt: true,
+    userId: true
+  })
+  .openapi('UserWorkoutPlan')
 
 export type SelectUserWorkoutPlan = z.infer<typeof selectUserWorkoutPlanSchema>

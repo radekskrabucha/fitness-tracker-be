@@ -24,7 +24,15 @@ export const createUserProfile = (
   db
     .insert(userFitnessProfiles)
     .values({ ...profile, userId, dateOfBirth: new Date(profile.dateOfBirth) })
-    .returning()
+    .returning({
+      height: userFitnessProfiles.height,
+      weight: userFitnessProfiles.weight,
+      dateOfBirth: userFitnessProfiles.dateOfBirth,
+      gender: userFitnessProfiles.gender,
+      activityLevel: userFitnessProfiles.activityLevel,
+      fitnessGoal: userFitnessProfiles.fitnessGoal,
+      dietaryPreference: userFitnessProfiles.dietaryPreference
+    })
 
 export const updateUserProfile = (
   id: string,
@@ -39,11 +47,27 @@ export const updateUserProfile = (
       ...(dateOfBirth ? { dateOfBirth: new Date(dateOfBirth) } : {})
     })
     .where(eq(userFitnessProfiles.userId, id))
-    .returning()
+    .returning({
+      height: userFitnessProfiles.height,
+      weight: userFitnessProfiles.weight,
+      dateOfBirth: userFitnessProfiles.dateOfBirth,
+      gender: userFitnessProfiles.gender,
+      activityLevel: userFitnessProfiles.activityLevel,
+      fitnessGoal: userFitnessProfiles.fitnessGoal,
+      dietaryPreference: userFitnessProfiles.dietaryPreference
+    })
 }
 
 export const deleteUserProfile = (id: string) =>
   db
     .delete(userFitnessProfiles)
     .where(eq(userFitnessProfiles.userId, id))
-    .returning()
+    .returning({
+      height: userFitnessProfiles.height,
+      weight: userFitnessProfiles.weight,
+      dateOfBirth: userFitnessProfiles.dateOfBirth,
+      gender: userFitnessProfiles.gender,
+      activityLevel: userFitnessProfiles.activityLevel,
+      fitnessGoal: userFitnessProfiles.fitnessGoal,
+      dietaryPreference: userFitnessProfiles.dietaryPreference
+    })

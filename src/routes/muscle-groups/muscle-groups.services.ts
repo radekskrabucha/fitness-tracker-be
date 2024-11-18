@@ -24,10 +24,19 @@ export const getMuscleGroupById = (id: string) =>
   })
 
 export const createMuscleGroup = (data: InsertMuscleGroup) =>
-  db.insert(muscleGroups).values(data).returning()
+  db.insert(muscleGroups).values(data).returning({
+    id: muscleGroups.id,
+    name: muscleGroups.name
+  })
 
 export const updateMuscleGroup = (id: string, data: PatchMuscleGroup) =>
-  db.update(muscleGroups).set(data).where(eq(muscleGroups.id, id)).returning()
+  db.update(muscleGroups).set(data).where(eq(muscleGroups.id, id)).returning({
+    id: muscleGroups.id,
+    name: muscleGroups.name
+  })
 
 export const deleteMuscleGroup = (id: string) =>
-  db.delete(muscleGroups).where(eq(muscleGroups.id, id)).returning()
+  db.delete(muscleGroups).where(eq(muscleGroups.id, id)).returning({
+    id: muscleGroups.id,
+    name: muscleGroups.name
+  })

@@ -68,7 +68,11 @@ export const createExercise = async ({
   muscleGroupIds,
   ...exerciseData
 }: InsertExerciseWithDetails) => {
-  const [exercise] = await db.insert(exercises).values(exerciseData).returning()
+  const [exercise] = await db.insert(exercises).values(exerciseData).returning({
+    id: exercises.id,
+    name: exercises.name,
+    description: exercises.description
+  })
 
   if (!exercise) {
     throw new Error('Exercise not found')
@@ -92,7 +96,11 @@ export const updateExercise = async (
     .update(exercises)
     .set(exerciseData)
     .where(eq(exercises.id, id))
-    .returning()
+    .returning({
+      id: exercises.id,
+      name: exercises.name,
+      description: exercises.description
+    })
 
   if (muscleGroupIds) {
     await db
@@ -110,4 +118,8 @@ export const updateExercise = async (
 }
 
 export const deleteExercise = (id: string) =>
-  db.delete(exercises).where(eq(exercises.id, id)).returning()
+  db.delete(exercises).where(eq(exercises.id, id)).returning({
+    id: exercises.id,
+    name: exercises.name,
+    description: exercises.description
+  })
