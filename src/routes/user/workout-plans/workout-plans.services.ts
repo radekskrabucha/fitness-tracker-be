@@ -209,7 +209,7 @@ export const createUserWorkoutPlan = async (
   userId: string,
   { workoutPlanId, workouts }: InsertUserWorkoutPlanWithExtras
 ) => {
-  const [insertedUSerWorkoutPlan] = await db
+  const [insertedUserWorkoutPlan] = await db
     .insert(userWorkoutPlans)
     .values({ workoutPlanId, userId })
     .returning({
@@ -217,7 +217,7 @@ export const createUserWorkoutPlan = async (
       workoutPlanId: userWorkoutPlans.workoutPlanId
     })
 
-  if (!insertedUSerWorkoutPlan) {
+  if (!insertedUserWorkoutPlan) {
     throw new Error('User workout plan not found')
   }
 
@@ -262,7 +262,7 @@ export const createUserWorkoutPlan = async (
       attributes.flatMap(attributes => ({
         ...attributes,
         workoutExerciseId: id,
-        workoutPlanId: insertedUSerWorkoutPlan.id,
+        workoutPlanId,
         userId
       }))
     )
@@ -270,7 +270,7 @@ export const createUserWorkoutPlan = async (
 
   await db.insert(userWorkoutExerciseAttributes).values(attributesToInsert)
 
-  return insertedUSerWorkoutPlan
+  return insertedUserWorkoutPlan
 }
 
 export const deleteWorkoutPlan = async (
