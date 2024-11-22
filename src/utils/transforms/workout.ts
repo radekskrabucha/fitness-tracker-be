@@ -25,7 +25,7 @@ export type WorkoutRaw = SelectWorkout & {
   exercises: Array<WorkoutExerciseRaw>
 }
 
-export const transformRawWorkout = (
+export const transformRawWorkoutWithExercises = (
   workout: WorkoutRaw
 ): SelectWorkoutWithExercises => {
   const { exercises, ...rest } = workout
@@ -48,7 +48,7 @@ export type WorkoutRawWithAttributes = SelectWorkout & {
   defaultAttributes: Array<SelectWorkoutAttributeRaw>
 }
 
-export const transformRawWorkoutWithExercisesAttributes = (
+export const transformRawWorkoutWithExercisesAndAttributes = (
   workout: WorkoutRawWithAttributes
 ): SelectWorkoutWithAttributesAndExercises => {
   const { exercises, defaultAttributes, ...rest } = workout
@@ -72,7 +72,7 @@ export type WorkoutRawWithUserAttributes = SelectWorkout & {
   attributes: Array<SelectWorkoutAttributeRaw>
 }
 
-export const transformRawUserWorkoutWithExercisesAttributes = (
+export const transformRawUserWorkoutWithExercisesAndAttributes = (
   workout: WorkoutRawWithUserAttributes
 ): SelectWorkoutWithAttributesAndExercises => {
   const { exercises, attributes, ...rest } = workout

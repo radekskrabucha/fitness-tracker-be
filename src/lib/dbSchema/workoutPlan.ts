@@ -2,6 +2,7 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { workoutPlans } from '~/db/schema/workout-plan.schema'
 import {
+  selectWorkoutSchema,
   selectWorkoutWithAttributesAndExercisesSchema,
   type SelectWorkout,
   type SelectWorkoutExtras,
@@ -59,8 +60,15 @@ export const selectWorkoutPlanSchema = createSelectSchema(workoutPlans)
     updatedAt: true
   })
   .openapi('WorkoutPlan')
-export const selectWorkoutPlanExtraWorkoutsSchema = z.object({
+export const selectWorkoutPlanExtraWorkoutsWithDetailsSchema = z.object({
   workouts: selectWorkoutWithAttributesAndExercisesSchema.array()
+})
+export const selectWorkoutPlanWithWorkoutsWithDetailsSchema =
+  selectWorkoutPlanSchema.extend(
+    selectWorkoutPlanExtraWorkoutsWithDetailsSchema.shape
+  )
+export const selectWorkoutPlanExtraWorkoutsSchema = z.object({
+  workouts: selectWorkoutSchema.array()
 })
 export const selectWorkoutPlanWithWorkoutsSchema =
   selectWorkoutPlanSchema.extend(selectWorkoutPlanExtraWorkoutsSchema.shape)
@@ -69,9 +77,11 @@ export type SelectWorkoutPlan<T extends SelectWorkoutPlanExtras = {}> = z.infer<
   typeof selectWorkoutPlanSchema
 > &
   T
-export type SelectWorkoutPlanWithWorkoutsWithExercises = SelectWorkoutPlan<
+export type SelectWorkoutPlanWithWorkoutsWithDetails = SelectWorkoutPlan<
   SelectWorkoutPlanExtraWorkouts<SelectWorkoutWithAttributesAndExercises>
 >
+export type SelectWorkoutPlanWithWorkouts =
+  SelectWorkoutPlan<SelectWorkoutPlanExtraWorkouts>
 // @ts-expect-error - we use empty object to make it work
 export type SelectWorkoutPlanExtraWorkouts<W extends SelectWorkoutExtras = {}> =
   {

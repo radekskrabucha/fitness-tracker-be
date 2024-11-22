@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { db } from '~/db'
 import {
   workoutPlans,
@@ -6,15 +6,16 @@ import {
 } from '~/db/schema/workout-plan.schema'
 import {
   defaultWorkoutAttributes,
-  defaultWorkoutExerciseAttributes,
-  workoutExercises,
-  workouts
+  defaultWorkoutExerciseAttributes
 } from '~/db/schema/workout.schema'
 import type {
   InsertWorkoutPlanWithExtras,
   PatchWorkoutPlan
 } from '~/lib/dbSchema/workoutPlan'
-import { transformRawWorkoutPlan } from '~/utils/transforms/workoutPlan'
+import {
+  transformRawWorkoutPlan,
+  transformRawWorkoutPlanWithDetails
+} from '~/utils/transforms/workoutPlan'
 
 export const getWorkoutPlans = async () => {
   const retrievedWorkouts = await db.query.workoutPlans.findMany({
@@ -32,62 +33,6 @@ export const getWorkoutPlans = async () => {
             columns: {
               createdAt: false,
               updatedAt: false
-            },
-            with: {
-              defaultAttributes: {
-                columns: {
-                  workoutId: false,
-                  workoutPlanId: false,
-                  createdAt: false,
-                  updatedAt: false
-                },
-                where: fields =>
-                  and(
-                    eq(fields.workoutPlanId, workoutPlans.id),
-                    eq(fields.workoutId, workouts.id)
-                  )
-              },
-              exercises: {
-                columns: {
-                  id: true,
-                  orderIndex: true
-                },
-                with: {
-                  defaultAttributes: {
-                    columns: {
-                      id: true,
-                      name: true,
-                      value: true
-                    },
-                    where: fields =>
-                      and(
-                        eq(fields.workoutPlanId, workoutPlans.id),
-                        eq(fields.workoutExerciseId, workoutExercises.id)
-                      )
-                  },
-                  exercise: {
-                    columns: {
-                      createdAt: false,
-                      updatedAt: false,
-                      categoryId: false
-                    },
-                    with: {
-                      category: true,
-                      muscleGroups: {
-                        columns: {},
-                        with: {
-                          muscleGroup: {
-                            columns: {
-                              createdAt: false,
-                              updatedAt: false
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
             }
           }
         }
@@ -174,7 +119,7 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
     return undefined
   }
 
-  return transformRawWorkoutPlan(workout)
+  return transformRawWorkoutPlanWithDetails(workout)
 }
 
 export const createWorkoutPlan = async ({

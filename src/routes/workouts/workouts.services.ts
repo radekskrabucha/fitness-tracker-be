@@ -5,7 +5,7 @@ import type {
   InsertWorkoutWithExercises,
   PatchWorkout
 } from '~/lib/dbSchema/workout'
-import { transformRawWorkout } from '~/utils/transforms/workout'
+import { transformRawWorkoutWithExercises } from '~/utils/transforms/workout'
 
 export const getWorkouts = async () => {
   const workout = await db.query.workouts.findMany({
@@ -46,7 +46,7 @@ export const getWorkouts = async () => {
     }
   })
 
-  return workout.map(transformRawWorkout)
+  return workout.map(transformRawWorkoutWithExercises)
 }
 
 export const getWorkout = async (workoutId: string) => {
@@ -93,7 +93,7 @@ export const getWorkout = async (workoutId: string) => {
     return undefined
   }
 
-  return transformRawWorkout(retrievedWorkouts)
+  return transformRawWorkoutWithExercises(retrievedWorkouts)
 }
 
 export const createWorkout = async ({

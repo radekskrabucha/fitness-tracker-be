@@ -3,7 +3,7 @@ import {
   insertUserWorkoutPlanWithExtrasSchema,
   selectUserWorkoutPlanSchema
 } from '~/lib/dbSchema/userWorkoutPlan'
-import { selectWorkoutPlanWithWorkoutsSchema } from '~/lib/dbSchema/workoutPlan'
+import { selectWorkoutPlanWithWorkoutsWithDetailsSchema, selectWorkoutPlanWithWorkoutsSchema } from '~/lib/dbSchema/workoutPlan'
 import { authMiddleware } from '~/middleware/auth'
 import {
   NOT_FOUND,
@@ -50,7 +50,7 @@ export const getUserWorkoutPlanById = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'Retrieved workout plan',
-      schema: selectWorkoutPlanWithWorkoutsSchema
+      schema: selectWorkoutPlanWithWorkoutsWithDetailsSchema
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,

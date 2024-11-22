@@ -1,54 +1,87 @@
+import type { SelectWorkout } from '~/lib/dbSchema/workout'
 import type {
   SelectWorkoutPlan,
-  SelectWorkoutPlanWithWorkoutsWithExercises
+  SelectWorkoutPlanWithWorkouts,
+  SelectWorkoutPlanWithWorkoutsWithDetails
 } from '~/lib/dbSchema/workoutPlan'
 import type { SelectWorkoutPlanWorkout } from '~/lib/dbSchema/workoutPlanWorkout'
 import {
-  transformRawUserWorkoutWithExercisesAttributes,
-  transformRawWorkoutWithExercisesAttributes
+  transformRawUserWorkoutWithExercisesAndAttributes,
+  transformRawWorkoutWithExercisesAndAttributes
 } from './workout'
 
 type TransformRawWorkoutParameters = Parameters<
-  typeof transformRawWorkoutWithExercisesAttributes
+  typeof transformRawWorkoutWithExercisesAndAttributes
 >
-
-export type WorkoutPlanWorkoutRaw = SelectWorkoutPlanWorkout & {
-  workout: TransformRawWorkoutParameters[0]
-}
 export type WorkoutPlanRaw<T> = SelectWorkoutPlan & {
   workouts: Array<T>
 }
 
+export type WorkoutPlanWorkoutRaw = SelectWorkoutPlanWorkout & {
+  workout: SelectWorkout
+}
+
 export const transformRawWorkoutPlan = (
   workoutPlan: WorkoutPlanRaw<WorkoutPlanWorkoutRaw>
-): SelectWorkoutPlanWithWorkoutsWithExercises => {
+): SelectWorkoutPlanWithWorkouts => {
+  const { workouts, ...rest } = workoutPlan
+  const sortedWorkouts = workouts.sort((a, b) => a.orderIndex - b.orderIndex)
+
+  return {
+    ...rest,
+    workouts: sortedWorkouts.map(({ workout }) => workout)
+  }
+}
+
+export type WorkoutPlanWorkoutRawWithDetails = SelectWorkoutPlanWorkout & {
+  workout: TransformRawWorkoutParameters[0]
+}
+
+export const transformRawWorkoutPlanWithDetails = (
+  workoutPlan: WorkoutPlanRaw<WorkoutPlanWorkoutRawWithDetails>
+): SelectWorkoutPlanWithWorkoutsWithDetails => {
   const { workouts, ...rest } = workoutPlan
   const sortedWorkouts = workouts.sort((a, b) => a.orderIndex - b.orderIndex)
 
   return {
     ...rest,
     workouts: sortedWorkouts.map(({ workout }) =>
-      transformRawWorkoutWithExercisesAttributes(workout)
+      transformRawWorkoutWithExercisesAndAttributes(workout)
     )
   }
 }
 
 type TransformRawUserWorkoutParameters = Parameters<
-  typeof transformRawUserWorkoutWithExercisesAttributes
+  typeof transformRawUserWorkoutWithExercisesAndAttributes
 >
 export type UserWorkoutPlanWorkoutRaw = SelectWorkoutPlanWorkout & {
-  workout: TransformRawUserWorkoutParameters[0]
+  workout: SelectWorkout
 }
 export const transformRawUserWorkoutPlan = (
   workoutPlan: WorkoutPlanRaw<UserWorkoutPlanWorkoutRaw>
-): SelectWorkoutPlanWithWorkoutsWithExercises => {
+): SelectWorkoutPlanWithWorkouts => {
+  const { workouts, ...rest } = workoutPlan
+  const sortedWorkouts = workouts.sort((a, b) => a.orderIndex - b.orderIndex)
+
+  return {
+    ...rest,
+    workouts: sortedWorkouts.map(({ workout }) => workout)
+  }
+}
+
+export type UserWorkoutPlanWorkoutRawWithDetails = SelectWorkoutPlanWorkout & {
+  workout: TransformRawUserWorkoutParameters[0]
+}
+export const transformRawUserWorkoutPlanWithDetails = (
+  workoutPlan: WorkoutPlanRaw<UserWorkoutPlanWorkoutRawWithDetails>
+): SelectWorkoutPlanWithWorkoutsWithDetails => {
   const { workouts, ...rest } = workoutPlan
   const sortedWorkouts = workouts.sort((a, b) => a.orderIndex - b.orderIndex)
 
   return {
     ...rest,
     workouts: sortedWorkouts.map(({ workout }) =>
-      transformRawUserWorkoutWithExercisesAttributes(workout)
+      transformRawUserWorkoutWithExercisesAndAttributes(workout)
     )
   }
 }
