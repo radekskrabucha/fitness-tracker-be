@@ -14,6 +14,7 @@ export const daysOfWeekSchema = z.enum([
   'saturday',
   'sunday'
 ])
+export type DayOfWeek = z.infer<typeof daysOfWeekSchema>
 export const intensityLevelSchema = z.enum(['easy', 'medium', 'high'])
 export const insertWorkoutAttributeSchema = createInsertSchema(
   defaultWorkoutAttributes
