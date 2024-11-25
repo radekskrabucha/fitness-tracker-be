@@ -17,7 +17,9 @@ import {
 import {
   errorOpenApiSchema,
   jsonContentOpenAPISchema,
-  paramIdUUIDSchema
+  paginationSchema,
+  paramIdUUIDSchema,
+  withPaginationMeta
 } from '~/utils/schemas'
 
 const tags = ['User Workout Plans']
@@ -28,10 +30,13 @@ export const getUserWorkoutPlans = createRoute({
   tags,
   security: [{ cookieAuth: [] }],
   middleware: [authMiddleware] as const,
+  request: {
+    query: paginationSchema
+  },
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of user workout plans',
-      schema: selectWorkoutPlanWithWorkoutsSchema.array()
+      schema: withPaginationMeta(selectWorkoutPlanWithWorkoutsSchema.array())
     }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,

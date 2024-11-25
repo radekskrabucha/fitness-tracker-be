@@ -92,3 +92,47 @@ export const zodErrorOpenApiSchema = errorOpenApiSchema
     })
   )
   .openapi('ZodError')
+
+export const paginationSchema = z.object({
+  page: z.coerce
+    .number()
+    .int()
+    .positive()
+    .optional()
+    .openapi({
+      param: {
+        name: 'page',
+        in: 'query'
+      },
+      example: 1
+    }),
+  limit: z.coerce
+    .number()
+    .int()
+    .positive()
+    .optional()
+    .openapi({
+      param: {
+        name: 'limit',
+        in: 'query'
+      },
+      example: 10
+    })
+})
+
+export type PaginationQuery = z.infer<typeof paginationSchema>
+
+export const paginationMetaSchema = z
+  .object({
+    total: z.number().int().positive(),
+    limit: z.number().int().positive(),
+    offset: z.number().int().positive(),
+    page: z.number().int().positive()
+  })
+  .optional()
+
+export const withPaginationMeta = <T extends z.ZodTypeAny>(schema: T) =>
+  z.object({
+    data: schema,
+    meta: paginationMetaSchema
+  })

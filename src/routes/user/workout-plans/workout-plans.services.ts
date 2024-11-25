@@ -6,14 +6,29 @@ import {
   userWorkoutExerciseAttributes,
   userWorkoutAttributes
 } from '~/db/schema/user-workout.schema'
-import { workoutPlans } from '~/db/schema/workout-plan.schema'
-import { workoutExercises, workouts } from '~/db/schema/workout.schema'
 import type { InsertUserWorkoutPlanWithExtras } from '~/lib/dbSchema/userWorkoutPlan'
-import { transformRawUserWorkoutPlan, transformRawUserWorkoutPlanWithDetails } from '~/utils/transforms/workoutPlan'
+import { nonNullable } from '~/utils/common'
+import { getPaginationMeta, getPaginationValues } from '~/utils/pagination'
+import { type PaginationQuery } from '~/utils/schemas'
+import {
+  transformRawUserWorkoutPlan,
+  transformRawUserWorkoutPlanWithDetails
+} from '~/utils/transforms/workoutPlan'
 
-export const getUserWorkoutPlans = async (userId: string) => {
+export const getUserWorkoutPlans = async (
+  userId: string,
+  pagination: PaginationQuery
+) => {
+  const { limit, offset, page } = getPaginationValues(pagination)
   const retrievedWorkoutPlans = await db.query.userWorkoutPlans.findMany({
     where: ({ userId: id }) => eq(id, userId),
+    extras: {
+      count: db
+        .$count(userWorkoutPlans, eq(userWorkoutPlans.userId, userId))
+        .as('count')
+    },
+    limit,
+    offset,
     columns: {},
     with: {
       plan: {
@@ -39,10 +54,16 @@ export const getUserWorkoutPlans = async (userId: string) => {
       }
     }
   })
+  const total = nonNullable(retrievedWorkoutPlans[0]?.count)
+    ? Number(retrievedWorkoutPlans[0]?.count)
+    : undefined
 
-  return retrievedWorkoutPlans.map(({ plan }) =>
-    transformRawUserWorkoutPlan(plan)
-  )
+  return {
+    data: retrievedWorkoutPlans.map(({ plan }) =>
+      transformRawUserWorkoutPlan(plan)
+    ),
+    meta: getPaginationMeta({ limit, offset, page, total })
+  }
 }
 
 export const getUserWorkoutPlanById = async (
@@ -84,8 +105,7 @@ export const getUserWorkoutPlanById = async (
                     where: fields =>
                       and(
                         eq(fields.userId, userId),
-                        eq(fields.workoutPlanId, workoutPlans.id),
-                        eq(fields.workoutId, workouts.id)
+                        eq(fields.workoutPlanId, workoutPlanId)
                       )
                   },
                   exercises: {
@@ -103,8 +123,7 @@ export const getUserWorkoutPlanById = async (
                         where: fields =>
                           and(
                             eq(fields.userId, userId),
-                            eq(fields.workoutPlanId, workoutPlans.id),
-                            eq(fields.workoutExerciseId, workoutExercises.id)
+                            eq(fields.workoutPlanId, workoutPlanId)
                           )
                       },
                       exercise: {

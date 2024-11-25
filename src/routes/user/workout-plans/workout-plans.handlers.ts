@@ -12,8 +12,10 @@ export const getUserWorkoutPlans: AppRouteHandlerWithAuth<
   GetUserWorkoutPlans
 > = async c => {
   const user = c.get('user')
+  const query = c.req.valid('query')
   const userWorkoutPlans = await userWorkoutPlanService.getUserWorkoutPlans(
-    user.id
+    user.id,
+    query
   )
 
   return c.json(userWorkoutPlans, OK)
