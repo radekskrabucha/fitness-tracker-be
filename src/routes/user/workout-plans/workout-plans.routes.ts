@@ -3,7 +3,10 @@ import {
   insertUserWorkoutPlanWithExtrasSchema,
   selectUserWorkoutPlanSchema
 } from '~/lib/dbSchema/userWorkoutPlan'
-import { selectWorkoutPlanWithWorkoutsWithDetailsSchema, selectWorkoutPlanWithWorkoutsSchema } from '~/lib/dbSchema/workoutPlan'
+import {
+  selectWorkoutPlanWithWorkoutsWithDetailsSchema,
+  selectWorkoutPlanWithWorkoutsSchema
+} from '~/lib/dbSchema/workoutPlan'
 import { authMiddleware } from '~/middleware/auth'
 import {
   NOT_FOUND,
