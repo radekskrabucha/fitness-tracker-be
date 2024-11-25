@@ -49,7 +49,7 @@ export const workoutPlanWorkouts = pgTable(
 
 export const workoutPlansRelations = relations(workoutPlans, ({ many }) => ({
   workouts: many(workoutPlanWorkouts),
-  plans: many(userWorkoutPlans)
+  userPlans: many(userWorkoutPlans)
 }))
 
 export const workoutPlanWorkoutsRelations = relations(
