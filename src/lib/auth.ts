@@ -6,9 +6,11 @@ import { env } from '~/utils/env'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: 'pg',
-    generateId: false
+    provider: 'pg'
   }),
+  advanced: {
+    generateId: false
+  },
   plugins: [admin()],
   trustedOrigins: [env.BETTER_AUTH_TRUSTED_ORIGINS],
   emailAndPassword: {

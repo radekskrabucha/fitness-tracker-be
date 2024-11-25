@@ -11,7 +11,10 @@ export type User = Omit<
   SessionResponseNonNull['user'],
   'createdAt' | 'updatedAt'
 >
-export type Session = Omit<SessionResponseNonNull['session'], 'expiresAt'>
+export type Session = Omit<
+  SessionResponseNonNull['session'],
+  'expiresAt' | 'createdAt' | 'updatedAt'
+>
 
 export type AppBindingsWithAuth = {
   Variables: {
