@@ -11,7 +11,6 @@ import { timestampConfig } from './config'
 import { userWorkoutPlans } from './user-workout.schema'
 import { workouts } from './workout.schema'
 
-// Define the difficulty level enum
 export const difficultyLevelEnum = pgEnum('difficulty_level', [
   'beginner',
   'intermediate',
