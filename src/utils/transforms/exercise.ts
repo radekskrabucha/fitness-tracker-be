@@ -8,22 +8,23 @@ import type { SelectMuscleGroup } from '~/lib/dbSchema/muscleGroups'
 import type { SelectWorkoutExerciseAttribute } from '~/lib/dbSchema/workoutExerciseAttributes'
 
 export type ExerciseMuscleGroupRaw = {
-  muscleGroup: SelectMuscleGroup
+  mG: SelectMuscleGroup
 }
 
 export type ExerciseRaw = SelectExercise & {
-  category: SelectExerciseCategory
-  muscleGroups: Array<ExerciseMuscleGroupRaw>
+  c: SelectExerciseCategory
+  mGs: Array<ExerciseMuscleGroupRaw>
 }
 
 export const transformRawExercise = (
   exercise: ExerciseRaw
 ): SelectExerciseWithDetails => {
-  const { muscleGroups, ...rest } = exercise
+  const { mGs, c, ...rest } = exercise
 
   return {
     ...rest,
-    muscleGroups: muscleGroups.map(muscleGroup => muscleGroup.muscleGroup)
+    category: c,
+    muscleGroups: mGs.map(muscleGroup => muscleGroup.mG)
   }
 }
 

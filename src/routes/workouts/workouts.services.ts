@@ -27,11 +27,11 @@ export const getWorkouts = async () => {
               categoryId: false
             },
             with: {
-              category: true,
-              muscleGroups: {
+              c: true,
+              mGs: {
                 columns: {},
                 with: {
-                  muscleGroup: {
+                  mG: {
                     columns: {
                       createdAt: false,
                       updatedAt: false
@@ -70,11 +70,11 @@ export const getWorkout = async (workoutId: string) => {
               categoryId: false
             },
             with: {
-              category: true,
-              muscleGroups: {
+              c: true,
+              mGs: {
                 columns: {},
                 with: {
-                  muscleGroup: {
+                  mG: {
                     columns: {
                       createdAt: false,
                       updatedAt: false

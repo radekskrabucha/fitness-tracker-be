@@ -49,12 +49,12 @@ export const exerciseMuscleGroups = pgTable(
 )
 
 export const exercisesRelations = relations(exercises, ({ one, many }) => ({
-  category: one(exerciseCategories, {
+  c: one(exerciseCategories, {
     fields: [exercises.categoryId],
     references: [exerciseCategories.id]
   }),
-  muscleGroups: many(exerciseMuscleGroups),
-  workoutExercises: many(workoutExercises)
+  mGs: many(exerciseMuscleGroups),
+  wEs: many(workoutExercises)
 }))
 
 export const muscleGroupsRelations = relations(muscleGroups, ({ many }) => ({
@@ -68,7 +68,7 @@ export const exerciseMuscleGroupsRelations = relations(
       fields: [exerciseMuscleGroups.exerciseId],
       references: [exercises.id]
     }),
-    muscleGroup: one(muscleGroups, {
+    mG: one(muscleGroups, {
       fields: [exerciseMuscleGroups.muscleGroupId],
       references: [muscleGroups.id]
     })
