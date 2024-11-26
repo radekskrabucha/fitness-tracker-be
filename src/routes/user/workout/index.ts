@@ -1,6 +1,6 @@
 import { createRouter } from '~/lib/createApp'
-import * as handlers from './workout-plans.handlers'
-import * as routes from './workout-plans.routes'
+import * as handlers from './workout.handlers'
+import * as routes from './workout.routes'
 
 export const userWorkoutsRouter = createRouter().openapi(
   routes.getUserTodayWorkoutPlan,
