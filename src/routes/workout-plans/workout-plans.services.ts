@@ -92,11 +92,11 @@ export const getWorkoutPlanById = async (workoutPlanId: string) => {
                       categoryId: false
                     },
                     with: {
-                      category: true,
-                      muscleGroups: {
+                      c: true,
+                      mGs: {
                         columns: {},
                         with: {
-                          muscleGroup: {
+                          mG: {
                             columns: {
                               createdAt: false,
                               updatedAt: false
