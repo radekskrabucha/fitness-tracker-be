@@ -11,6 +11,7 @@ import { transformRawWorkoutSession } from '~/utils/transforms/workoutSession'
 export const getUserWorkoutSessions = async (userId: string) => {
   const workoutSessions = await db.query.userWorkoutSessions.findMany({
     where: fields => eq(fields.userId, userId),
+    orderBy: fields => [desc(fields.date), desc(fields.createdAt)],
     columns: {
       id: true,
       notes: true,
