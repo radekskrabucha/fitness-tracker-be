@@ -134,6 +134,13 @@
       "when": 1732695241845,
       "tag": "0018_flashy_outlaw_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1732695623617,
+      "tag": "0019_uneven_black_panther",
+      "breakpoints": true
     }
   ]
 }
