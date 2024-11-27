@@ -49,7 +49,7 @@ export const getUserWorkoutSessionById = createRoute({
   },
   responses: {
     [OK]: jsonContentOpenAPISchema({
-      description: 'List of user workout session by id',
+      description: 'User workout session by id',
       schema: selectUserWorkoutSessionSchemaWithExtras
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
@@ -63,6 +63,29 @@ export const getUserWorkoutSessionById = createRoute({
   }
 })
 export type GetUserWorkoutSessionById = typeof getUserWorkoutSessionById
+
+export const getUserLatestWorkoutSession = createRoute({
+  method: 'get',
+  path: '/latest',
+  tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware] as const,
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'User latest workout by session date',
+      schema: selectUserWorkoutSessionSchemaWithExtras
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Not found'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Unauthorized'
+    })
+  }
+})
+export type GetUserLatestWorkoutSession = typeof getUserLatestWorkoutSession
 
 export const postUserWorkoutSession = createRoute({
   method: 'post',

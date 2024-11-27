@@ -3,7 +3,8 @@ import { NOT_FOUND, OK } from '~/utils/httpCodes'
 import type {
   PostUserWorkoutSession,
   GetUserWorkoutSessions,
-  GetUserWorkoutSessionById
+  GetUserWorkoutSessionById,
+  GetUserLatestWorkoutSession
 } from './workout-sessions.routes'
 import * as userWorkoutSessionsService from './workout-sessions.services'
 
@@ -29,6 +30,21 @@ export const getUserWorkoutSessionById: AppRouteHandlerWithAuth<
       user.id,
       params.id
     )
+
+  if (!userWorkoutSession) {
+    return c.json({ message: 'Not found' }, NOT_FOUND)
+  }
+
+  return c.json(userWorkoutSession, OK)
+}
+
+export const getUserLatestWorkoutSession: AppRouteHandlerWithAuth<
+  GetUserLatestWorkoutSession
+> = async c => {
+  const user = c.get('user')
+
+  const userWorkoutSession =
+    await userWorkoutSessionsService.getUserLatestWorkoutSession(user.id)
 
   if (!userWorkoutSession) {
     return c.json({ message: 'Not found' }, NOT_FOUND)

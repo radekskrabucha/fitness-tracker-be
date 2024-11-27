@@ -4,5 +4,9 @@ import * as routes from './workout-sessions.routes'
 
 export const userWorkoutSessionsRouter = createRouter()
   .openapi(routes.getUserWorkoutSessions, handlers.getUserWorkoutSessions)
+  .openapi(
+    routes.getUserLatestWorkoutSession,
+    handlers.getUserLatestWorkoutSession
+  )
   .openapi(routes.getUserWorkoutSessionById, handlers.getUserWorkoutSessionById)
   .openapi(routes.postUserWorkoutSession, handlers.postUserWorkoutSession)

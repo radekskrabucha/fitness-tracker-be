@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 import { db } from '~/db'
 import {
   userWorkoutSessions,
@@ -61,6 +61,61 @@ export const getUserWorkoutSessions = async (userId: string) => {
 export const getUserWorkoutSessionById = async (userId: string, id: string) => {
   const workoutSession = await db.query.userWorkoutSessions.findFirst({
     where: fields => and(eq(fields.userId, userId), eq(fields.id, id)),
+    columns: {
+      id: true,
+      notes: true,
+      date: true,
+      duration: true
+    },
+    with: {
+      workout: {
+        columns: {
+          id: true,
+          name: true,
+          description: true
+        }
+      },
+      workoutPlan: {
+        columns: {
+          id: true,
+          name: true,
+          description: true,
+          difficultyLevel: true
+        }
+      },
+      exercises: {
+        where: fields => eq(fields.userId, userId),
+        columns: {
+          id: true,
+          notes: true,
+          completed: true,
+          orderIndex: true
+        },
+        with: {
+          attributes: {
+            where: fields => eq(fields.userId, userId),
+            columns: {
+              id: true,
+              name: true,
+              value: true
+            }
+          }
+        }
+      }
+    }
+  })
+
+  if (!workoutSession) {
+    return undefined
+  }
+
+  return transformRawWorkoutSession(workoutSession)
+}
+
+export const getUserLatestWorkoutSession = async (userId: string) => {
+  const workoutSession = await db.query.userWorkoutSessions.findFirst({
+    where: fields => eq(fields.userId, userId),
+    orderBy: fields => [desc(fields.date), desc(fields.createdAt)],
     columns: {
       id: true,
       notes: true,
