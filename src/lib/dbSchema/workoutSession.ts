@@ -62,9 +62,14 @@ export const selectUserWorkoutSessionSchemaExtraWorkoutPlanSchema = z.object({
   workoutPlan: selectWorkoutPlanSchema
 })
 
-export const selectUserWorkoutSessionSchemaWithExtras =
+export const selectUserWorkoutSessionSchemaWithDetails =
   selectUserWorkoutSessionSchema
     .extend(selectUserWorkoutSessionSchemaExtraExercisesSchema.shape)
+    .extend(selectUserWorkoutSessionSchemaExtraWorkoutSchema.shape)
+    .extend(selectUserWorkoutSessionSchemaExtraWorkoutPlanSchema.shape)
+
+export const selectUserWorkoutSessionSchemaWithOverview =
+  selectUserWorkoutSessionSchema
     .extend(selectUserWorkoutSessionSchemaExtraWorkoutSchema.shape)
     .extend(selectUserWorkoutSessionSchemaExtraWorkoutPlanSchema.shape)
 
@@ -73,8 +78,10 @@ export type SelectUserWorkoutSession<
   T extends SelectUserWorkoutSessionExtras = {}
 > = z.infer<typeof selectUserWorkoutSessionSchema> & T
 
-export type SelectUserWorkoutSessionWithExtras =
-  SelectUserWorkoutSession<SelectUserWorkoutSessionExtras>
+export type SelectUserWorkoutSessionWithDetails =
+  SelectUserWorkoutSession<SelectUserWorkoutSessionExtraDetails>
+export type SelectUserWorkoutSessionWithOverview =
+  SelectUserWorkoutSession<SelectUserWorkoutSessionExtraOverview>
 
 export type SelectUserWorkoutSessionExtraExercises = {
   exercises: Array<SelectWorkoutSessionExerciseWithExtras>
@@ -86,7 +93,13 @@ export type SelectUserWorkoutSessionExtraWorkoutPlan = {
   workoutPlan: SelectWorkoutPlan
 }
 
-export type SelectUserWorkoutSessionExtras =
-  SelectUserWorkoutSessionExtraExercises &
-    SelectUserWorkoutSessionExtraWorkout &
+export type SelectUserWorkoutSessionExtraOverview =
+  SelectUserWorkoutSessionExtraWorkout &
     SelectUserWorkoutSessionExtraWorkoutPlan
+
+export type SelectUserWorkoutSessionExtraDetails =
+  SelectUserWorkoutSessionExtraOverview & SelectUserWorkoutSessionExtraExercises
+
+export type SelectUserWorkoutSessionExtras =
+  | SelectUserWorkoutSessionExtraDetails
+  | SelectUserWorkoutSessionExtraOverview

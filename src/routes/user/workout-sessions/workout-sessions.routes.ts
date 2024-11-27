@@ -2,7 +2,8 @@ import { createRoute } from '@hono/zod-openapi'
 import {
   insertUserWorkoutSessionWithExtrasSchema,
   selectUserWorkoutSessionSchema,
-  selectUserWorkoutSessionSchemaWithExtras
+  selectUserWorkoutSessionSchemaWithDetails,
+  selectUserWorkoutSessionSchemaWithOverview
 } from '~/lib/dbSchema/workoutSession'
 import { authMiddleware } from '~/middleware/auth'
 import {
@@ -28,7 +29,7 @@ export const getUserWorkoutSessions = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'List of user workout sessions',
-      schema: selectUserWorkoutSessionSchemaWithExtras.array()
+      schema: selectUserWorkoutSessionSchemaWithOverview.array()
     }),
     [UNAUTHORIZED]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
@@ -50,7 +51,7 @@ export const getUserWorkoutSessionById = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'User workout session by id',
-      schema: selectUserWorkoutSessionSchemaWithExtras
+      schema: selectUserWorkoutSessionSchemaWithDetails
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,
@@ -73,7 +74,7 @@ export const getUserLatestWorkoutSession = createRoute({
   responses: {
     [OK]: jsonContentOpenAPISchema({
       description: 'User latest workout by session date',
-      schema: selectUserWorkoutSessionSchemaWithExtras
+      schema: selectUserWorkoutSessionSchemaWithOverview
     }),
     [NOT_FOUND]: jsonContentOpenAPISchema({
       schema: errorOpenApiSchema,

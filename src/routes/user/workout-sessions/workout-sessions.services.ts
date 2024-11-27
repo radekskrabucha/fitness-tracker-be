@@ -6,7 +6,7 @@ import {
   userWorkoutSessionExerciseAttributes
 } from '~/db/schema/workout-session.schema'
 import type { InsertUserWorkoutSessionWithExtras } from '~/lib/dbSchema/workoutSession'
-import { transformRawWorkoutSession } from '~/utils/transforms/workoutSession'
+import { transformWorkoutSessionWithExercises } from '~/utils/transforms/workoutSession'
 
 export const getUserWorkoutSessions = async (userId: string) => {
   const workoutSessions = await db.query.userWorkoutSessions.findMany({
@@ -33,30 +33,11 @@ export const getUserWorkoutSessions = async (userId: string) => {
           description: true,
           difficultyLevel: true
         }
-      },
-      exercises: {
-        where: fields => eq(fields.userId, userId),
-        columns: {
-          id: true,
-          notes: true,
-          completed: true,
-          orderIndex: true
-        },
-        with: {
-          attributes: {
-            where: fields => eq(fields.userId, userId),
-            columns: {
-              id: true,
-              name: true,
-              value: true
-            }
-          }
-        }
       }
     }
   })
 
-  return workoutSessions.map(transformRawWorkoutSession)
+  return workoutSessions
 }
 
 export const getUserWorkoutSessionById = async (userId: string, id: string) => {
@@ -110,7 +91,7 @@ export const getUserWorkoutSessionById = async (userId: string, id: string) => {
     return undefined
   }
 
-  return transformRawWorkoutSession(workoutSession)
+  return transformWorkoutSessionWithExercises(workoutSession)
 }
 
 export const getUserLatestWorkoutSession = async (userId: string) => {
@@ -138,25 +119,6 @@ export const getUserLatestWorkoutSession = async (userId: string) => {
           description: true,
           difficultyLevel: true
         }
-      },
-      exercises: {
-        where: fields => eq(fields.userId, userId),
-        columns: {
-          id: true,
-          notes: true,
-          completed: true,
-          orderIndex: true
-        },
-        with: {
-          attributes: {
-            where: fields => eq(fields.userId, userId),
-            columns: {
-              id: true,
-              name: true,
-              value: true
-            }
-          }
-        }
       }
     }
   })
@@ -165,7 +127,7 @@ export const getUserLatestWorkoutSession = async (userId: string) => {
     return undefined
   }
 
-  return transformRawWorkoutSession(workoutSession)
+  return workoutSession
 }
 
 export const postUserWorkoutSession = async (

@@ -2,7 +2,7 @@ import type { SelectWorkout } from '~/lib/dbSchema/workout'
 import type { SelectWorkoutPlan } from '~/lib/dbSchema/workoutPlan'
 import type {
   SelectUserWorkoutSession,
-  SelectUserWorkoutSessionWithExtras
+  SelectUserWorkoutSessionWithDetails
 } from '~/lib/dbSchema/workoutSession'
 import { transformWorkoutSessionExercise } from './workoutSessionExercise'
 
@@ -11,14 +11,17 @@ type TransformSessionExerciseParameters = Parameters<
 >
 
 type WorkoutSessionRaw = SelectUserWorkoutSession & {
-  exercises: Array<TransformSessionExerciseParameters[0]>
   workout: SelectWorkout
   workoutPlan: SelectWorkoutPlan
 }
 
-export const transformRawWorkoutSession = (
-  workoutSession: WorkoutSessionRaw
-): SelectUserWorkoutSessionWithExtras => {
+type WorkoutSessionRawWithExercises = WorkoutSessionRaw & {
+  exercises: Array<TransformSessionExerciseParameters[0]>
+}
+
+export const transformWorkoutSessionWithExercises = (
+  workoutSession: WorkoutSessionRawWithExercises
+): SelectUserWorkoutSessionWithDetails => {
   const { exercises, ...rest } = workoutSession
   const sortedExercises = exercises.sort((a, b) => a.orderIndex - b.orderIndex)
 
