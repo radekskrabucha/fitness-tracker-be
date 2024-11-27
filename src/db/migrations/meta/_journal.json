@@ -127,6 +127,13 @@
       "when": 1732519425668,
       "tag": "0017_round_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1732695241845,
+      "tag": "0018_flashy_outlaw_kid",
+      "breakpoints": true
     }
   ]
 }
