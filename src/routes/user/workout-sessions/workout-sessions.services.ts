@@ -8,11 +8,11 @@ import type { InsertUserWorkoutSessionWithExtras } from '~/lib/dbSchema/workoutS
 
 export const postUserWorkoutSession = async (
   userId: string,
-  { exercises, ...rest }: InsertUserWorkoutSessionWithExtras
+  { exercises, date, ...rest }: InsertUserWorkoutSessionWithExtras
 ) => {
   const [insertedWorkoutSession] = await db
     .insert(userWorkoutSessions)
-    .values({ ...rest, userId })
+    .values({ ...rest, userId, date: new Date(date).toISOString() })
     .returning({
       id: userWorkoutSessions.id,
       date: userWorkoutSessions.date,
