@@ -5,8 +5,17 @@ import {
   selectUserWorkoutSessionSchemaWithExtras
 } from '~/lib/dbSchema/workoutSession'
 import { authMiddleware } from '~/middleware/auth'
-import { OK, UNAUTHORIZED, UNPROCESSABLE_ENTITY } from '~/utils/httpCodes'
-import { errorOpenApiSchema, jsonContentOpenAPISchema } from '~/utils/schemas'
+import {
+  NOT_FOUND,
+  OK,
+  UNAUTHORIZED,
+  UNPROCESSABLE_ENTITY
+} from '~/utils/httpCodes'
+import {
+  errorOpenApiSchema,
+  jsonContentOpenAPISchema,
+  paramIdUUIDSchema
+} from '~/utils/schemas'
 
 const tags = ['User Workout Sessions']
 
@@ -28,6 +37,32 @@ export const getUserWorkoutSessions = createRoute({
   }
 })
 export type GetUserWorkoutSessions = typeof getUserWorkoutSessions
+
+export const getUserWorkoutSessionById = createRoute({
+  method: 'get',
+  path: '/{id}',
+  tags,
+  security: [{ cookieAuth: [] }],
+  middleware: [authMiddleware] as const,
+  request: {
+    params: paramIdUUIDSchema
+  },
+  responses: {
+    [OK]: jsonContentOpenAPISchema({
+      description: 'List of user workout session by id',
+      schema: selectUserWorkoutSessionSchemaWithExtras
+    }),
+    [NOT_FOUND]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Not found'
+    }),
+    [UNAUTHORIZED]: jsonContentOpenAPISchema({
+      schema: errorOpenApiSchema,
+      description: 'Unauthorized'
+    })
+  }
+})
+export type GetUserWorkoutSessionById = typeof getUserWorkoutSessionById
 
 export const postUserWorkoutSession = createRoute({
   method: 'post',
