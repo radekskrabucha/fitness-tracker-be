@@ -22,7 +22,11 @@ export const createUserProfile = (
 ) =>
   db
     .insert(userFitnessProfiles)
-    .values({ ...profile, userId, dateOfBirth: new Date(profile.dateOfBirth) })
+    .values({
+      ...profile,
+      userId,
+      dateOfBirth: new Date(profile.dateOfBirth).toISOString()
+    })
     .returning({
       userId: userFitnessProfiles.userId,
       height: userFitnessProfiles.height,
@@ -44,7 +48,9 @@ export const updateUserProfile = (
     .update(userFitnessProfiles)
     .set({
       ...rest,
-      ...(dateOfBirth ? { dateOfBirth: new Date(dateOfBirth) } : {})
+      ...(dateOfBirth
+        ? { dateOfBirth: new Date(dateOfBirth).toISOString() }
+        : {})
     })
     .where(eq(userFitnessProfiles.userId, id))
     .returning({

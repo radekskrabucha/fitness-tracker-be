@@ -8,17 +8,12 @@ export const insertUserFitnessProfileSchema = createInsertSchema(
     height: schema => schema.height.min(1).max(300),
     weight: schema => schema.weight.min(1).max(30_000) // 300kg, 30 000 dekagrams
   }
-)
-  .omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-    userId: true,
-    dateOfBirth: true
-  })
-  .extend({
-    dateOfBirth: z.string()
-  })
+).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  userId: true
+})
 export const patchUserFitnessProfileSchema =
   insertUserFitnessProfileSchema.partial()
 export const selectUserFitnessProfileSchema = createSelectSchema(

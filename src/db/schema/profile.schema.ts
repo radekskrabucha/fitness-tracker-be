@@ -41,7 +41,7 @@ export const userFitnessProfiles = pgTable('user_fitness_profiles', {
     .unique(),
   height: integer('height').notNull(), // in centimeters
   weight: integer('weight').notNull(), // in dekagrams
-  dateOfBirth: timestamp('date_of_birth').notNull(),
+  dateOfBirth: timestamp('date_of_birth', timestampConfig).notNull(),
   gender: genderEnum('gender').notNull(),
   activityLevel: activityLevelEnum('activity_level').notNull(),
   fitnessGoal: fitnessGoalEnum('fitness_goal').notNull(),
