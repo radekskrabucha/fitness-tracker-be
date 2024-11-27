@@ -1,3 +1,4 @@
+import { eq } from 'drizzle-orm'
 import { db } from '~/db'
 import {
   userWorkoutSessions,
@@ -5,6 +6,57 @@ import {
   userWorkoutSessionExerciseAttributes
 } from '~/db/schema/workout-session.schema'
 import type { InsertUserWorkoutSessionWithExtras } from '~/lib/dbSchema/workoutSession'
+import { transformRawWorkoutSession } from '~/utils/transforms/workoutSession'
+
+export const getUserWorkoutSessions = async (userId: string) => {
+  const workoutSessions = await db.query.userWorkoutSessions.findMany({
+    where: fields => eq(fields.userId, userId),
+    columns: {
+      id: true,
+      notes: true,
+      date: true,
+      duration: true
+    },
+    with: {
+      workout: {
+        columns: {
+          id: true,
+          name: true,
+          description: true
+        }
+      },
+      workoutPlan: {
+        columns: {
+          id: true,
+          name: true,
+          description: true,
+          difficultyLevel: true
+        }
+      },
+      exercises: {
+        where: fields => eq(fields.userId, userId),
+        columns: {
+          id: true,
+          notes: true,
+          completed: true,
+          orderIndex: true
+        },
+        with: {
+          attributes: {
+            where: fields => eq(fields.userId, userId),
+            columns: {
+              id: true,
+              name: true,
+              value: true
+            }
+          }
+        }
+      }
+    }
+  })
+
+  return workoutSessions.map(transformRawWorkoutSession)
+}
 
 export const postUserWorkoutSession = async (
   userId: string,
