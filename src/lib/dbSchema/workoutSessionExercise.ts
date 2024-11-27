@@ -1,7 +1,11 @@
 import { createInsertSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { userWorkoutSessionExercises } from '~/db/schema/workout-session.schema'
-import { insertUserWorkoutSessionExerciseAttributeSchema } from './workoutSessionAttributes'
+import {
+  insertUserWorkoutSessionExerciseAttributeSchema,
+  selectUserWorkoutSessionExerciseAttributeSchema,
+  type SelectUserWorkoutSessionExerciseAttribute
+} from './workoutSessionAttributes'
 
 export const insertWorkoutSessionExerciseSchema = createInsertSchema(
   userWorkoutSessionExercises,
@@ -45,16 +49,43 @@ export type PatchWorkoutSessionExercise = z.infer<
   typeof patchWorkoutSessionExerciseSchema
 >
 
-export const selectWorkoutSessionExerciseSchema = createInsertSchema(
+export const selectWorkoutSessionExerciseRawSchema = createInsertSchema(
   userWorkoutSessionExercises
 ).omit({
   createdAt: true,
   updatedAt: true,
   userId: true,
   sessionId: true,
-  orderIndex: true,
   exerciseId: true
 })
-export type SelectWorkoutSessionExercise = z.infer<
-  typeof selectWorkoutSessionExerciseSchema
+export const selectWorkoutSessionExerciseSchema =
+  selectWorkoutSessionExerciseRawSchema.omit({ orderIndex: true })
+
+export const selectWorkoutSessionExerciseSchemaExtraAttributesSchema = z.object(
+  {
+    attributes: selectUserWorkoutSessionExerciseAttributeSchema.array()
+  }
+)
+
+export const selectWorkoutSessionExerciseSchemaWithExtras =
+  selectWorkoutSessionExerciseSchema.extend(
+    selectWorkoutSessionExerciseSchemaExtraAttributesSchema.shape
+  )
+
+export type SelectWorkoutSessionExerciseRaw = z.infer<
+  typeof selectWorkoutSessionExerciseRawSchema
 >
+export type SelectWorkoutSessionExercise<
+  // @ts-expect-error - we use empty object to make it work
+  T extends SelectWorkoutSessionExerciseExtras = {}
+> = z.infer<typeof selectWorkoutSessionExerciseSchema> & T
+
+export type SelectWorkoutSessionExerciseWithExtras =
+  SelectWorkoutSessionExercise<SelectWorkoutSessionExerciseExtras>
+
+export type SelectWorkoutSessionExerciseExtraAttributes = {
+  attributes: Array<SelectUserWorkoutSessionExerciseAttribute>
+}
+
+export type SelectWorkoutSessionExerciseExtras =
+  SelectWorkoutSessionExerciseExtraAttributes

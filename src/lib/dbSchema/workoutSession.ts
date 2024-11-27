@@ -1,7 +1,13 @@
 import { createInsertSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { userWorkoutSessions } from '~/db/schema/workout-session.schema'
-import { insertWorkoutSessionExerciseWithExtrasSchema } from './workoutSessionExercise'
+import { selectWorkoutSchema, type SelectWorkout } from './workout'
+import { selectWorkoutPlanSchema, type SelectWorkoutPlan } from './workoutPlan'
+import {
+  insertWorkoutSessionExerciseWithExtrasSchema,
+  selectWorkoutSessionExerciseSchemaWithExtras,
+  type SelectWorkoutSessionExerciseWithExtras
+} from './workoutSessionExercise'
 
 export const insertUserWorkoutSessionSchema = createInsertSchema(
   userWorkoutSessions
@@ -45,6 +51,42 @@ export const selectUserWorkoutSessionSchema = createInsertSchema(
   createdAt: true,
   updatedAt: true
 })
-export type SelectUserWorkoutSession = z.infer<
-  typeof selectUserWorkoutSessionSchema
->
+
+export const selectUserWorkoutSessionSchemaExtraExercisesSchema = z.object({
+  exercises: selectWorkoutSessionExerciseSchemaWithExtras.array()
+})
+export const selectUserWorkoutSessionSchemaExtraWorkoutSchema = z.object({
+  workout: selectWorkoutSchema
+})
+export const selectUserWorkoutSessionSchemaExtraWorkoutPlanSchema = z.object({
+  workoutPlan: selectWorkoutPlanSchema
+})
+
+export const selectUserWorkoutSessionSchemaWithExtras =
+  selectUserWorkoutSessionSchema
+    .extend(selectUserWorkoutSessionSchemaExtraExercisesSchema.shape)
+    .extend(selectUserWorkoutSessionSchemaExtraWorkoutSchema.shape)
+    .extend(selectUserWorkoutSessionSchemaExtraWorkoutPlanSchema.shape)
+
+export type SelectUserWorkoutSession<
+  // @ts-expect-error - we use empty object to make it work
+  T extends SelectUserWorkoutSessionExtras = {}
+> = z.infer<typeof selectUserWorkoutSessionSchema> & T
+
+export type SelectUserWorkoutSessionWithExtras =
+  SelectUserWorkoutSession<SelectUserWorkoutSessionExtras>
+
+export type SelectUserWorkoutSessionExtraExercises = {
+  exercises: Array<SelectWorkoutSessionExerciseWithExtras>
+}
+export type SelectUserWorkoutSessionExtraWorkout = {
+  workout: SelectWorkout
+}
+export type SelectUserWorkoutSessionExtraWorkoutPlan = {
+  workoutPlan: SelectWorkoutPlan
+}
+
+export type SelectUserWorkoutSessionExtras =
+  SelectUserWorkoutSessionExtraExercises &
+    SelectUserWorkoutSessionExtraWorkout &
+    SelectUserWorkoutSessionExtraWorkoutPlan
