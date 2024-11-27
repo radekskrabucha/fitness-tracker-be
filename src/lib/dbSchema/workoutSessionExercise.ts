@@ -1,6 +1,6 @@
 import { createInsertSchema } from 'drizzle-zod'
 import { z } from 'zod'
-import { userWorkoutSessionExercises } from '~/db/schema/workout-session'
+import { userWorkoutSessionExercises } from '~/db/schema/workout-session.schema'
 import { insertUserWorkoutSessionExerciseAttributeSchema } from './workoutSessionAttributes'
 
 export const insertWorkoutSessionExerciseSchema = createInsertSchema(

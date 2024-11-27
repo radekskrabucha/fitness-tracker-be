@@ -3,7 +3,7 @@ import {
   userWorkoutSessions,
   userWorkoutSessionExercises,
   userWorkoutSessionExerciseAttributes
-} from '~/db/schema/workout-session'
+} from '~/db/schema/workout-session.schema'
 import type { InsertUserWorkoutSessionWithExtras } from '~/lib/dbSchema/workoutSession'
 
 export const postUserWorkoutSession = async (
