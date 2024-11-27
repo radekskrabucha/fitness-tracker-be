@@ -8,6 +8,7 @@ import {
   varchar
 } from 'drizzle-orm/pg-core'
 import { user } from './auth.schema'
+import { timestampConfig } from './config'
 import { exercises } from './exercise.schema'
 import { workoutPlans } from './workout-plan.schema'
 import { exerciseAttributeNameEnum, workouts } from './workout.schema'
@@ -27,11 +28,11 @@ export const userWorkoutSessions = pgTable('user_workout_sessions', {
     .references(() => workouts.id, {
       onDelete: 'cascade'
     }),
-  date: timestamp('date').defaultNow().notNull(),
+  date: timestamp('date', timestampConfig).notNull(),
   duration: integer('duration').notNull(),
   notes: varchar('notes', { length: 1024 }),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at')
+  createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', timestampConfig)
     .defaultNow()
     .notNull()
     .$onUpdate(() => sql`now()`)
@@ -53,8 +54,8 @@ export const userWorkoutSessionExercises = pgTable(
     orderIndex: integer('order_index').notNull(),
     completed: boolean('completed').default(false).notNull(),
     notes: varchar('notes', { length: 1024 }),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
+    createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', timestampConfig)
       .defaultNow()
       .notNull()
       .$onUpdate(() => sql`now()`)
@@ -75,8 +76,8 @@ export const userWorkoutSessionExerciseAttributes = pgTable(
       }),
     name: exerciseAttributeNameEnum('name').notNull(),
     value: integer('value').notNull(),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
+    createdAt: timestamp('created_at', timestampConfig).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', timestampConfig)
       .defaultNow()
       .notNull()
       .$onUpdate(() => sql`now()`)
