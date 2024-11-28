@@ -81,6 +81,27 @@ export const getUserWorkoutSessionById = async (userId: string, id: string) => {
               name: true,
               value: true
             }
+          },
+          exercise: {
+            columns: {
+              updatedAt: false,
+              createdAt: false,
+              categoryId: false
+            },
+            with: {
+              c: true,
+              mGs: {
+                columns: {},
+                with: {
+                  mG: {
+                    columns: {
+                      updatedAt: false,
+                      createdAt: false
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

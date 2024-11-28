@@ -2,6 +2,10 @@ import { createInsertSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { userWorkoutSessionExercises } from '~/db/schema/workout-session.schema'
 import {
+  selectExerciseWithDetailsSchema,
+  type SelectExerciseWithDetails
+} from './exercise'
+import {
   insertUserWorkoutSessionExerciseAttributeSchema,
   selectUserWorkoutSessionExerciseAttributeSchema,
   type SelectUserWorkoutSessionExerciseAttribute
@@ -66,11 +70,15 @@ export const selectWorkoutSessionExerciseSchemaExtraAttributesSchema = z.object(
     attributes: selectUserWorkoutSessionExerciseAttributeSchema.array()
   }
 )
+export const selectWorkoutSessionExerciseSchemaExtraExerciseDetailsSchema =
+  z.object({
+    exercise: selectExerciseWithDetailsSchema
+  })
 
 export const selectWorkoutSessionExerciseSchemaWithExtras =
-  selectWorkoutSessionExerciseSchema.extend(
-    selectWorkoutSessionExerciseSchemaExtraAttributesSchema.shape
-  )
+  selectWorkoutSessionExerciseSchema
+    .extend(selectWorkoutSessionExerciseSchemaExtraAttributesSchema.shape)
+    .extend(selectWorkoutSessionExerciseSchemaExtraExerciseDetailsSchema.shape)
 
 export type SelectWorkoutSessionExerciseRaw = z.infer<
   typeof selectWorkoutSessionExerciseRawSchema
@@ -86,6 +94,10 @@ export type SelectWorkoutSessionExerciseWithExtras =
 export type SelectWorkoutSessionExerciseExtraAttributes = {
   attributes: Array<SelectUserWorkoutSessionExerciseAttribute>
 }
+export type SelectWorkoutSessionExerciseExtraExerciseDetails = {
+  exercise: SelectExerciseWithDetails
+}
 
 export type SelectWorkoutSessionExerciseExtras =
-  SelectWorkoutSessionExerciseExtraAttributes
+  SelectWorkoutSessionExerciseExtraAttributes &
+    SelectWorkoutSessionExerciseExtraExerciseDetails
