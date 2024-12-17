@@ -5,8 +5,8 @@ import { exerciseCategories } from '~/db/schema/exercise.schema'
 export const insertExerciseCategorySchema = createInsertSchema(
   exerciseCategories,
   {
-    name: schema => schema.name.min(1).max(50),
-    description: schema => schema.description.max(256)
+    name: schema => schema.min(1).max(50),
+    description: schema => schema.max(256)
   }
 ).omit({
   id: true

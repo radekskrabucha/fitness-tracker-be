@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { muscleGroups } from '~/db/schema/exercise.schema'
 
 export const insertMuscleGroupSchema = createInsertSchema(muscleGroups, {
-  name: schema => schema.name.min(1).max(256)
+  name: schema => schema.min(1).max(256)
 }).omit({
   id: true,
   createdAt: true,

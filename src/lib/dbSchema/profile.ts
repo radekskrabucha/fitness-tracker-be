@@ -5,8 +5,8 @@ import { userFitnessProfiles } from '~/db/schema/profile.schema'
 export const insertUserFitnessProfileSchema = createInsertSchema(
   userFitnessProfiles,
   {
-    height: schema => schema.height.min(1).max(300),
-    weight: schema => schema.weight.min(1).max(30_000) // 300kg, 30 000 dekagrams
+    height: schema => schema.min(1).max(300),
+    weight: schema => schema.min(1).max(30_000) // 300kg, 30 000 dekagrams
   }
 ).omit({
   id: true,

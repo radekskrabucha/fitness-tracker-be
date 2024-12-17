@@ -5,7 +5,7 @@ import { defaultWorkoutExerciseAttributes } from '~/db/schema/workout.schema'
 export const insertWorkoutExerciseAttributeSchemaRaw = createInsertSchema(
   defaultWorkoutExerciseAttributes,
   {
-    value: schema => schema.value.min(1)
+    value: schema => schema.min(1)
   }
 ).omit({
   id: true,

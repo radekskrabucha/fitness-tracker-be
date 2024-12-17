@@ -5,7 +5,7 @@ import { workoutExercises } from '~/db/schema/workout.schema'
 export const insertWorkoutExerciseSchema = createInsertSchema(
   workoutExercises,
   {
-    orderIndex: schema => schema.orderIndex.min(0)
+    orderIndex: schema => schema.min(0)
   }
 ).omit({
   id: true,

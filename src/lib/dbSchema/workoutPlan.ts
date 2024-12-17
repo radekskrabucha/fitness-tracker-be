@@ -12,8 +12,8 @@ import { insertWorkoutAttributeSchema } from './workoutAttributes'
 import { insertWorkoutExerciseAttributeSchema } from './workoutExerciseAttributes'
 
 export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans, {
-  name: schema => schema.name.min(1).max(256),
-  description: schema => schema.description.max(1024)
+  name: schema => schema.min(1).max(256),
+  description: schema => schema.max(1024)
 }).omit({
   id: true,
   createdAt: true,

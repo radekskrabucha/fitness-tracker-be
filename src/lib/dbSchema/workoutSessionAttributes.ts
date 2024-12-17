@@ -4,7 +4,7 @@ import { userWorkoutSessionExerciseAttributes } from '~/db/schema/workout-sessio
 
 export const insertUserWorkoutSessionExerciseAttributeSchema =
   createInsertSchema(userWorkoutSessionExerciseAttributes, {
-    value: schema => schema.value.min(1)
+    value: schema => schema.min(1)
   }).omit({
     id: true,
     createdAt: true,

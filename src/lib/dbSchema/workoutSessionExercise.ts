@@ -14,7 +14,7 @@ import {
 export const insertWorkoutSessionExerciseSchema = createInsertSchema(
   userWorkoutSessionExercises,
   {
-    orderIndex: schema => schema.orderIndex.min(0)
+    orderIndex: schema => schema.min(0)
   }
 ).omit({
   id: true,
