@@ -17,6 +17,9 @@ export const auth = betterAuth({
     enabled: true
   },
   user: {
+    deleteUser: {
+      enabled: true
+    },
     modelName: 'user',
     fields: {
       name: 'displayName'
