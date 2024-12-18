@@ -1,4 +1,4 @@
-import { serve } from '@hono/node-server'
+import { handle } from '@hono/node-server/vercel'
 import { createApp } from '~/lib/createApp'
 import { configureOpenApi } from '~/lib/openApi'
 import { exercisesRouter } from '~/routes/exercises'
@@ -10,7 +10,6 @@ import { userWorkoutPlansRouter } from '~/routes/user/workout-plans'
 import { userWorkoutSessionsRouter } from '~/routes/user/workout-sessions'
 import { workoutPlansRouter } from '~/routes/workout-plans'
 import { workoutsRouter } from '~/routes/workouts'
-import { env } from '~/utils/env'
 
 export const app = createApp()
 
@@ -26,9 +25,4 @@ app.route('/user/workout-plans', userWorkoutPlansRouter)
 app.route('/user/workouts', userWorkoutsRouter)
 app.route('/user/workout-sessions', userWorkoutSessionsRouter)
 
-serve({
-  fetch: app.fetch,
-  port: env.PORT
-})
-
-console.log(`Server is running on port ${env.PORT}`)
+export default handle(app)
