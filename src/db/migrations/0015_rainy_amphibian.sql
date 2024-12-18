@@ -1,0 +1,1 @@
+ALTER TABLE "default_workout_attributes" RENAME COLUMN "description" TO "text_value";

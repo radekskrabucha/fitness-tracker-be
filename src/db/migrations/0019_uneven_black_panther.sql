@@ -1,0 +1,1 @@
+ALTER TABLE "user_fitness_profiles" ALTER COLUMN "date_of_birth" SET DATA TYPE timestamp with time zone;
