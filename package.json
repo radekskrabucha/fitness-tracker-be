@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc && tsc-alias",
     "start": "vercel dev",
     "deploy": "vercel",
     "test": "NODE_ENV=test vitest",
