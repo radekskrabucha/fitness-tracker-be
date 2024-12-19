@@ -14,6 +14,8 @@ import { env } from '~/utils/env'
 
 export const app = createApp()
 
+app.get('/', c => c.json({ message: 'Hello World' }))
+
 configureOpenApi(app)
 
 app.route('/profile', profileRouter)
