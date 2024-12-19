@@ -14,7 +14,7 @@ import { env } from '~/utils/env'
 
 export const app = createApp()
 
-app.get('/', c => c.json({ message: 'Hello World' }))
+app.get('/health-check', c => c.json({ message: 'Ok!' }))
 
 configureOpenApi(app)
 
