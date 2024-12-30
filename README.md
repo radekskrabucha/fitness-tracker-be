@@ -1,6 +1,12 @@
 # Fitness Tracker Backend
 
+[Live Demo App](https://ricoculo.vercel.app)
+
+⚠️ Please beware that the demo app might take some time to spin up the BE server. Probably you will have to refresh the page after ~30-60 seconds.
+
 This project is the backend for a Fitness Tracker application, built using Hono, OpenAPI, and TypeScript.
+
+You can find the frontend app [here](https://github.com/radekskrabucha/fitness-tracker-fe).
 
 ## Features
 
