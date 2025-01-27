@@ -36,7 +36,7 @@
   "devDependencies": {
     "@total-typescript/tsconfig": "1.0.4",
     "@trivago/prettier-plugin-sort-imports": "5.2.1",
-    "@types/node": "22.10.9",
+    "@types/node": "22.10.10",
     "drizzle-kit": "0.30.2",
     "eslint": "9.18.0",
     "eslint-config-prettier": "10.0.1",
