@@ -10,13 +10,13 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: 1.13.7
-        version: 1.13.7(hono@4.6.19)
+        version: 1.13.7(hono@4.6.20)
       '@hono/swagger-ui':
         specifier: 0.5.0
-        version: 0.5.0(hono@4.6.19)
+        version: 0.5.0(hono@4.6.20)
       '@hono/zod-openapi':
         specifier: 0.18.3
-        version: 0.18.3(hono@4.6.19)(zod@3.24.1)
+        version: 0.18.3(hono@4.6.20)(zod@3.24.1)
       '@neondatabase/serverless':
         specifier: 0.10.4
         version: 0.10.4
@@ -36,11 +36,11 @@ importers:
         specifier: 0.7.0
         version: 0.7.0(drizzle-orm@0.39.0(@neondatabase/serverless@0.10.4)(@types/pg@8.11.6)(kysely@0.27.4)(react@18.3.1))(zod@3.24.1)
       hono:
-        specifier: 4.6.19
-        version: 4.6.19
+        specifier: 4.6.20
+        version: 4.6.20
       hono-pino:
         specifier: 0.7.0
-        version: 0.7.0(hono@4.6.19)(pino@9.6.0)
+        version: 0.7.0(hono@4.6.20)(pino@9.6.0)
       pino:
         specifier: 9.6.0
         version: 9.6.0
@@ -119,6 +119,11 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
+  '@babel/parser@7.26.7':
+    resolution: {integrity: sha512-kEvgGGgEjRUutvdVvZhbn/BxVt+5VSpwXz1j3WYXQbXDo8KzFOPNG2GQbdAiNq8g6wn1yKk7C/qrke03a84V+w==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
   '@babel/template@7.25.9':
     resolution: {integrity: sha512-9DGttpmPvIxBb/2uwpVo3dqJ+O6RooAFOS+lB+xDqoE2PVCE8nfoHMdZLpfCQRLwvohzXISPZcgxt80xLfsuwg==}
     engines: {node: '>=6.9.0'}
@@ -129,6 +134,10 @@ packages:
 
   '@babel/types@7.26.3':
     resolution: {integrity: sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/types@7.26.7':
+    resolution: {integrity: sha512-t8kDRGrKXyp6+tjUh7hw2RLyclsW4TRoRvRHtSyAX9Bb5ldlFh+90YAYY6awRXrlB4G5G2izNeGySpATlFzmOg==}
     engines: {node: '>=6.9.0'}
 
   '@better-auth/utils@0.2.3':
@@ -1515,8 +1524,8 @@ packages:
       hono: '>=4.0.0'
       pino: '>=7.1.0'
 
-  hono@4.6.19:
-    resolution: {integrity: sha512-Xw5DwU2cewEsQ1DkDCdy6aBJkEBARl5loovoL1gL3/gw81RdaPbXrNJYp3LoQpzpJ7ECC/1OFi/vn3UZTLHFEw==}
+  hono@4.6.20:
+    resolution: {integrity: sha512-5qfNQeaIptMaJKyoJ6N/q4gIq0DBp2FCRaLNuUI3LlJKL4S37DY/rLL1uAxA4wrPB39tJ3s+f7kgI79O4ScSug==}
     engines: {node: '>=16.9.0'}
 
   ignore@5.3.2:
@@ -1646,6 +1655,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@3.3.8:
+    resolution: {integrity: sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
   nanostores@0.11.3:
     resolution: {integrity: sha512-TUes3xKIX33re4QzdxwZ6tdbodjmn3tWXCEc1uokiEmo14sI1EaGYNs2k3bU2pyyGNmBqFGAVl6jAGWd06AVIg==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -1756,6 +1770,10 @@ packages:
 
   postcss@8.4.47:
     resolution: {integrity: sha512-56rxCq7G/XfB4EkXq9Egn5GCqugWvDFjafDOThIdMBsI15iqPqR5r15TfSr1YPYeEI19YeaXMCbY6u88Y76GLQ==}
+    engines: {node: ^10 || ^12 || >=14}
+
+  postcss@8.5.1:
+    resolution: {integrity: sha512-6oz2beyjc5VMn/KV1pPw8fliQkhBXrVn1Z3TVyqZxU8kZpzEKhBdmCFqI6ZbmGtamQvQGuU1sgPTk8ZrXDD7jQ==}
     engines: {node: ^10 || ^12 || >=14}
 
   postgres-array@3.0.2:
@@ -2105,6 +2123,11 @@ snapshots:
     dependencies:
       '@babel/types': 7.26.3
 
+  '@babel/parser@7.26.7':
+    dependencies:
+      '@babel/types': 7.26.7
+    optional: true
+
   '@babel/template@7.25.9':
     dependencies:
       '@babel/code-frame': 7.26.2
@@ -2127,6 +2150,12 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
+
+  '@babel/types@7.26.7':
+    dependencies:
+      '@babel/helper-string-parser': 7.25.9
+      '@babel/helper-validator-identifier': 7.25.9
+    optional: true
 
   '@better-auth/utils@0.2.3':
     dependencies:
@@ -2474,24 +2503,24 @@ snapshots:
 
   '@hexagon/base64@1.1.28': {}
 
-  '@hono/node-server@1.13.7(hono@4.6.19)':
+  '@hono/node-server@1.13.7(hono@4.6.20)':
     dependencies:
-      hono: 4.6.19
+      hono: 4.6.20
 
-  '@hono/swagger-ui@0.5.0(hono@4.6.19)':
+  '@hono/swagger-ui@0.5.0(hono@4.6.20)':
     dependencies:
-      hono: 4.6.19
+      hono: 4.6.20
 
-  '@hono/zod-openapi@0.18.3(hono@4.6.19)(zod@3.24.1)':
+  '@hono/zod-openapi@0.18.3(hono@4.6.20)(zod@3.24.1)':
     dependencies:
       '@asteasolutions/zod-to-openapi': 7.2.0(zod@3.24.1)
-      '@hono/zod-validator': 0.4.1(hono@4.6.19)(zod@3.24.1)
-      hono: 4.6.19
+      '@hono/zod-validator': 0.4.1(hono@4.6.20)(zod@3.24.1)
+      hono: 4.6.20
       zod: 3.24.1
 
-  '@hono/zod-validator@0.4.1(hono@4.6.19)(zod@3.24.1)':
+  '@hono/zod-validator@0.4.1(hono@4.6.20)(zod@3.24.1)':
     dependencies:
-      hono: 4.6.19
+      hono: 4.6.20
       zod: 3.24.1
 
   '@humanfs/core@0.19.1': {}
@@ -2798,7 +2827,7 @@ snapshots:
 
   '@vue/compiler-core@3.5.12':
     dependencies:
-      '@babel/parser': 7.26.3
+      '@babel/parser': 7.26.7
       '@vue/shared': 3.5.12
       entities: 4.5.0
       estree-walker: 2.0.2
@@ -2813,14 +2842,14 @@ snapshots:
 
   '@vue/compiler-sfc@3.5.12':
     dependencies:
-      '@babel/parser': 7.26.3
+      '@babel/parser': 7.26.7
       '@vue/compiler-core': 3.5.12
       '@vue/compiler-dom': 3.5.12
       '@vue/compiler-ssr': 3.5.12
       '@vue/shared': 3.5.12
       estree-walker: 2.0.2
       magic-string: 0.30.17
-      postcss: 8.4.47
+      postcss: 8.5.1
       source-map-js: 1.2.1
     optional: true
 
@@ -3293,13 +3322,13 @@ snapshots:
 
   help-me@5.0.0: {}
 
-  hono-pino@0.7.0(hono@4.6.19)(pino@9.6.0):
+  hono-pino@0.7.0(hono@4.6.20)(pino@9.6.0):
     dependencies:
       defu: 6.1.4
-      hono: 4.6.19
+      hono: 4.6.20
       pino: 9.6.0
 
-  hono@4.6.19: {}
+  hono@4.6.20: {}
 
   ignore@5.3.2: {}
 
@@ -3398,6 +3427,9 @@ snapshots:
   mylas@2.1.13: {}
 
   nanoid@3.3.7: {}
+
+  nanoid@3.3.8:
+    optional: true
 
   nanostores@0.11.3: {}
 
@@ -3517,6 +3549,13 @@ snapshots:
       nanoid: 3.3.7
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  postcss@8.5.1:
+    dependencies:
+      nanoid: 3.3.8
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+    optional: true
 
   postgres-array@3.0.2: {}
 
